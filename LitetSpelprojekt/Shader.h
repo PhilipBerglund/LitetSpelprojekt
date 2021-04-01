@@ -10,17 +10,16 @@ using namespace DirectX;
 class Shader
 {
 private:
-	std::string vs_path;
+	std::string vs_path = "../x64/Debug/VertexShader.cso";
+	std::string ps_path = "../x64/Debug/PixelShader.cso";
+
 	ID3D11VertexShader* vertexShader;
-
-	std::string ps_path;
 	ID3D11PixelShader* pixelShader;
-
 	ID3D11InputLayout* layout;
 
-	ID3D11Buffer* VS_Buffer;
-
 	//STRUCTS N STUFF
+
+	ID3D11Buffer* VS_Buffer;
 	struct VS
 	{
 		XMFLOAT4X4 worldMatrix;
@@ -28,9 +27,11 @@ private:
 		XMFLOAT4X4 light_WVP;
 	};
 
+	bool UpdateBuffers(ID3D11DeviceContext* context, Model model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix);
 public:
 	Shader();
 	void ShutDown();
 	bool Initialize(ID3D11Device* device, HWND window);
-	void Render(ID3D11DeviceContext* context, ID3D11ShaderResourceView* depthSRV, Model model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix);
+	void SetShader(ID3D11DeviceContext* context, ID3D11ShaderResourceView* depthSRV);
+	void Render(ID3D11DeviceContext* context, Model model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix);
 };

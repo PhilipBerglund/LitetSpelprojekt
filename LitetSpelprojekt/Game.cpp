@@ -6,6 +6,10 @@ Game::Game(HWND window, UINT windowWidth, UINT windowHeight)
 		std::cerr << " > : ( " << std::endl;
 }
 
+void Game::LoadGame()
+{
+}
+
 void Game::Update(float dt)
 {
 	//UPDATE

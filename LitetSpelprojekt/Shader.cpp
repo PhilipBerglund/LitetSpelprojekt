@@ -1,6 +1,28 @@
 #include "Shader.h"
 #include "ShaderLoader.h"
 
+bool Shader::UpdateBuffers(ID3D11DeviceContext* context, Model model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix)
+{
+	VS vertexShaderData = {};
+
+	XMMATRIX WVP = model.GetMatrix() * viewMatrix * perspectiveMatrix;
+	XMMATRIX light_WVP = model.GetMatrix() * light.GetViewMatrix() * light.GetPerspectiveMatrix();
+
+	D3D11_MAPPED_SUBRESOURCE mappedResource = {};
+
+	if (FAILED(context->Map(VS_Buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
+		return false;
+
+	XMStoreFloat4x4(&vertexShaderData.worldMatrix, XMMatrixTranspose(model.GetMatrix()));
+	XMStoreFloat4x4(&vertexShaderData.WVPMatrix, XMMatrixTranspose(WVP));
+	XMStoreFloat4x4(&vertexShaderData.light_WVP, XMMatrixTranspose(light_WVP));
+
+	memcpy(mappedResource.pData, &vertexShaderData, sizeof(VS));
+	context->Unmap(VS_Buffer, 0);
+
+	return true;
+}
+
 Shader::Shader()
 {
 	this->vertexShader = nullptr;
@@ -72,8 +94,21 @@ bool Shader::Initialize(ID3D11Device* device, HWND window)
 	return true;
 }
 
-void Shader::Render(ID3D11DeviceContext* context, ID3D11ShaderResourceView* depthSRV, Model model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix)
+void Shader::SetShader(ID3D11DeviceContext* context, ID3D11ShaderResourceView* depthSRV)
 {
-	XMMATRIX WVP = model.GetMatrix() * viewMatrix * perspectiveMatrix;
-	XMMATRIX light_WVP = model.GetMatrix() * light.GetViewMatrix() * light.GetPerspectiveMatrix();
+	context->VSSetShader(vertexShader, nullptr, 0);
+	context->VSSetConstantBuffers(0, 1, &VS_Buffer);
+
+	context->PSSetShaderResources(0, 1, &depthSRV);
+	context->PSSetShader(pixelShader, nullptr, 0);
+}
+
+void Shader::Render(ID3D11DeviceContext* context, Model model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix)
+{
+	UpdateBuffers(context, model, light, viewMatrix, perspectiveMatrix);
+
+	ID3D11ShaderResourceView* texture = model.GetTexture();
+	context->PSSetShaderResources(1, 1, &texture);
+	texture->Release();
+	texture = nullptr;
 }

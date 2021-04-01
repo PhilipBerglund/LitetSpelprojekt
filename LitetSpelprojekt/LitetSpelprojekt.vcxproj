@@ -143,19 +143,40 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="D3D11Helper.cpp" />
+    <ClCompile Include="DirectXEssentials.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="PipelineHelper.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Time.cpp" />
+    <ClCompile Include="Window.cpp" />
     <ClCompile Include="WindowHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="D3D11Helper.h" />
+    <ClInclude Include="DirectXEssentials.h" />
+    <ClInclude Include="Drawable.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="Geometry.h" />
+    <ClInclude Include="Graphics.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="PipelineHelper.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShaderLoader.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Time.h" />
+    <ClInclude Include="Timer.h" />
+    <ClInclude Include="Window.h" />
     <ClInclude Include="WindowHelper.h" />
   </ItemGroup>
   <ItemGroup>

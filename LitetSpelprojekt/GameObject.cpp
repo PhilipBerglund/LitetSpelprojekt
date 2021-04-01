@@ -1,5 +1,12 @@
 #include "GameObject.h"
 
+GameObject::GameObject()
+{
+	transform.position = { 0,0,0 };
+	transform.rotation = { 0,0,0 };
+	transform.scale = { 1,1,1 };
+}
+
 GameObject::GameObject(XMFLOAT3 position, XMFLOAT3 rotation, XMFLOAT3 scale)
 {
 	transform.position = position;

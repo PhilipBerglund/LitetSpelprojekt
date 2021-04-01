@@ -13,9 +13,8 @@ protected:
 		XMFLOAT3 position;
 	} transform;
 
-	virtual void Update() = 0;
 public:
-	GameObject() = default;
+	GameObject();
 	GameObject(XMFLOAT3 position, XMFLOAT3 rotation = { 0,0,0 }, XMFLOAT3 scale = { 1,1,1 });
 
 	void SetScale(XMFLOAT3 scale);
@@ -25,4 +24,6 @@ public:
 	XMFLOAT3 GetScale() const;
 	XMFLOAT3 GetRotation() const;
 	XMFLOAT3 GetPosition() const;
+
+	virtual void Update() = 0;
 };

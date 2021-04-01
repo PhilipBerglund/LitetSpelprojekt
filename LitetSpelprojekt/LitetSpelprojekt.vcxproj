@@ -154,7 +154,6 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="PipelineHelper.cpp" />
     <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="Time.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="WindowHelper.cpp" />
   </ItemGroup>
@@ -174,7 +173,6 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderLoader.h" />
     <ClInclude Include="stb_image.h" />
-    <ClInclude Include="Time.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WindowHelper.h" />

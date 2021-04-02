@@ -13,10 +13,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	Timer timer;
 	float dt = 0;
 
-	//AllocConsole();
-	/*freopen("conin$", "r", stdin);
+	AllocConsole();
+	freopen("conin$", "r", stdin);
 	freopen("conout$", "w", stdout);
-	freopen("conout$", "w", stderr);*/
+	freopen("conout$", "w", stderr);
 
 	MSG msg = {};
 	while (msg.message != WM_QUIT)

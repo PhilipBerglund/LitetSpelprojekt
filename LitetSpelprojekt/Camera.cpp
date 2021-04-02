@@ -35,7 +35,7 @@ T clamp(T x, T min, T max)
 {
 	if (x < min) x = min;
 	if (x > max) x = max;
-	return x
+	return x;
 }
 
 void Camera::Rotate(float dx, float dy)

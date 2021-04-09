@@ -8,7 +8,7 @@ struct LightAttributes
 	XMFLOAT4 diffuse;
 };
 
-class Light :GameObject, Drawable
+class Light :public GameObject, Drawable
 {
 private:
 	LightAttributes attributes;
@@ -21,6 +21,8 @@ public:
 
 	XMMATRIX GetViewMatrix() const;
 	XMMATRIX GetPerspectiveMatrix() const;
+
+	Type type() const override { return Type::LIGHT; };
 
 	LightAttributes GetAttributes() const;
 

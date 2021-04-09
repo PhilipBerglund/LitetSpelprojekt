@@ -17,14 +17,15 @@ private:
 	ID3D11PixelShader* pixelShader;
 	ID3D11InputLayout* layout;
 
-	//STRUCTS N STUFF
-
 	ID3D11Buffer* VS_Buffer;
 	struct VS
 	{
 		XMFLOAT4X4 worldMatrix;
-		XMFLOAT4X4 WVPMatrix;
-		XMFLOAT4X4 light_WVP;
+		XMFLOAT4X4 viewMatrix;
+		XMFLOAT4X4 perspectiveMatrix;
+
+		XMFLOAT4X4 lightViewMatrix;
+		XMFLOAT4X4 lightPerspectiveMatrix;
 	};
 
 	bool UpdateBuffers(ID3D11DeviceContext* context, Model model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix);
@@ -32,6 +33,6 @@ public:
 	Shader();
 	void ShutDown();
 	bool Initialize(ID3D11Device* device, HWND window);
-	void SetShader(ID3D11DeviceContext* context, ID3D11ShaderResourceView* depthSRV);
+	void SetShader(ID3D11DeviceContext* context);
 	void Render(ID3D11DeviceContext* context, Model model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix);
 };

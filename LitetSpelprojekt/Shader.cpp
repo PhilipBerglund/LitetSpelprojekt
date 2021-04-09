@@ -1,21 +1,23 @@
 #include "Shader.h"
 #include "ShaderLoader.h"
+#include <iostream>
 
 bool Shader::UpdateBuffers(ID3D11DeviceContext* context, Model model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix)
 {
-	VS vertexShaderData = {};
-
-	XMMATRIX WVP = model.GetMatrix() * viewMatrix * perspectiveMatrix;
-	XMMATRIX light_WVP = model.GetMatrix() * light.GetViewMatrix() * light.GetPerspectiveMatrix();
-
 	D3D11_MAPPED_SUBRESOURCE mappedResource = {};
 
 	if (FAILED(context->Map(VS_Buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
 		return false;
 
+	VS vertexShaderData = {};
 	XMStoreFloat4x4(&vertexShaderData.worldMatrix, XMMatrixTranspose(model.GetMatrix()));
-	XMStoreFloat4x4(&vertexShaderData.WVPMatrix, XMMatrixTranspose(WVP));
-	XMStoreFloat4x4(&vertexShaderData.light_WVP, XMMatrixTranspose(light_WVP));
+
+	XMMATRIX WVP = model.GetMatrix() * viewMatrix * perspectiveMatrix;
+	XMStoreFloat4x4(&vertexShaderData.viewMatrix, XMMatrixTranspose(WVP));
+
+	XMStoreFloat4x4(&vertexShaderData.perspectiveMatrix, XMMatrixTranspose(perspectiveMatrix));
+	XMStoreFloat4x4(&vertexShaderData.lightViewMatrix, XMMatrixTranspose(light.GetViewMatrix()));
+	XMStoreFloat4x4(&vertexShaderData.lightPerspectiveMatrix, XMMatrixTranspose(light.GetPerspectiveMatrix()));
 
 	memcpy(mappedResource.pData, &vertexShaderData, sizeof(VS));
 	context->Unmap(VS_Buffer, 0);
@@ -72,7 +74,7 @@ bool Shader::Initialize(ID3D11Device* device, HWND window)
 	D3D11_INPUT_ELEMENT_DESC inputDesc[numElements] =
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"UV", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
@@ -94,21 +96,22 @@ bool Shader::Initialize(ID3D11Device* device, HWND window)
 	return true;
 }
 
-void Shader::SetShader(ID3D11DeviceContext* context, ID3D11ShaderResourceView* depthSRV)
+void Shader::SetShader(ID3D11DeviceContext* context)
 {
+	context->IASetInputLayout(layout);
 	context->VSSetShader(vertexShader, nullptr, 0);
-	context->VSSetConstantBuffers(0, 1, &VS_Buffer);
-
-	context->PSSetShaderResources(0, 1, &depthSRV);
 	context->PSSetShader(pixelShader, nullptr, 0);
 }
 
 void Shader::Render(ID3D11DeviceContext* context, Model model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix)
 {
-	UpdateBuffers(context, model, light, viewMatrix, perspectiveMatrix);
+	unsigned int stride = sizeof(Vertex);
+	unsigned int offset = 0;
 
-	ID3D11ShaderResourceView* texture = model.GetTexture();
-	context->PSSetShaderResources(1, 1, &texture);
-	texture->Release();
-	texture = nullptr;
+	ID3D11Buffer* buffer = model.GetVertexBuffer();
+	context->IASetVertexBuffers(0, 1, &buffer, &stride, &offset);
+
+	UpdateBuffers(context, model, light, viewMatrix, perspectiveMatrix);
+	context->VSSetConstantBuffers(0, 1, &VS_Buffer);
+	context->Draw(model.GetVertexCount(), 0);
 }

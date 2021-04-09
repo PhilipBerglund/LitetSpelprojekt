@@ -167,7 +167,6 @@
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Light.h" />
-    <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="PipelineHelper.h" />
     <ClInclude Include="Shader.h" />

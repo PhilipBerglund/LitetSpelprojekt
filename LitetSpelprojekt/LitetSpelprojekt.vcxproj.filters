@@ -62,9 +62,6 @@
     <ClInclude Include="Geometry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PipelineHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>

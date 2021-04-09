@@ -1,24 +1,21 @@
 #include "Graphics.h"
 #include "PipelineHelper.h"
+#include "Camera.h"
 
 Graphics::Graphics()
 {
 	this->vertexShader = nullptr;
 	this->pixelShader = nullptr;
 	this->layout = nullptr;
-	this->sampler = nullptr;
 }
 
 bool Graphics::Initialize(UINT windowWidth, UINT windowHeight, HWND window)
 {
 	if (!core.Initialize(windowWidth, windowHeight, window))
 		return false;
-	
-	if (!SetupPipeline(core.GetDevice(), vertexShader, pixelShader, layout, sampler))
-	{
-		std::cerr << "Failed to setup pipeline" << std::endl;
+
+	if (!shader.Initialize(core.GetDevice(), window))
 		return false;
-	}
 
 	return true;
 }
@@ -26,6 +23,8 @@ bool Graphics::Initialize(UINT windowWidth, UINT windowHeight, HWND window)
 void Graphics::ShutDown()
 {
 	core.ShutDown();
+
+	shader.ShutDown();
 
 	if (vertexShader)
 	{
@@ -44,19 +43,44 @@ void Graphics::ShutDown()
 		layout->Release();
 		layout = nullptr;
 	}
-
-	if (sampler)
-	{
-		sampler->Release();
-		sampler = nullptr;
-	}
 }
 
-void Graphics::Render()
+void Graphics::Render(std::vector<GameObject*> gameObjects)
 {
 	core.BeginScene(1, 1, 1);
+	Light light;
 
-	//RENDER STUFF
+	XMMATRIX viewMatrix = XMMatrixIdentity();
+	XMMATRIX perspectiveMatrix = XMMatrixIdentity();
+
+	for (int i = 0; i < gameObjects.size(); ++i)
+	{
+		switch (gameObjects[i]->type())
+		{
+		case Type::CAMERA:
+			viewMatrix = dynamic_cast<Camera*>(gameObjects[i])->GetViewMatrix();
+			perspectiveMatrix = dynamic_cast<Camera*>(gameObjects[i])->GetPerspectiveMatrix();
+			break;
+
+		case Type::LIGHT:
+			break;
+
+		case Type::MODEL:
+			shader.SetShader(core.GetDeviceContext());
+			shader.Render(core.GetDeviceContext(), *dynamic_cast<Model*>(gameObjects[i]), light, viewMatrix, perspectiveMatrix);
+			break;
+		}
+	}
 
 	core.EndScene();
+}
+
+ID3D11Device* Graphics::GetDevice()
+{
+	return core.GetDevice();
+}
+
+ID3D11DeviceContext* Graphics::GetDeviceContext()
+{
+	return core.GetDeviceContext();
 }

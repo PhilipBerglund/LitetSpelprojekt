@@ -12,7 +12,7 @@ struct PixelShaderInput
 float4 main(PixelShaderInput input) : SV_TARGET
 {
 
-    float4 finalColor = float4(0, 0, 0, 0);
+    float4 finalColor = float4(0, 0, 0, 1);
     
     return finalColor;
 }

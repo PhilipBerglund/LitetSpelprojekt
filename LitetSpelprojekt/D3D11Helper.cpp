@@ -37,6 +37,8 @@ bool CreateInterfaces(UINT width, UINT height, HWND window, ID3D11Device*& devic
 	HRESULT hr = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, flags, featureLevels, 1, D3D11_SDK_VERSION, &swapChainDesc, &swapChain, &device, nullptr, &immediateContext);
 	//Default grafikkort,   vilken drivartyp,	går att specifiera drivar-software,    vi skickar med flaggorna,   vilken feature level,   hur många värden det finns i FL-arrayen,  SDK-version,   vår swapchain-beskrivning,  vår swapchain, device,	går att stoppa med FL-pekare för att få reda på vilken som används,  vår immediateContext
 
+	immediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
 	return !FAILED(hr);	//Anger sant om det misslyckades, vi inverterar (!)
 }
 

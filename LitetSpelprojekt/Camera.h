@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
-class Camera :GameObject
+class Camera :public GameObject
 {
 private:
 	XMMATRIX perspectiveMatrix;
@@ -18,6 +18,8 @@ public:
 
 	XMMATRIX GetViewMatrix() const;
 	XMMATRIX GetPerspectiveMatrix() const;
+
+	Type type() const override { return Type::CAMERA; };
 
 	void Rotate(float dx, float dy);
 

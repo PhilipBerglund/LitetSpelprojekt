@@ -2,16 +2,17 @@
 #include <algorithm>
 
 Camera::Camera()
+	:pitch(0), yaw(0), rotationSpeed(0), speed(0)
 {
 	XMFLOAT3 up = { 0,1,0 };
 	this->forward = { 0,0,1 };
 	this->viewMatrix = XMMatrixLookAtLH(XMLoadFloat3(&transform.position), XMLoadFloat3(&forward), XMLoadFloat3(&up));
 
-	perspectiveMatrix = XMMatrixPerspectiveFovLH(XM_PIDIV4, (float)1024 / float(476), 0.1, 100);
+	perspectiveMatrix = XMMatrixPerspectiveFovLH(XM_PIDIV4, (float)1024 / float(576), 0.1, 100);
 }
 
 Camera::Camera(float FOV, float aspectRatio, float nearZ, float farZ, XMFLOAT3 position, XMFLOAT3 rotation, XMFLOAT3 scale)
-	:GameObject(position, rotation, scale)
+	:GameObject(position, rotation, scale), pitch(0), yaw(0), rotationSpeed(0), speed(0)
 {
 	XMFLOAT3 up = { 0,1,0 };
 	this->forward = { 0,0,1 };
@@ -51,4 +52,6 @@ void Camera::Rotate(float dx, float dy)
 
 void Camera::Update()
 {
+	XMFLOAT3 up = { 0,1,0 };
+	this->viewMatrix = XMMatrixLookAtLH(XMLoadFloat3(&transform.position), XMLoadFloat3(&forward), XMLoadFloat3(&up));
 }

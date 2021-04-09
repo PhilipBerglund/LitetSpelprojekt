@@ -59,12 +59,15 @@ bool DirectXEssentials::Initialize(UINT windowWidth, UINT windowHeight, HWND win
 		return false;
 	}
 
+	context->RSSetViewports(1, &viewport);
+
 	return true;
 }
 
 void DirectXEssentials::BeginScene(float r, float g, float b)
 {
 	float backgroundColor[4] = { r, g, b, 1 };
+	context->OMSetRenderTargets(1, &rtv, dsView);
 	context->ClearRenderTargetView(rtv, backgroundColor);
 	context->ClearDepthStencilView(dsView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0);
 }

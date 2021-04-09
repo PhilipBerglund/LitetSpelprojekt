@@ -3,32 +3,57 @@
 Game::Game(HWND window, UINT windowWidth, UINT windowHeight)
 {
 	if (!graphics.Initialize(windowWidth, windowHeight, window))
-		std::cerr << " > : ( " << std::endl;
+		std::cout << "FAILED TO INITIALIZE GRAPHICS" << std::endl;
+
+	camera = new Camera(XM_PIDIV4, (float)windowWidth / float(windowHeight), 0.01f, 100.0f, { 0.0f, 0.0f, -10.0f });
+	LoadGame();
 }
 
 void Game::LoadGame()
 {
+	gameObjects.push_back(camera);
+	gameObjects.push_back(new Model());
+	
+	for (int i = 0; i < gameObjects.size(); ++i)
+	{
+		if (gameObjects[i]->type() == Type::MODEL)
+			dynamic_cast<Model*>(gameObjects[i])->Initialize(graphics.GetDevice(), "Troll.obj");
+	}
 }
 
 void Game::Update(float dt)
 {
-	XMMATRIX viewMatrix = camera.GetViewMatrix();
-	XMMATRIX perspectiveMatrix = camera.GetPerspectiveMatrix();
+	for (int i = 0; i < gameObjects.size(); ++i)
+	{		
+		switch (gameObjects[i]->type())
+		{
+		case Type::CAMERA:
+			dynamic_cast<Camera*>(gameObjects[i])->Update();
+			break;
 
-	for (int i = 0; i < objects.size(); ++i)
-	{
-		objects[i].Update();
+		case Type::MODEL:
+			dynamic_cast<Model*>(gameObjects[i])->UpdateBuffers(graphics.GetDeviceContext());
+			break;
+
+		case Type::LIGHT:
+			dynamic_cast<Light*>(gameObjects[i])->UpdateBuffers(graphics.GetDeviceContext());
+			break;
+		}
 	}
-	//UPDATE
-	//MAYBE PARAM FOR KEYPRESS BUT IDK
 }
 
 void Game::Render()
 {
-	graphics.Render();
+	graphics.Render(gameObjects);
 }
 
 void Game::ShutDown()
 {
+	for (int i = 0; i < gameObjects.size(); ++i)
+	{
+		if (gameObjects[i] != nullptr)
+			delete gameObjects[i];
+	}
+
 	graphics.ShutDown();
 }

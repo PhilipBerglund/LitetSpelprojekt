@@ -10,12 +10,8 @@ class Game
 {
 private:
 	Graphics graphics;
-
-	Model model;
-	Light light;
-	Camera camera;
-	std::vector<GameObject> objects;
-
+	Camera* camera;
+	std::vector<GameObject*> gameObjects;
 	void LoadGame();
 public:
 	Game(HWND window, UINT windowWidth, UINT windowHeight);

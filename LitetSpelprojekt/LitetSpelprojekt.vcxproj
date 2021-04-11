@@ -173,6 +173,7 @@
     <ClInclude Include="PipelineHelper.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderLoader.h" />
+    <ClInclude Include="SkeletonAnimation.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Timer.h" />

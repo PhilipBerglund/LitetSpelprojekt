@@ -12,7 +12,7 @@ Camera::Camera()
 }
 
 Camera::Camera(float FOV, float aspectRatio, float nearZ, float farZ, XMFLOAT3 position, XMFLOAT3 rotation, XMFLOAT3 scale)
-	:GameObject(position, rotation, scale), pitch(0), yaw(0), rotationSpeed(0), speed(0)
+	:GameObject(position, rotation, scale), pitch(0), yaw(0), rotationSpeed(0), speed(5)
 {
 	XMFLOAT3 up = { 0,1,0 };
 	this->forward = { 0,0,1 };
@@ -31,12 +31,27 @@ XMMATRIX Camera::GetPerspectiveMatrix() const
 	return this->perspectiveMatrix;
 }
 
+float Camera::GetSpeed() const
+{
+	return this->speed;
+}
+
 template <typename T>
 T clamp(T x, T min, T max)
 {
 	if (x < min) x = min;
 	if (x > max) x = max;
 	return x;
+}
+
+void Camera::MoveRight(float distance)
+{
+	transform.position.x += distance;
+}
+
+void Camera::MoveForward(float distance)
+{
+	transform.position.z += distance;
 }
 
 void Camera::Rotate(float dx, float dy)

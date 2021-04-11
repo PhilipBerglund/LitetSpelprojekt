@@ -1,12 +1,8 @@
 #include "Model.h"
 
-void Model::Update()
+void Model::Update(ID3D11DeviceContext& context)
 {
 
-}
-
-void Model::UpdateBuffers(ID3D11DeviceContext* context)
-{
 }
 
 bool Model::LoadModel(std::string path)
@@ -128,10 +124,12 @@ bool Model::LoadTexture(std::string path)
     return false;
 }
 
-bool Model::Initialize(ID3D11Device* device, std::string path)
+bool Model::Initialize(ID3D11Device& device, std::string path)
 {
     if (!LoadModel(path))
         return false;
+
+    this->name = path;
 
     D3D11_BUFFER_DESC desc = {};
     desc.ByteWidth = polygons.size() * sizeof(Face);
@@ -144,7 +142,7 @@ bool Model::Initialize(ID3D11Device* device, std::string path)
     D3D11_SUBRESOURCE_DATA data = {};
     data.pSysMem = polygons.data();
 
-    if (FAILED(device->CreateBuffer(&desc, &data, &vertexBuffer)))
+    if (FAILED(device.CreateBuffer(&desc, &data, &vertexBuffer)))
         return false;
 
     return true;
@@ -159,9 +157,9 @@ Model::Model()
     this->vertexCount = 0;
 }
 
-ID3D11ShaderResourceView* Model::GetTexture()
+ID3D11ShaderResourceView& Model::GetTexture()
 {
-    return this->texture;
+    return *this->texture.Get();
 }
 
 std::string Model::GetName() const
@@ -179,9 +177,9 @@ int Model::GetVertexCount() const
     return this->vertexCount;
 }
 
-ID3D11Buffer* Model::GetVertexBuffer()
+ID3D11Buffer& Model::GetVertexBuffer()
 {
-    return this->vertexBuffer;
+    return *this->vertexBuffer.Get();
 }
 
 Material Model::GetMatrial() const

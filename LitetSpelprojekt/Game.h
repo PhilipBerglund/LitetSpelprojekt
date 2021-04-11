@@ -1,21 +1,18 @@
 #pragma once
+#include "Scene.h"
 #include "Graphics.h"
-#include "Model.h"
-#include <vector>
-#include "Camera.h"
-#include "Light.h"
-#include "Model.h"
+#include "InputHandler.h"
 
 class Game
 {
 private:
+	Scene scene;
 	Graphics graphics;
-	Camera* camera;
-	std::vector<GameObject*> gameObjects;
-	void LoadGame();
+	InputHandler input;
 public:
 	Game(HWND window, UINT windowWidth, UINT windowHeight);
+
+	void CatchInput(unsigned char key, bool down);
 	void Update(float dt);
 	void Render();
-	void ShutDown();
 };

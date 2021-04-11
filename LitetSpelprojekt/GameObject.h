@@ -1,5 +1,7 @@
 #pragma once
 #include <DirectXMath.h>
+#include <d3d11.h>
+#include "ComPtr.h"
 
 enum class Type {GAMEOBJECT, LIGHT, CAMERA, MODEL};
 
@@ -29,6 +31,4 @@ public:
 	XMFLOAT3 GetPosition() const;
 
 	virtual Type type() const { return Type::GAMEOBJECT; };
-
-	virtual void Update() = 0;
 };

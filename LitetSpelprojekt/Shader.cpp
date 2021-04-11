@@ -2,11 +2,13 @@
 #include "ShaderLoader.h"
 #include <iostream>
 
-bool Shader::UpdateBuffers(ID3D11DeviceContext* context, Model model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix)
+bool Shader::UpdateBuffers(ID3D11DeviceContext& context, Model model, Light light, XMMATRIX viewMatrix, 
+							XMMATRIX perspectiveMatrix, XMFLOAT3 cameraPosition)
 {
 	D3D11_MAPPED_SUBRESOURCE mappedResource = {};
 
-	if (FAILED(context->Map(VS_Buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
+	//VERTEX SHADER BUFFER(S)
+	if (FAILED(context.Map(VS_Buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
 		return false;
 
 	VS vertexShaderData = {};
@@ -20,47 +22,20 @@ bool Shader::UpdateBuffers(ID3D11DeviceContext* context, Model model, Light ligh
 	XMStoreFloat4x4(&vertexShaderData.lightPerspectiveMatrix, XMMatrixTranspose(light.GetPerspectiveMatrix()));
 
 	memcpy(mappedResource.pData, &vertexShaderData, sizeof(VS));
-	context->Unmap(VS_Buffer, 0);
+	context.Unmap(VS_Buffer.Get(), 0);
+
+	//PIXEL SHADER BUFFER(S)
+	PS pixelShaderData = {};
+	if (FAILED(context.Map(PS_Buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
+		return false;
+
+	memcpy(mappedResource.pData, &cameraPosition, sizeof(PS));
+	context.Unmap(PS_Buffer.Get(), 0);
 
 	return true;
 }
 
-Shader::Shader()
-{
-	this->vertexShader = nullptr;
-	this->pixelShader = nullptr;
-	this->layout = nullptr;
-	this->VS_Buffer = nullptr;
-}
-
-void Shader::ShutDown()
-{
-	if (vertexShader)
-	{
-		vertexShader->Release();
-		this->vertexShader = nullptr;
-	}
-
-	if (pixelShader)
-	{
-		pixelShader->Release();
-		this->pixelShader = nullptr;
-	}
-
-	if (layout)
-	{
-		layout->Release();
-		this->layout = nullptr;
-	}
-
-	if (VS_Buffer)
-	{
-		VS_Buffer->Release();
-		this->VS_Buffer = nullptr;
-	}
-}
-
-bool Shader::Initialize(ID3D11Device* device, HWND window)
+bool Shader::Initialize(ID3D11Device& device, HWND window)
 {
 	std::string byteCode;
 	if (!LoadVertexShader(device, vertexShader, vs_path, byteCode))
@@ -78,7 +53,7 @@ bool Shader::Initialize(ID3D11Device* device, HWND window)
 		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
-	if (FAILED(device->CreateInputLayout(inputDesc, numElements, byteCode.c_str(), byteCode.length(), &layout)))
+	if (FAILED(device.CreateInputLayout(inputDesc, numElements, byteCode.c_str(), byteCode.length(), &layout)))
 		return false;
 
 	//BUFFERS
@@ -90,28 +65,35 @@ bool Shader::Initialize(ID3D11Device* device, HWND window)
 	bufferDesc.MiscFlags = 0;
 	bufferDesc.StructureByteStride = 0;
 
-	if (FAILED(device->CreateBuffer(&bufferDesc, nullptr, &VS_Buffer)))
+	if (FAILED(device.CreateBuffer(&bufferDesc, nullptr, &VS_Buffer)))
+		return false;
+
+	bufferDesc.ByteWidth = sizeof(PS);
+	if (FAILED(device.CreateBuffer(&bufferDesc, nullptr, &PS_Buffer)))
 		return false;
 
 	return true;
 }
 
-void Shader::SetShader(ID3D11DeviceContext* context)
+void Shader::SetShader(ID3D11DeviceContext& context)
 {
-	context->IASetInputLayout(layout);
-	context->VSSetShader(vertexShader, nullptr, 0);
-	context->PSSetShader(pixelShader, nullptr, 0);
+	context.IASetInputLayout(layout.Get());
+	context.VSSetShader(vertexShader.Get(), nullptr, 0);
+	context.PSSetShader(pixelShader.Get(), nullptr, 0);
 }
 
-void Shader::Render(ID3D11DeviceContext* context, Model model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix)
+void Shader::Render(ID3D11DeviceContext& context, Model model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix, XMFLOAT3 cameraPosition)
 {
 	unsigned int stride = sizeof(Vertex);
 	unsigned int offset = 0;
 
-	ID3D11Buffer* buffer = model.GetVertexBuffer();
-	context->IASetVertexBuffers(0, 1, &buffer, &stride, &offset);
+	ID3D11Buffer* buffer = &model.GetVertexBuffer();
+	context.IASetVertexBuffers(0, 1, &buffer, &stride, &offset);
 
-	UpdateBuffers(context, model, light, viewMatrix, perspectiveMatrix);
-	context->VSSetConstantBuffers(0, 1, &VS_Buffer);
-	context->Draw(model.GetVertexCount(), 0);
+	UpdateBuffers(context, model, light, viewMatrix, perspectiveMatrix, cameraPosition);
+
+	context.PSSetConstantBuffers(0, 1, PS_Buffer.GetAddressOf());
+	context.VSSetConstantBuffers(0, 1, VS_Buffer.GetAddressOf());
+
+	context.Draw(model.GetVertexCount(), 0);
 }

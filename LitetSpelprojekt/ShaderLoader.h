@@ -3,7 +3,7 @@
 #include <fstream>
 #include <string>
 
-bool LoadVertexShader(ID3D11Device* device, ID3D11VertexShader*& vertexShader, std::string path, std::string& vertexShaderByteCode)
+bool LoadVertexShader(ID3D11Device& device, ComPtr<ID3D11VertexShader>& vertexShader, std::string path, std::string& vertexShaderByteCode)
 {
 	std::string shaderData;
 	std::ifstream reader;
@@ -18,7 +18,7 @@ bool LoadVertexShader(ID3D11Device* device, ID3D11VertexShader*& vertexShader, s
 	reader.seekg(0, std::ios::beg);
 	shaderData.assign((std::istreambuf_iterator<char>(reader)), std::istreambuf_iterator<char>());
 
-	if (FAILED(device->CreateVertexShader(shaderData.c_str(), shaderData.length(), nullptr, &vertexShader)))
+	if (FAILED(device.CreateVertexShader(shaderData.c_str(), shaderData.length(), nullptr, &vertexShader)))
 		return false;
 
 	vertexShaderByteCode = shaderData;
@@ -27,7 +27,7 @@ bool LoadVertexShader(ID3D11Device* device, ID3D11VertexShader*& vertexShader, s
 	return true;
 };
 
-bool LoadPixelShader(ID3D11Device* device, ID3D11PixelShader*& pixelShader, std::string path)
+bool LoadPixelShader(ID3D11Device& device, ComPtr<ID3D11PixelShader>& pixelShader, std::string path)
 {
 	std::string shaderData;
 	std::ifstream reader;
@@ -42,7 +42,7 @@ bool LoadPixelShader(ID3D11Device* device, ID3D11PixelShader*& pixelShader, std:
 	reader.seekg(0, std::ios::beg);
 	shaderData.assign((std::istreambuf_iterator<char>(reader)), std::istreambuf_iterator<char>());
 
-	if (FAILED(device->CreatePixelShader(shaderData.c_str(), shaderData.length(), nullptr, &pixelShader)))
+	if (FAILED(device.CreatePixelShader(shaderData.c_str(), shaderData.length(), nullptr, &pixelShader)))
 		return false;
 
 	shaderData.clear();

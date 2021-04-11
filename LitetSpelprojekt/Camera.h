@@ -18,11 +18,13 @@ public:
 
 	XMMATRIX GetViewMatrix() const;
 	XMMATRIX GetPerspectiveMatrix() const;
+	float GetSpeed() const;
 
 	Type type() const override { return Type::CAMERA; };
 
+	void MoveRight(float distance);
+	void MoveForward(float distance);
 	void Rotate(float dx, float dy);
 
-	// Inherited via GameObject
-	virtual void Update() override;
+	void Update();
 };

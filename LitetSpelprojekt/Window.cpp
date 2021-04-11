@@ -34,10 +34,8 @@ LRESULT Window::MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 	switch (msg)
 	{
 	case WM_CLOSE:
-	{
 		PostQuitMessage(0);
 		return 0;
-	}
 	}
 
 	return DefWindowProc(hWnd, msg, wParam, lParam);
@@ -73,11 +71,6 @@ Window::Window(UINT width, UINT height, LPCWSTR title, HINSTANCE instance)
 Window::~Window()
 {
 	DestroyWindow(hWnd);
-}
-
-void Window::SetTitle(LPCSTR title)
-{
-	SetWindowTextA(hWnd, title);
 }
 
 HWND Window::GetWindowHandle() const

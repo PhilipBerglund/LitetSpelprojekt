@@ -1,5 +1,6 @@
 #pragma once
 #include <DirectXMath.h>
+#include "ComPtr.h"
 #include <d3d11.h>
 #include <string>
 #include "Model.h"
@@ -13,11 +14,11 @@ private:
 	std::string vs_path = "../x64/Debug/VertexShader.cso";
 	std::string ps_path = "../x64/Debug/PixelShader.cso";
 
-	ID3D11VertexShader* vertexShader;
-	ID3D11PixelShader* pixelShader;
-	ID3D11InputLayout* layout;
+	ComPtr<ID3D11VertexShader> vertexShader;
+	ComPtr<ID3D11PixelShader> pixelShader;
+	ComPtr<ID3D11InputLayout> layout;
 
-	ID3D11Buffer* VS_Buffer;
+	ComPtr<ID3D11Buffer> VS_Buffer;
 	struct VS
 	{
 		XMFLOAT4X4 worldMatrix;
@@ -28,11 +29,17 @@ private:
 		XMFLOAT4X4 lightPerspectiveMatrix;
 	};
 
-	bool UpdateBuffers(ID3D11DeviceContext* context, Model model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix);
+	ComPtr<ID3D11Buffer> PS_Buffer;
+	struct PS
+	{
+		XMFLOAT3 cameraPosition;
+		float padding;
+	};
+
+	bool UpdateBuffers(ID3D11DeviceContext& context, Model model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix, XMFLOAT3 cameraPosition);
 public:
-	Shader();
-	void ShutDown();
-	bool Initialize(ID3D11Device* device, HWND window);
-	void SetShader(ID3D11DeviceContext* context);
-	void Render(ID3D11DeviceContext* context, Model model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix);
+	Shader() = default;
+	bool Initialize(ID3D11Device& device, HWND window);
+	void SetShader(ID3D11DeviceContext& context);
+	void Render(ID3D11DeviceContext& context, Model model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix, XMFLOAT3 cameraPosition);
 };

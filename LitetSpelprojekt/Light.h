@@ -1,6 +1,5 @@
 #pragma once
 #include "GameObject.h"
-#include "Drawable.h"
 
 struct LightAttributes
 {
@@ -8,7 +7,7 @@ struct LightAttributes
 	XMFLOAT4 diffuse;
 };
 
-class Light :public GameObject, Drawable
+class Light :public GameObject
 {
 private:
 	LightAttributes attributes;
@@ -25,10 +24,4 @@ public:
 	Type type() const override { return Type::LIGHT; };
 
 	LightAttributes GetAttributes() const;
-
-	// Inherited via GameObject
-	virtual void Update() override;
-
-	// Inherited via Drawable
-	virtual void UpdateBuffers(ID3D11DeviceContext* context) override;
 };

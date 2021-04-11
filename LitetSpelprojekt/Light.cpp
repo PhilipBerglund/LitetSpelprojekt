@@ -39,11 +39,3 @@ LightAttributes Light::GetAttributes() const
 {
     return this->attributes;
 }
-
-void Light::Update()
-{
-}
-
-void Light::UpdateBuffers(ID3D11DeviceContext* context)
-{
-}

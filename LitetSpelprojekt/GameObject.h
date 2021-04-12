@@ -3,7 +3,7 @@
 #include <d3d11.h>
 #include "ComPtr.h"
 
-enum class Type {GAMEOBJECT, LIGHT, CAMERA, MODEL};
+enum class Type {GAMEOBJECT, LIGHT, CAMERA, MODEL, PARTICLESYSTEM};
 
 using namespace DirectX;
 

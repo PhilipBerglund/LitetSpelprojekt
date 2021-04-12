@@ -6,7 +6,9 @@ class Camera :public GameObject
 private:
 	XMMATRIX perspectiveMatrix;
 	XMMATRIX viewMatrix;
-	XMFLOAT3 forward;
+	XMVECTOR forward;
+	XMVECTOR right;
+	XMVECTOR up;
 
 	float pitch;
 	float yaw;
@@ -22,8 +24,8 @@ public:
 
 	Type type() const override { return Type::CAMERA; };
 
-	void MoveRight(float distance);
-	void MoveForward(float distance);
+	void MoveRight(float dt);
+	void MoveForward(float dt);
 	void Rotate(float dx, float dy);
 
 	void Update();

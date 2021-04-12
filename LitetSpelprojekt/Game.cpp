@@ -6,6 +6,12 @@ Game::Game(HWND window, UINT windowWidth, UINT windowHeight)
 		std::cout << "FAILED TO INITIALIZE GRAPHICS" << std::endl;
 
 	scene = Scene(graphics, windowWidth, windowHeight, window);
+	state = GameState::INGAME;
+}
+
+GameState Game::GetState() const
+{
+	return this->state;
 }
 
 void Game::CatchInput(unsigned char key, bool down)
@@ -16,12 +22,35 @@ void Game::CatchInput(unsigned char key, bool down)
 		input.OnkeyReleased(key);
 }
 
-void Game::Update(float dt)
+void Game::CatchInput(std::pair<float, float> pos, bool down)
 {
-	scene.Update(input, dt);
+	if (down)
+		input.OnLeftPressed(pos.first, pos.second);
+		
+	else
+		input.OnLeftRelease();
 }
 
-void Game::Render()
+void Game::CatchRawInput(std::pair<float, float> delta)
 {
-	scene.Render(graphics);
+	input.OnRawDelta(delta.first, delta.second);
+}
+
+void Game::Render(float dt)
+{
+	switch (state)
+	{
+	case GameState::MAINMENU:
+		break;
+
+	case GameState::INGAME:
+		scene.Update(input, dt);
+		scene.Render(graphics);
+		break;
+
+	case GameState::PAUSED:
+		break;
+	}
+
+	input.ClearRawData();
 }

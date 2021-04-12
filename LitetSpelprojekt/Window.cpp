@@ -64,8 +64,8 @@ Window::Window(UINT width, UINT height, LPCWSTR title, HINSTANCE instance)
 	rid.dwFlags = 0;
 	rid.hwndTarget = nullptr;
 	RegisterRawInputDevices(&rid, 1, sizeof(rid));
-
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
+	DisableCursor();
 }
 
 Window::~Window()
@@ -73,7 +73,56 @@ Window::~Window()
 	DestroyWindow(hWnd);
 }
 
+std::pair<int, int> Window::GetRawInput(LPARAM lParam)
+{
+	std::pair<int, int> coords;
+	UINT size = 0;
+	if (GetRawInputData(reinterpret_cast<HRAWINPUT>(lParam), RID_INPUT, nullptr, &size, sizeof(RAWINPUTHEADER)) == -1)
+		return coords;
+
+	rawBuffer.resize(size);
+
+	if (GetRawInputData(reinterpret_cast<HRAWINPUT>(lParam), RID_INPUT, rawBuffer.data(), &size, sizeof(RAWINPUTHEADER)) != size)
+		return coords;
+
+	auto& ri = reinterpret_cast<const RAWINPUT&>(*rawBuffer.data());
+	if (ri.header.dwType == RIM_TYPEMOUSE && (ri.data.mouse.lLastX != 0 || ri.data.mouse.lLastY != 0))
+		return { ri.data.mouse.lLastX, ri.data.mouse.lLastY };
+
+	return coords;
+}
+
+std::pair<int, int> Window::GetMousePos(LPARAM lParam)
+{
+	POINTS pt = MAKEPOINTS(lParam);
+	return std::pair<int, int>(pt.x, pt.y);
+}
+
 HWND Window::GetWindowHandle() const
 {
 	return hWnd;
+}
+
+void Window::EnableCursor()
+{
+	if (!cursorEnabled)
+	{
+		while (::ShowCursor(TRUE) < 0);
+		ClipCursor(nullptr);
+		SetCursorPos(width / 2, height / 2);
+		cursorEnabled = true;
+	}
+}
+
+void Window::DisableCursor()
+{
+	if (cursorEnabled)
+	{
+		while (::ShowCursor(FALSE) >= 0);
+		RECT rect;
+		GetClientRect(hWnd, &rect);
+		MapWindowPoints(hWnd, nullptr, reinterpret_cast<POINT*>(&rect), 2);
+		ClipCursor(&rect);
+		cursorEnabled = false;
+	}
 }

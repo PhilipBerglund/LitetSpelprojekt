@@ -2,7 +2,7 @@
 #include "BaseRenderPass.h"
 
 Scene::Scene(Graphics& graphics, UINT windowWidth, UINT windowHeight, HWND window)
-	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 100.0f, { 0,0,-20 })
+	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 100.0f, { 0,0,-10 })
 {
 	renderPasses.push_back(std::make_unique<BaseRenderPass>(graphics.GetDevice(), window));
 
@@ -27,17 +27,19 @@ void Scene::AddLight()
 
 void Scene::Update(InputHandler& input, float dt)
 {
+	camera.Rotate(input.ReadRawDelta().value().x, input.ReadRawDelta().value().y);
+
 	if (input.KeyIsPressed('W'))
-		camera.MoveForward(camera.GetSpeed() * dt);
+		camera.MoveForward(dt);
 
 	if (input.KeyIsPressed('S'))
-		camera.MoveForward(camera.GetSpeed() * -dt);
+		camera.MoveForward(-dt);
 
 	if (input.KeyIsPressed('D'))
-		camera.MoveRight(camera.GetSpeed() * dt);
+		camera.MoveRight(dt);
 
 	if (input.KeyIsPressed('A'))
-		camera.MoveRight(camera.GetSpeed() * -dt);
+		camera.MoveRight(-dt);
 
 	camera.Update();
 }
@@ -45,9 +47,6 @@ void Scene::Update(InputHandler& input, float dt)
 void Scene::Render(Graphics& graphics)
 {
 	graphics.BeginFrame();
-
-	/*for (int i = 0; i < renderPasses.size(); ++i)
-		renderPasses[i]->Execute(*this, graphics);*/
 
 	for (auto& renderPass : renderPasses)
 		renderPass->Execute(*this, graphics);

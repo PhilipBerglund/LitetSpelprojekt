@@ -177,7 +177,7 @@ int Model::GetVertexCount() const
     return this->vertexCount;
 }
 
-ID3D11Buffer& Model::GetVertexBuffer()
+ID3D11Buffer& Model::GetVertexBuffer() const
 {
     return *this->vertexBuffer.Get();
 }

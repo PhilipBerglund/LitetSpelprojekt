@@ -37,7 +37,8 @@ public:
 	std::string GetName() const;
 	XMMATRIX GetMatrix() const;
 	int GetVertexCount() const;
-	ID3D11Buffer& GetVertexBuffer();
+	//datatyp const & func() const (????????)
+	ID3D11Buffer& GetVertexBuffer() const;
 
 	Type type() const override { return Type::MODEL; };
 

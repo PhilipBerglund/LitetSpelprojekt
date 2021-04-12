@@ -5,7 +5,7 @@ Game::Game(HWND window, UINT windowWidth, UINT windowHeight)
 	if (!graphics.Initialize(windowWidth, windowHeight, window))
 		std::cout << "FAILED TO INITIALIZE GRAPHICS" << std::endl;
 
-	scene = Scene(graphics, windowWidth, windowHeight);
+	scene = Scene(graphics, windowWidth, windowHeight, window);
 }
 
 void Game::CatchInput(unsigned char key, bool down)

@@ -36,10 +36,10 @@ private:
 		float padding;
 	};
 
-	bool UpdateBuffers(ID3D11DeviceContext& context, Model model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix, XMFLOAT3 cameraPosition);
+	bool UpdateBuffers(ID3D11DeviceContext& context, const Model& model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix, XMFLOAT3 cameraPosition);
 public:
 	Shader() = default;
 	bool Initialize(ID3D11Device& device, HWND window);
 	void SetShader(ID3D11DeviceContext& context);
-	void Render(ID3D11DeviceContext& context, Model model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix, XMFLOAT3 cameraPosition);
+	void Render(ID3D11DeviceContext& context, const Model& model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix, XMFLOAT3 cameraPosition);
 };

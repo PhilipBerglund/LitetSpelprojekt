@@ -154,6 +154,7 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ParticleRenderPass.cpp" />
     <ClCompile Include="PipelineHelper.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="ParticleRenderPass.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="PipelineHelper.h" />
     <ClInclude Include="RenderPass.h" />

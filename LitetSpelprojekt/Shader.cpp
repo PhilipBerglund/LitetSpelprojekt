@@ -2,7 +2,7 @@
 #include "ShaderLoader.h"
 #include <iostream>
 
-bool Shader::UpdateBuffers(ID3D11DeviceContext& context, Model model, Light light, XMMATRIX viewMatrix, 
+bool Shader::UpdateBuffers(ID3D11DeviceContext& context, const Model& model, Light light, XMMATRIX viewMatrix,
 							XMMATRIX perspectiveMatrix, XMFLOAT3 cameraPosition)
 {
 	D3D11_MAPPED_SUBRESOURCE mappedResource = {};
@@ -82,12 +82,12 @@ void Shader::SetShader(ID3D11DeviceContext& context)
 	context.PSSetShader(pixelShader.Get(), nullptr, 0);
 }
 
-void Shader::Render(ID3D11DeviceContext& context, Model model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix, XMFLOAT3 cameraPosition)
+void Shader::Render(ID3D11DeviceContext& context, const Model& model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix, XMFLOAT3 cameraPosition)
 {
 	unsigned int stride = sizeof(Vertex);
 	unsigned int offset = 0;
 
-	ID3D11Buffer* buffer = &model.GetVertexBuffer();
+	auto buffer = &model.GetVertexBuffer();
 	context.IASetVertexBuffers(0, 1, &buffer, &stride, &offset);
 
 	UpdateBuffers(context, model, light, viewMatrix, perspectiveMatrix, cameraPosition);

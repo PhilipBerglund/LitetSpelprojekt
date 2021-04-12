@@ -16,6 +16,9 @@
     <Filter Include="Header Files\RenderPasses">
       <UniqueIdentifier>{6f520f71-6875-4c01-8cae-ad22736b67e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\RenderPasses">
+      <UniqueIdentifier>{236f035b-9c80-4092-b53d-782fb50a6e79}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -55,6 +58,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BaseRenderPass.cpp">
+      <Filter>Source Files\RenderPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleRenderPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -120,6 +126,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BaseRenderPass.h">
+      <Filter>Header Files\RenderPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleRenderPass.h">
       <Filter>Header Files\RenderPasses</Filter>
     </ClInclude>
   </ItemGroup>

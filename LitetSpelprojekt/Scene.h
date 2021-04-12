@@ -15,7 +15,7 @@ private:
 	std::vector<std::unique_ptr<RenderPass>> renderPasses;
 public:
 	Scene() = default;
-	Scene(Graphics& graphics, UINT windowWidth, UINT windowHeight);
+	Scene(Graphics& graphics, UINT windowWidth, UINT windowHeight, HWND window);
 	void AddModel(Graphics& graphics, const std::string& path);
 	void AddLight();
 	void Update(InputHandler& input ,float dt);

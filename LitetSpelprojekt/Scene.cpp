@@ -1,10 +1,10 @@
 #include "Scene.h"
 #include "BaseRenderPass.h"
 
-Scene::Scene(Graphics& graphics, UINT windowWidth, UINT windowHeight)
+Scene::Scene(Graphics& graphics, UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 100.0f, { 0,0,-20 })
 {
-	renderPasses.push_back(std::make_unique<BaseRenderPass>());
+	renderPasses.push_back(std::make_unique<BaseRenderPass>(graphics.GetDevice(), window));
 
 	AddModel(graphics, "Models/Troll.obj");
 	AddLight();
@@ -44,7 +44,7 @@ void Scene::Update(InputHandler& input, float dt)
 
 void Scene::Render(Graphics& graphics)
 {
-	graphics.BeginRendering();
+	graphics.BeginFrame();
 
 	/*for (int i = 0; i < renderPasses.size(); ++i)
 		renderPasses[i]->Execute(*this, graphics);*/
@@ -52,7 +52,7 @@ void Scene::Render(Graphics& graphics)
 	for (auto& renderPass : renderPasses)
 		renderPass->Execute(*this, graphics);
 
-	graphics.EndRendering();
+	graphics.EndFrame();
 }
 
 const std::vector<std::shared_ptr<Light>>& Scene::GetLights() const

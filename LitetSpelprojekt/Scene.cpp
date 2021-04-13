@@ -51,7 +51,7 @@ void Scene::Render(Graphics& graphics)
 	for (auto& renderPass : renderPasses)
 		renderPass->Execute(*this, graphics);
 
-	graphics.EndFrame();
+	//graphics.EndFrame();
 }
 
 const std::vector<std::shared_ptr<Light>>& Scene::GetLights() const

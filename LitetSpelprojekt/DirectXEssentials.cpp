@@ -51,7 +51,7 @@ bool DirectXEssentials::SetupD3D11(UINT width, UINT height, HWND window)
 		std::cerr << "Failed to get back buffer!" << std::endl;
 		return false;
 	}
-
+	
 	hr = device->CreateRenderTargetView(backBuffer, nullptr, &rtv);
 	backBuffer->Release();
 	if (FAILED(hr))
@@ -133,4 +133,9 @@ ID3D11DeviceContext& DirectXEssentials::GetDeviceContext()
 ID3D11DepthStencilView& DirectXEssentials::GetDepthStencilView()
 {
 	return *this->dsView.Get();
+}
+
+IDXGISwapChain& DirectXEssentials::GetSwapChain()
+{
+	return *this->swapChain.Get();
 }

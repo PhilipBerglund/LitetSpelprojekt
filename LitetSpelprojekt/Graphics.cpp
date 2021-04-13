@@ -28,3 +28,8 @@ ID3D11DeviceContext& Graphics::GetDeviceContext()
 {
 	return core.GetDeviceContext();
 }
+
+IDXGISwapChain& Graphics::GetSwapChain()
+{
+	return this->core.GetSwapChain();
+}

@@ -3,7 +3,13 @@
 Game::Game(HWND window, UINT windowWidth, UINT windowHeight)
 {
 	if (!graphics.Initialize(windowWidth, windowHeight, window))
-		std::cout << "FAILED TO INITIALIZE GRAPHICS" << std::endl;
+		std::cerr << "FAILED TO INITIALIZE GRAPHICS" << std::endl;
+
+	if (!ui.Initialize(graphics))
+		std::cerr << "FAILED TO INITIALIZE UI" << std::endl;
+
+	if (!mainMenu.Initialize(ui.GetRenderTarget()))
+		std::cerr << "FAILED TO INITIALIZE MAIN MENU" << std::endl;
 
 	scene = Scene(graphics, windowWidth, windowHeight, window);
 	state = GameState::INGAME;
@@ -46,6 +52,8 @@ void Game::Render(float dt)
 	case GameState::INGAME:
 		scene.Update(input, dt);
 		scene.Render(graphics);
+		//mainMenu.Render(ui.GetRenderTarget());
+		graphics.EndFrame();
 		break;
 
 	case GameState::PAUSED:

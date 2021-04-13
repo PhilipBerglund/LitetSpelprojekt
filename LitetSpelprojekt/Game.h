@@ -2,13 +2,17 @@
 #include "Scene.h"
 #include "Graphics.h"
 #include "InputHandler.h"
+#include "UI.h"
+#include "MainMenu.h"
 
 enum class GameState { MAINMENU, INGAME, PAUSED };
 
 class Game
 {
 private:
+	UI ui;
 	Scene scene;
+	MainMenu mainMenu;
 	Graphics graphics;
 	InputHandler input;
 	GameState state;

@@ -30,20 +30,17 @@ private:
 	bool LoadTexture(std::string path);
 public:
 	Model();
+	void Update(ID3D11DeviceContext& context);
 	bool Initialize(ID3D11Device& device, std::string path);
-
-	ID3D11ShaderResourceView& GetTexture();
-
-	std::string GetName() const;
-	XMMATRIX GetMatrix() const;
-	int GetVertexCount() const;
-	//datatyp const & func() const (????????)
-	ID3D11Buffer& GetVertexBuffer() const;
 
 	Type type() const override { return Type::MODEL; };
 
-	Material GetMatrial() const;
-	void SetMaterial(XMFLOAT4 ambient, XMFLOAT4 diffuse, XMFLOAT4 specular, float specularPower);
+	ID3D11Buffer& GetVertexBuffer() const	{ return *this->vertexBuffer.Get(); };
+	ID3D11ShaderResourceView& GetTexture()	{ return *this->texture.Get(); };
+	std::string GetName() const				{ return this->name; };
+	XMMATRIX GetMatrix() const				{ return this->worldMatrix; };
+	int GetVertexCount() const				{ return this->vertexCount; };
+	Material GetMatrial() const				{ return this->material; };
 
-	void Update(ID3D11DeviceContext& context);
+	void SetMaterial(XMFLOAT4 ambient, XMFLOAT4 diffuse, XMFLOAT4 specular, float specularPower);
 };

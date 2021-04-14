@@ -22,8 +22,7 @@ void MainMenu::Render(ID2D1RenderTarget& renderTarget)
 {
 	renderTarget.BeginDraw();
 	renderTarget.SetTransform(D2D1::Matrix3x2F::Identity());
-	renderTarget.Clear();
 
-	renderTarget.FillRectangle(&rectangle, brush.Get());
+	renderTarget.DrawRectangle(&rectangle, brush.Get());
 	renderTarget.EndDraw();
 }

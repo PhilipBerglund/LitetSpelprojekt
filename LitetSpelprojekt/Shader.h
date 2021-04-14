@@ -1,8 +1,8 @@
 #pragma once
 #include <DirectXMath.h>
-#include "ComPtr.h"
 #include <d3d11.h>
-#include <string>
+
+#include "ComPtr.h"
 #include "Model.h"
 #include "Light.h"
 

@@ -1,8 +1,5 @@
 #pragma once
 #include "Scene.h"
-#include "Graphics.h"
-#include "InputHandler.h"
-#include "UI.h"
 #include "MainMenu.h"
 
 enum class GameState { MAINMENU, INGAME, PAUSED };
@@ -15,13 +12,13 @@ private:
 	MainMenu mainMenu;
 	Graphics graphics;
 	InputHandler input;
-	GameState state;
+	GameState state = GameState::INGAME;
 public:
 	Game(HWND window, UINT windowWidth, UINT windowHeight);
-	GameState GetState() const;
+	GameState GetState() const { return this->state; };
 
 	void CatchInput(unsigned char key, bool down = true);
-	void CatchInput(std::pair<float, float> pos, bool down = true);
-	void CatchRawInput(std::pair<float, float> delta);
+	void CatchInput(std::pair<int, int> pos, bool down = true);
+	void CatchRawInput(std::pair<int, int> delta) { input.OnRawDelta(delta.first, delta.second); };
 	void Render(float dt);
 };

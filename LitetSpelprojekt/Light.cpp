@@ -24,18 +24,3 @@ Light::Light(XMFLOAT4 ambient, XMFLOAT4 diffuse, float FOV, float aspectRatio, f
 
     perspectiveMatrix = XMMatrixPerspectiveFovLH(FOV, aspectRatio, nearZ, farZ);
 }
-
-XMMATRIX Light::GetViewMatrix() const
-{
-    return this->viewMatrix;
-}
-
-XMMATRIX Light::GetPerspectiveMatrix() const
-{
-    return this->perspectiveMatrix;
-}
-
-LightAttributes Light::GetAttributes() const
-{
-    return this->attributes;
-}

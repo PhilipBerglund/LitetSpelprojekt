@@ -3,6 +3,9 @@
 #include "InputHandler.h"
 #include "Graphics.h"
 #include "RenderPass.h"
+#include "Model.h"
+#include "Light.h"
+#include "Camera.h"
 #include <vector>
 
 class Scene
@@ -16,12 +19,12 @@ private:
 public:
 	Scene() = default;
 	Scene(Graphics& graphics, UINT windowWidth, UINT windowHeight, HWND window);
-	void AddModel(Graphics& graphics, const std::string& path);
+	bool AddModel(Graphics& graphics, const std::string& path);
 	void AddLight();
 	void Update(InputHandler& input ,float dt);
 	void Render(Graphics& graphics);
 
-	const std::vector<std::shared_ptr<Light>>& GetLights() const;
-	const std::vector<std::shared_ptr<Model>>& GetModels() const;
-	const Camera& GetCamera() const;
+	const std::vector<std::shared_ptr<Light>>& GetLights() const	{ return this->lights; };
+	const std::vector<std::shared_ptr<Model>>& GetModels() const	{ return this->models; };
+	const Camera& GetCamera() const									{ return this->camera; };
 };

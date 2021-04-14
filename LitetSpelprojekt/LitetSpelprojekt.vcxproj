@@ -157,7 +157,7 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ParticleRenderPass.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
-    <ClCompile Include="PipelineHelper.cpp" />
+    <ClCompile Include="Print.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="UI.cpp" />
@@ -165,10 +165,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseRenderPass.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ComPtr.h" />
-    <ClInclude Include="D3D11Helper.h" />
     <ClInclude Include="DirectXEssentials.h" />
+    <ClInclude Include="Print.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Geometry.h" />
@@ -179,7 +180,6 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="ParticleRenderPass.h" />
     <ClInclude Include="ParticleSystem.h" />
-    <ClInclude Include="PipelineHelper.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="RenderPass.h" />
     <ClInclude Include="Scene.h" />

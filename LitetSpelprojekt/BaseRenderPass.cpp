@@ -1,10 +1,5 @@
 #include "BaseRenderPass.h"
 
-BaseRenderPass::BaseRenderPass(ID3D11Device& device, HWND window)
-{
-	shader.Initialize(device, window);
-}
-
 void BaseRenderPass::Execute(const Scene& scene, Graphics& graphics)
 {
 	const auto& models = scene.GetModels();

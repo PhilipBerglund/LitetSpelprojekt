@@ -100,7 +100,7 @@ std::pair<int, int> Window::GetMousePos(LPARAM lParam)
 
 HWND Window::GetWindowHandle() const
 {
-	return hWnd;
+	return this->hWnd;
 }
 
 void Window::EnableCursor()

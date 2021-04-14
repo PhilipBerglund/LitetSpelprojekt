@@ -150,41 +150,10 @@ bool Model::Initialize(ID3D11Device& device, std::string path)
 
 Model::Model()
 {
-    //this->mesh = nullptr;
     this->texture = nullptr;
     this->vertexBuffer = nullptr;
     this->worldMatrix = XMMatrixIdentity();
     this->vertexCount = 0;
-}
-
-ID3D11ShaderResourceView& Model::GetTexture()
-{
-    return *this->texture.Get();
-}
-
-std::string Model::GetName() const
-{
-    return this->name;
-}
-
-XMMATRIX Model::GetMatrix() const
-{
-    return this->worldMatrix;
-}
-
-int Model::GetVertexCount() const
-{
-    return this->vertexCount;
-}
-
-ID3D11Buffer& Model::GetVertexBuffer() const
-{
-    return *this->vertexBuffer.Get();
-}
-
-Material Model::GetMatrial() const
-{
-    return this->material;
 }
 
 void Model::SetMaterial(XMFLOAT4 ambient, XMFLOAT4 diffuse, XMFLOAT4 specular, float specularPower)

@@ -2,22 +2,22 @@
 
 Game::Game(HWND window, UINT windowWidth, UINT windowHeight)
 {
-	if (!graphics.Initialize(windowWidth, windowHeight, window))
-		std::cerr << "FAILED TO INITIALIZE GRAPHICS" << std::endl;
+	if (graphics.Initialize(windowWidth, windowHeight, window))
+	{
+		if (ui.Initialize(graphics, window))
+		{
+			if (!mainMenu.Initialize(ui.GetRenderTarget()))
+				Error("- FAILED TO INITIALIZE MAIN MENU -");
+		}
 
-	if (!ui.Initialize(graphics))
-		std::cerr << "FAILED TO INITIALIZE UI" << std::endl;
+		else
+			Error("- FAILED TO INITIALIZE UI -");
+	}
 
-	if (!mainMenu.Initialize(ui.GetRenderTarget()))
-		std::cerr << "FAILED TO INITIALIZE MAIN MENU" << std::endl;
+	else
+		Error("- FAILED TO INITIALIZE GRAPHICS -");
 
 	scene = Scene(graphics, windowWidth, windowHeight, window);
-	state = GameState::INGAME;
-}
-
-GameState Game::GetState() const
-{
-	return this->state;
 }
 
 void Game::CatchInput(unsigned char key, bool down)
@@ -28,7 +28,7 @@ void Game::CatchInput(unsigned char key, bool down)
 		input.OnkeyReleased(key);
 }
 
-void Game::CatchInput(std::pair<float, float> pos, bool down)
+void Game::CatchInput(std::pair<int, int> pos, bool down)
 {
 	if (down)
 		input.OnLeftPressed(pos.first, pos.second);
@@ -37,28 +37,26 @@ void Game::CatchInput(std::pair<float, float> pos, bool down)
 		input.OnLeftRelease();
 }
 
-void Game::CatchRawInput(std::pair<float, float> delta)
-{
-	input.OnRawDelta(delta.first, delta.second);
-}
-
 void Game::Render(float dt)
 {
+	graphics.BeginFrame();
+
 	switch (state)
 	{
 	case GameState::MAINMENU:
+		mainMenu.Render(ui.GetRenderTarget());
 		break;
 
 	case GameState::INGAME:
 		scene.Update(input, dt);
 		scene.Render(graphics);
-		//mainMenu.Render(ui.GetRenderTarget());
-		graphics.EndFrame();
+		mainMenu.Render(ui.GetRenderTarget());
 		break;
 
 	case GameState::PAUSED:
 		break;
 	}
 
+	graphics.EndFrame();
 	input.ClearRawData();
 }

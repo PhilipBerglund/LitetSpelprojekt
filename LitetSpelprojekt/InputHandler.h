@@ -15,7 +15,7 @@ private:
 	bool leftIsPressed = false;
 	std::pair<int, int> lastLeftMouseClick;
 
-	RawDelta rd;
+	RawDelta rd = {};
 
 	//KEYBOARD
 	static constexpr unsigned int keys = 256;

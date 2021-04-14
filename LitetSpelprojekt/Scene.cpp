@@ -10,12 +10,18 @@ Scene::Scene(Graphics& graphics, UINT windowWidth, UINT windowHeight, HWND windo
 	AddLight();
 }
 
-void Scene::AddModel(Graphics& graphics, const std::string& path)
+bool Scene::AddModel(Graphics& graphics, const std::string& path)
 {
 	auto model = std::make_shared<Model>();
 	models.push_back(model);
 	gameObjects.push_back(model);
-	model->Initialize(graphics.GetDevice(), path);
+	if (!model->Initialize(graphics.GetDevice(), path))
+	{
+		Error("- FAILED TO INITIALIZE MODEL -");
+		return false;
+	}
+
+	return true;
 }
 
 void Scene::AddLight()
@@ -27,7 +33,7 @@ void Scene::AddLight()
 
 void Scene::Update(InputHandler& input, float dt)
 {
-	camera.Rotate(input.ReadRawDelta().value().x, input.ReadRawDelta().value().y);
+	camera.Rotate((float)input.ReadRawDelta().value().x, (float)input.ReadRawDelta().value().y);
 
 	if (input.KeyIsPressed('W'))
 		camera.MoveForward(dt);
@@ -46,25 +52,6 @@ void Scene::Update(InputHandler& input, float dt)
 
 void Scene::Render(Graphics& graphics)
 {
-	graphics.BeginFrame();
-
 	for (auto& renderPass : renderPasses)
 		renderPass->Execute(*this, graphics);
-
-	//graphics.EndFrame();
-}
-
-const std::vector<std::shared_ptr<Light>>& Scene::GetLights() const
-{
-	return this->lights;
-}
-
-const std::vector<std::shared_ptr<Model>>& Scene::GetModels() const
-{
-	return this->models;
-}
-
-const Camera& Scene::GetCamera() const
-{
-	return this->camera;
 }

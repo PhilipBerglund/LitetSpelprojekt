@@ -1,15 +1,19 @@
 #include "Shader.h"
 #include "ShaderLoader.h"
-#include <iostream>
 
 bool Shader::UpdateBuffers(ID3D11DeviceContext& context, const Model& model, Light light, XMMATRIX viewMatrix,
 							XMMATRIX perspectiveMatrix, XMFLOAT3 cameraPosition)
 {
+	HRESULT hr;
 	D3D11_MAPPED_SUBRESOURCE mappedResource = {};
 
 	//VERTEX SHADER BUFFER(S)
-	if (FAILED(context.Map(VS_Buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
+	hr = context.Map(VS_Buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	if FAILED(hr)
+	{
+		Error("- FAILED TO MAP BUFFER -");
 		return false;
+	}
 
 	VS vertexShaderData = {};
 	XMStoreFloat4x4(&vertexShaderData.worldMatrix, XMMatrixTranspose(model.GetMatrix()));
@@ -20,14 +24,18 @@ bool Shader::UpdateBuffers(ID3D11DeviceContext& context, const Model& model, Lig
 	XMStoreFloat4x4(&vertexShaderData.perspectiveMatrix, XMMatrixTranspose(perspectiveMatrix));
 	XMStoreFloat4x4(&vertexShaderData.lightViewMatrix, XMMatrixTranspose(light.GetViewMatrix()));
 	XMStoreFloat4x4(&vertexShaderData.lightPerspectiveMatrix, XMMatrixTranspose(light.GetPerspectiveMatrix()));
-
+	
 	memcpy(mappedResource.pData, &vertexShaderData, sizeof(VS));
 	context.Unmap(VS_Buffer.Get(), 0);
 
 	//PIXEL SHADER BUFFER(S)
 	PS pixelShaderData = {};
-	if (FAILED(context.Map(PS_Buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
+	hr = context.Map(PS_Buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	if FAILED(hr)
+	{
+		Error("- FAILED TO MAP BUFFER -");
 		return false;
+	}
 
 	memcpy(mappedResource.pData, &cameraPosition, sizeof(PS));
 	context.Unmap(PS_Buffer.Get(), 0);
@@ -37,6 +45,7 @@ bool Shader::UpdateBuffers(ID3D11DeviceContext& context, const Model& model, Lig
 
 bool Shader::Initialize(ID3D11Device& device, HWND window)
 {
+	HRESULT hr;
 	std::string byteCode;
 	if (!LoadVertexShader(device, vertexShader, vs_path, byteCode))
 		return false;
@@ -53,8 +62,12 @@ bool Shader::Initialize(ID3D11Device& device, HWND window)
 		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
-	if (FAILED(device.CreateInputLayout(inputDesc, numElements, byteCode.c_str(), byteCode.length(), &layout)))
+	hr = device.CreateInputLayout(inputDesc, numElements, byteCode.c_str(), byteCode.length(), &layout);
+	if FAILED(hr)
+	{
+		Error("- FAILED TO CREATE INPUT LAYOUT -");
 		return false;
+	}
 
 	//BUFFERS
 	D3D11_BUFFER_DESC bufferDesc = {};
@@ -65,12 +78,21 @@ bool Shader::Initialize(ID3D11Device& device, HWND window)
 	bufferDesc.MiscFlags = 0;
 	bufferDesc.StructureByteStride = 0;
 
-	if (FAILED(device.CreateBuffer(&bufferDesc, nullptr, &VS_Buffer)))
+	hr = device.CreateBuffer(&bufferDesc, nullptr, &VS_Buffer);
+	if FAILED(hr)
+	{
+		Error("- FAILED TO CREATE BUFFER -");
 		return false;
+	}
 
 	bufferDesc.ByteWidth = sizeof(PS);
-	if (FAILED(device.CreateBuffer(&bufferDesc, nullptr, &PS_Buffer)))
+
+	hr = device.CreateBuffer(&bufferDesc, nullptr, &PS_Buffer);
+	if FAILED(hr)
+	{
+		Error("- FAILED TO CREATE BUFFER -");
 		return false;
+	}
 
 	return true;
 }

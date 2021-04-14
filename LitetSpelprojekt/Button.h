@@ -16,8 +16,11 @@ public:
 
 	void DrawFilled(ID2D1RenderTarget& renderTarget, ID2D1Brush* brush) { renderTarget.FillRectangle(&rectangle, brush); }
 	void DrawOutlined(ID2D1RenderTarget& renderTarget, ID2D1Brush* brush) { renderTarget.DrawRectangle(&rectangle, brush); }
-	bool Intersects(int x, int y)
+	bool OnClick(int x, int y)
 	{
+		if (x > rectangle.left && x < rectangle.right && y < rectangle.bottom && y > rectangle.top)
+			return true;
 
+		return false;
 	}
 };

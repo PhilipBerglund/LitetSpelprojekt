@@ -13,7 +13,7 @@ Camera::Camera()
 }
 
 Camera::Camera(float FOV, float aspectRatio, float nearZ, float farZ, XMFLOAT3 position, XMFLOAT3 rotation, XMFLOAT3 scale)
-	:GameObject(position, rotation, scale), pitch(0), yaw(0), rotationSpeed(0.004f), speed(15.0f)
+	:GameObject(position, rotation, scale), pitch(0), yaw(0), rotationSpeed(0.001f), speed(15.0f)
 {
 	this->up = { 0,1,0 };
 	this->forward = { 0,0,1 };

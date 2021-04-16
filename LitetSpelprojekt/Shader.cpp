@@ -1,8 +1,8 @@
 #include "Shader.h"
 #include "ShaderLoader.h"
+#include "Scene.h"
 
-bool Shader::UpdateBuffers(ID3D11DeviceContext& context, const Model& model, Light light, XMMATRIX viewMatrix,
-							XMMATRIX perspectiveMatrix, XMFLOAT3 cameraPosition)
+bool Shader::UpdateBuffers(ID3D11DeviceContext& context, const Model& model)
 {
 	HRESULT hr;
 	D3D11_MAPPED_SUBRESOURCE mappedResource = {};
@@ -11,21 +11,17 @@ bool Shader::UpdateBuffers(ID3D11DeviceContext& context, const Model& model, Lig
 	hr = context.Map(VS_Buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	if FAILED(hr)
 	{
-		Error("- FAILED TO MAP BUFFER -");
+		Error("FAILED TO MAP BUFFER");
 		return false;
 	}
 
-	VS vertexShaderData = {};
-	XMStoreFloat4x4(&vertexShaderData.worldMatrix, XMMatrixTranspose(model.GetMatrix()));
+	XMStoreFloat4x4(&vertexShaderBuffer.worldMatrix, XMMatrixTranspose(model.GetMatrix()));
 
-	XMMATRIX WVP = model.GetMatrix() * viewMatrix * perspectiveMatrix;
-	XMStoreFloat4x4(&vertexShaderData.viewMatrix, XMMatrixTranspose(WVP));
+	XMMATRIX WVP = model.GetMatrix() * XMLoadFloat4x4(&vertexShaderBuffer.viewMatrix) * XMLoadFloat4x4(&vertexShaderBuffer.perspectiveMatrix);
 
-	XMStoreFloat4x4(&vertexShaderData.perspectiveMatrix, XMMatrixTranspose(perspectiveMatrix));
-	XMStoreFloat4x4(&vertexShaderData.lightViewMatrix, XMMatrixTranspose(light.GetViewMatrix()));
-	XMStoreFloat4x4(&vertexShaderData.lightPerspectiveMatrix, XMMatrixTranspose(light.GetPerspectiveMatrix()));
+	XMStoreFloat4x4(&vertexShaderBuffer.viewMatrix, XMMatrixTranspose(WVP));
 	
-	memcpy(mappedResource.pData, &vertexShaderData, sizeof(VS));
+	memcpy(mappedResource.pData, &vertexShaderBuffer, sizeof(VS));
 	context.Unmap(VS_Buffer.Get(), 0);
 
 	//PIXEL SHADER BUFFER(S)
@@ -33,11 +29,11 @@ bool Shader::UpdateBuffers(ID3D11DeviceContext& context, const Model& model, Lig
 	hr = context.Map(PS_Buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	if FAILED(hr)
 	{
-		Error("- FAILED TO MAP BUFFER -");
+		Error("FAILED TO MAP BUFFER");
 		return false;
 	}
 
-	memcpy(mappedResource.pData, &cameraPosition, sizeof(PS));
+	memcpy(mappedResource.pData, &pixelShaderBuffer.cameraPosition, sizeof(PS));
 	context.Unmap(PS_Buffer.Get(), 0);
 
 	return true;
@@ -47,6 +43,7 @@ bool Shader::Initialize(ID3D11Device& device, HWND window)
 {
 	HRESULT hr;
 	std::string byteCode;
+
 	if (!LoadVertexShader(device, vertexShader, vs_path, byteCode))
 		return false;
 
@@ -65,7 +62,7 @@ bool Shader::Initialize(ID3D11Device& device, HWND window)
 	hr = device.CreateInputLayout(inputDesc, numElements, byteCode.c_str(), byteCode.length(), &layout);
 	if FAILED(hr)
 	{
-		Error("- FAILED TO CREATE INPUT LAYOUT -");
+		Error("FAILED TO CREATE INPUT LAYOUT");
 		return false;
 	}
 
@@ -81,7 +78,7 @@ bool Shader::Initialize(ID3D11Device& device, HWND window)
 	hr = device.CreateBuffer(&bufferDesc, nullptr, &VS_Buffer);
 	if FAILED(hr)
 	{
-		Error("- FAILED TO CREATE BUFFER -");
+		Error("FAILED TO CREATE BUFFER");
 		return false;
 	}
 
@@ -90,32 +87,49 @@ bool Shader::Initialize(ID3D11Device& device, HWND window)
 	hr = device.CreateBuffer(&bufferDesc, nullptr, &PS_Buffer);
 	if FAILED(hr)
 	{
-		Error("- FAILED TO CREATE BUFFER -");
+		Error("FAILED TO CREATE BUFFER");
 		return false;
 	}
 
 	return true;
 }
 
-void Shader::SetShader(ID3D11DeviceContext& context)
+void Shader::SetShader(ID3D11DeviceContext& context, const Scene& scene)
 {
+	const auto& camera = scene.GetCamera();
+	const auto& lights = scene.GetLights();
+
+	XMStoreFloat4x4(&vertexShaderBuffer.viewMatrix, camera.GetViewMatrix());
+	XMStoreFloat4x4(&vertexShaderBuffer.perspectiveMatrix, camera.GetPerspectiveMatrix());
+	XMStoreFloat4x4(&vertexShaderBuffer.lightViewMatrix, lights[0]->GetViewMatrix());
+	XMStoreFloat4x4(&vertexShaderBuffer.lightPerspectiveMatrix, lights[0]->GetPerspectiveMatrix());
+
+	pixelShaderBuffer.cameraPosition = camera.GetPosition();
+
 	context.IASetInputLayout(layout.Get());
 	context.VSSetShader(vertexShader.Get(), nullptr, 0);
 	context.PSSetShader(pixelShader.Get(), nullptr, 0);
 }
 
-void Shader::Render(ID3D11DeviceContext& context, const Model& model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix, XMFLOAT3 cameraPosition)
+void Shader::Render(ID3D11DeviceContext& context, const Scene& scene)
 {
+	SetShader(context, scene);
+
 	unsigned int stride = sizeof(Vertex);
 	unsigned int offset = 0;
 
-	auto buffer = &model.GetVertexBuffer();
-	context.IASetVertexBuffers(0, 1, &buffer, &stride, &offset);
+	const auto& models = scene.GetModels();
 
-	UpdateBuffers(context, model, light, viewMatrix, perspectiveMatrix, cameraPosition);
+	for (const auto& model : models)
+	{
+		UpdateBuffers(context, *model);
 
-	context.PSSetConstantBuffers(0, 1, PS_Buffer.GetAddressOf());
-	context.VSSetConstantBuffers(0, 1, VS_Buffer.GetAddressOf());
+		auto buffer = &model->GetVertexBuffer();
+		context.IASetVertexBuffers(0, 1, &buffer, &stride, &offset);
 
-	context.Draw(model.GetVertexCount(), 0);
+		context.PSSetConstantBuffers(0, 1, PS_Buffer.GetAddressOf());
+		context.VSSetConstantBuffers(0, 1, VS_Buffer.GetAddressOf());
+
+		context.Draw(model->GetVertexCount(), 0);
+	}
 }

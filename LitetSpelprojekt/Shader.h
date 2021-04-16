@@ -2,11 +2,13 @@
 #include <DirectXMath.h>
 #include <d3d11.h>
 
+#include "Print.h"
 #include "ComPtr.h"
-#include "Model.h"
-#include "Light.h"
 
 using namespace DirectX;
+
+class Scene;
+class Model;
 
 class Shader
 {
@@ -27,19 +29,19 @@ private:
 
 		XMFLOAT4X4 lightViewMatrix;
 		XMFLOAT4X4 lightPerspectiveMatrix;
-	};
+	} vertexShaderBuffer;
 
 	ComPtr<ID3D11Buffer> PS_Buffer;
 	struct PS
 	{
 		XMFLOAT3 cameraPosition;
 		float padding;
-	};
+	} pixelShaderBuffer;
 
-	bool UpdateBuffers(ID3D11DeviceContext& context, const Model& model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix, XMFLOAT3 cameraPosition);
+	bool UpdateBuffers(ID3D11DeviceContext& context, const Model& model);
 public:
 	Shader() = default;
 	bool Initialize(ID3D11Device& device, HWND window);
-	void SetShader(ID3D11DeviceContext& context);
-	void Render(ID3D11DeviceContext& context, const Model& model, Light light, XMMATRIX viewMatrix, XMMATRIX perspectiveMatrix, XMFLOAT3 cameraPosition);
+	void SetShader(ID3D11DeviceContext& context, const Scene& scene);
+	void Render(ID3D11DeviceContext& context, const Scene& scene);
 };

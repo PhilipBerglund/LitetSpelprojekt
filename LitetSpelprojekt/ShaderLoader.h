@@ -8,11 +8,11 @@ bool LoadVertexShader(ID3D11Device& device, ComPtr<ID3D11VertexShader>& vertexSh
 	std::string shaderData;
 	std::ifstream reader;
 
-	reader.open(path, std::ios::binary);
+	reader.open(path, std::ios::binary | std::ios::beg);
 
 	if (!reader.is_open())
 	{
-		Error("- COULD NOT OPEN FILE: " + path + " -");
+		Error("COULD NOT OPEN FILE: " + path);
 		return false;
 	}
 
@@ -24,7 +24,7 @@ bool LoadVertexShader(ID3D11Device& device, ComPtr<ID3D11VertexShader>& vertexSh
 	HRESULT hr = device.CreateVertexShader(shaderData.c_str(), shaderData.length(), nullptr, &vertexShader);
 	if FAILED(hr)
 	{
-		Error("- FAILED TO CREATE VERTEX SHADER -");
+		Error("FAILED TO CREATE VERTEX SHADER");
 		return false;
 	}
 
@@ -39,11 +39,11 @@ bool LoadPixelShader(ID3D11Device& device, ComPtr<ID3D11PixelShader>& pixelShade
 	std::string shaderData;
 	std::ifstream reader;
 
-	reader.open(path, std::ios::binary);
+	reader.open(path, std::ios::binary | std::ios::beg);
 
 	if (!reader.is_open())
 	{
-		Error("- COULD NOT OPEN FILE: " + path + " -");
+		Error("COULD NOT OPEN FILE: " + path);
 		return false;
 	}
 
@@ -55,7 +55,7 @@ bool LoadPixelShader(ID3D11Device& device, ComPtr<ID3D11PixelShader>& pixelShade
 	HRESULT hr = device.CreatePixelShader(shaderData.c_str(), shaderData.length(), nullptr, &pixelShader);
 	if FAILED(hr)
 	{
-		Error("- FAILED TO CREATE PIXEL SHADER -");
+		Error("FAILED TO CREATE PIXEL SHADER");
 		return false;
 	}
 

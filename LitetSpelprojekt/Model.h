@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Geometry.h"
+#include "Collider.h"
 
 struct Material
 {
@@ -29,6 +30,9 @@ private:
 	bool LoadModel(std::string path);
 	bool LoadTexture(std::string path);
 public:
+	bool isInteractable = true;
+	BoxCollider collider;
+
 	Model();
 	void Update(ID3D11DeviceContext& context);
 	bool Initialize(ID3D11Device& device, std::string path);

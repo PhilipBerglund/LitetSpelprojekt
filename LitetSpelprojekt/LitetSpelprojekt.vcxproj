@@ -123,7 +123,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;d2d1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d2d1.lib;windowscodecs.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -141,13 +141,11 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;d2d1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d2d1.lib;windowscodecs.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BaseRenderPass.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="DirectXEssentials.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Graphics.cpp" />
@@ -155,20 +153,19 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Model.cpp" />
-    <ClCompile Include="ParticleRenderPass.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Print.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="UI.cpp" />
+    <ClCompile Include="SkeletonAnimation.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BaseRenderPass.h" />
-    <ClInclude Include="Button.h" />
+    <ClInclude Include="Collider.h" />
+    <ClInclude Include="SkeletonAnimation.h" />
+    <ClInclude Include="UI_Button.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ComPtr.h" />
-    <ClInclude Include="DirectXEssentials.h" />
     <ClInclude Include="Print.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
@@ -178,16 +175,15 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Model.h" />
-    <ClInclude Include="ParticleRenderPass.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Random.h" />
-    <ClInclude Include="RenderPass.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderLoader.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="UI.h" />
+    <ClInclude Include="UI_Component.h" />
+    <ClInclude Include="UI_Image.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

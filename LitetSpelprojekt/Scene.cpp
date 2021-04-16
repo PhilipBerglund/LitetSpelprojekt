@@ -1,11 +1,9 @@
 #include "Scene.h"
-#include "BaseRenderPass.h"
 
 Scene::Scene(Graphics& graphics, UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 100.0f, { 0,0,-10 })
 {
-	renderPasses.push_back(std::make_unique<BaseRenderPass>(graphics.GetDevice(), window));
-
+	sh.Initialize(graphics.GetDevice(), window);
 	AddModel(graphics, "Models/Troll.obj");
 	AddLight();
 }
@@ -17,7 +15,7 @@ bool Scene::AddModel(Graphics& graphics, const std::string& path)
 	gameObjects.push_back(model);
 	if (!model->Initialize(graphics.GetDevice(), path))
 	{
-		Error("- FAILED TO INITIALIZE MODEL -");
+		Error("FAILED TO INITIALIZE MODEL");
 		return false;
 	}
 
@@ -35,6 +33,10 @@ void Scene::Update(InputHandler& input, float dt)
 {
 	camera.Rotate((float)input.ReadRawDelta().value().x, (float)input.ReadRawDelta().value().y);
 
+	XMFLOAT3 lastPosition = camera.GetPosition();
+
+	for (int i = 0; i < models.size(); ++i)
+
 	if (input.KeyIsPressed('W'))
 		camera.MoveForward(dt);
 
@@ -47,11 +49,21 @@ void Scene::Update(InputHandler& input, float dt)
 	if (input.KeyIsPressed('A'))
 		camera.MoveRight(-dt);
 
+	for (auto& model : models)
+	{
+		if (camera.CheckCollision(model->collider))
+		{
+			camera.SetPosition(lastPosition);
+			XMFLOAT3 direction = { camera.GetPosition().x - model->GetPosition().x, 0.0f,
+									camera.GetPosition().z - model->GetPosition().z };
+			camera.PushBack(direction, dt);
+		}
+	}
+
 	camera.Update();
 }
 
 void Scene::Render(Graphics& graphics)
 {
-	for (auto& renderPass : renderPasses)
-		renderPass->Execute(*this, graphics);
+	sh.Render(graphics.GetDeviceContext(), *this);
 }

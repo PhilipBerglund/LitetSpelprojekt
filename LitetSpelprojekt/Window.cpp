@@ -52,7 +52,6 @@ Window::Window(UINT width, UINT height, LPCWSTR title, HINSTANCE instance)
 	wc.lpszClassName = className;
 
 	RegisterClass(&wc);
-
 	hWnd = CreateWindowEx(0, className, title,
 		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
 		CW_USEDEFAULT, CW_USEDEFAULT, width, height,

@@ -13,7 +13,11 @@ Camera::Camera()
 }
 
 Camera::Camera(float FOV, float aspectRatio, float nearZ, float farZ, XMFLOAT3 position, XMFLOAT3 rotation, XMFLOAT3 scale)
+<<<<<<< Updated upstream
 	:GameObject(position, rotation, scale), pitch(0), yaw(0), rotationSpeed(0.001f), speed(15.0f)
+=======
+	:GameObject(position, rotation, scale), pitch(0), yaw(0), rotationSpeed(0.0015f), speed(15.0f)
+>>>>>>> Stashed changes
 {
 	this->up = { 0,1,0 };
 	this->forward = { 0,0,1 };
@@ -21,21 +25,11 @@ Camera::Camera(float FOV, float aspectRatio, float nearZ, float farZ, XMFLOAT3 p
 	this->viewMatrix = XMMatrixLookAtLH(XMLoadFloat3(&transform.position), forward, up);
 
 	this->perspectiveMatrix = XMMatrixPerspectiveFovLH(FOV, aspectRatio, nearZ, farZ);
-}
 
-XMMATRIX Camera::GetViewMatrix() const
-{
-	return this->viewMatrix;
-}
-
-XMMATRIX Camera::GetPerspectiveMatrix() const
-{
-	return this->perspectiveMatrix;
-}
-
-float Camera::GetSpeed() const
-{
-	return this->speed;
+	this->collider.x = position.x;
+	this->collider.y = position.y;
+	this->collider.z = position.z;
+	this->collider.radius = 2;
 }
 
 void Camera::MoveRight(float dt)
@@ -77,10 +71,25 @@ void Camera::Rotate(float dx, float dy)
 	pitch = std::clamp(pitch + dy * rotationSpeed, 0.995f * -XM_PIDIV2, 0.995f * XM_PIDIV2);
 }
 
+void Camera::PushBack(XMFLOAT3 direction, float dt)
+{
+	transform.position.x += direction.x * dt;
+	transform.position.z += direction.z * dt;
+}
+
+bool Camera::CheckCollision(Collider& other)
+{
+	return collider.Intersects(other);
+}
+
 void Camera::Update()
 {
 	const XMVECTOR lookAtVec = XMVector3Transform(forward, XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0f));
 	const XMVECTOR target = XMLoadFloat3(&transform.position) + lookAtVec;
 
 	this->viewMatrix = XMMatrixLookAtLH(XMLoadFloat3(&transform.position), target, up);
+
+	this->collider.x = transform.position.x;
+	this->collider.y = transform.position.y;
+	this->collider.z = transform.position.z;
 }

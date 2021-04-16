@@ -2,15 +2,14 @@
 #include "Scene.h"
 #include "MainMenu.h"
 
-enum class GameState { MAINMENU, INGAME, PAUSED };
+enum class GameState { MAINMENU, INGAME, PAUSED, END };
 
 class Game
 {
 private:
-	UI ui;
+	Graphics graphics;
 	Scene scene;
 	MainMenu mainMenu;
-	Graphics graphics;
 	InputHandler input;
 	GameState state = GameState::INGAME;
 public:
@@ -20,5 +19,6 @@ public:
 	void CatchInput(unsigned char key, bool down = true);
 	void CatchInput(std::pair<int, int> pos, bool down = true);
 	void CatchRawInput(std::pair<int, int> delta) { input.OnRawDelta(delta.first, delta.second); };
+
 	void Render(float dt);
 };

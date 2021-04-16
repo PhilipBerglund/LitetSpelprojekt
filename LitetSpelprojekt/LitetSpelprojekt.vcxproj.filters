@@ -13,12 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\RenderPasses">
-      <UniqueIdentifier>{6f520f71-6875-4c01-8cae-ad22736b67e2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\RenderPasses">
-      <UniqueIdentifier>{236f035b-9c80-4092-b53d-782fb50a6e79}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Utilities">
       <UniqueIdentifier>{906875ca-c6c9-4912-9a86-99053b9fc3ce}</UniqueIdentifier>
     </Filter>
@@ -34,15 +28,9 @@
     <Filter Include="Header Files\UI">
       <UniqueIdentifier>{c6618d2a-7f5e-4be5-b129-5af3b3b76079}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\UI">
-      <UniqueIdentifier>{ea248fa7-9f9a-43dd-92fa-6bef3d8af4ba}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectXEssentials.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Graphics.cpp">
@@ -58,12 +46,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseRenderPass.cpp">
-      <Filter>Source Files\RenderPasses</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleRenderPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ParticleSystem.cpp">
@@ -87,18 +69,12 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="UI.cpp">
-      <Filter>Source Files\UI</Filter>
+    <ClCompile Include="SkeletonAnimation.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectXEssentials.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Graphics.h">
@@ -118,15 +94,6 @@
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderPass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseRenderPass.h">
-      <Filter>Header Files\RenderPasses</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleRenderPass.h">
-      <Filter>Header Files\RenderPasses</Filter>
     </ClInclude>
     <ClInclude Include="MainMenu.h">
       <Filter>Header Files</Filter>
@@ -161,11 +128,23 @@
     <ClInclude Include="ShaderLoader.h">
       <Filter>Header Files\Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="UI.h">
+    <ClInclude Include="UI_Image.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Button.h">
+    <ClInclude Include="UI_Button.h">
       <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Component.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="SkeletonAnimation.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -2,11 +2,13 @@
 
 #include "InputHandler.h"
 #include "Graphics.h"
-#include "RenderPass.h"
 #include "Model.h"
+#include "Shader.h"
 #include "Light.h"
 #include "Camera.h"
 #include <vector>
+
+//IDs / sorterad lista (olika shaders, konstanter för framen en gång)
 
 class Scene
 {
@@ -15,7 +17,7 @@ private:
 	std::vector<std::shared_ptr<Light>> lights;
 	std::vector<std::shared_ptr<Model>> models;
 	std::vector<std::shared_ptr<GameObject>> gameObjects;
-	std::vector<std::unique_ptr<RenderPass>> renderPasses;
+	Shader sh;
 public:
 	Scene() = default;
 	Scene(Graphics& graphics, UINT windowWidth, UINT windowHeight, HWND window);

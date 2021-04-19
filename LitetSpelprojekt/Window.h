@@ -9,7 +9,6 @@ private:
 	UINT height;
 	HWND hWnd;
 	std::vector<char> rawBuffer;
-	bool cursorEnabled = true;
 
 	LRESULT MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 public:
@@ -21,4 +20,6 @@ public:
 	HWND GetWindowHandle() const;
 	void EnableCursor();
 	void DisableCursor();
+
+	bool cursorEnabled = true;
 };

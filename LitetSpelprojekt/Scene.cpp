@@ -51,13 +51,26 @@ void Scene::Update(InputHandler& input, float dt)
 
 	for (auto& model : models)
 	{
-		if (camera.CheckCollision(model->collider))
+		bool hit = false;
+
+		switch (model->collidertype)
+		{
+		case ColliderType::BOX:
+			hit = camera.CheckCollision(model->boundingbox);
+			break;
+		case ColliderType::SPHERE:
+			break;
+		}
+
+		if (hit)
 		{
 			camera.SetPosition(lastPosition);
 			XMFLOAT3 direction = { camera.GetPosition().x - model->GetPosition().x, 0.0f,
 									camera.GetPosition().z - model->GetPosition().z };
 			camera.PushBack(direction, dt);
 		}
+
+		Print(std::to_string(camera.CheckIntersection(model->boundingbox)));
 	}
 
 	camera.Update();

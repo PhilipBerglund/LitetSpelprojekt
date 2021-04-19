@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObject.h"
-#include "Collider.h"
+#include <DirectXCollision.h>
 
 class Camera :public GameObject
 {
@@ -16,7 +16,9 @@ private:
 	float rotationSpeed;
 	float speed;
 
-	SphereCollider collider;
+	BoundingSphere boundingsphere;
+	float pickingDistance;
+	XMVECTOR direction;
 public:
 	Camera();
 	Camera(float FOV, float aspectRatio, float nearZ, float farZ, XMFLOAT3 position, XMFLOAT3 rotation = { 0,0,0 }, XMFLOAT3 scale = { 1,1,1 });
@@ -31,7 +33,10 @@ public:
 	void Rotate(float dx, float dy);
 
 	void PushBack(XMFLOAT3 direction, float dt);
-	bool CheckCollision(Collider& other);
+	bool CheckCollision(BoundingOrientedBox& other);
+	bool CheckCollision(BoundingSphere& other);
+
+	bool CheckIntersection(BoundingOrientedBox& other);
 
 	void Update();
 };

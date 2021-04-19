@@ -13,7 +13,7 @@ Camera::Camera()
 }
 
 Camera::Camera(float FOV, float aspectRatio, float nearZ, float farZ, XMFLOAT3 position, XMFLOAT3 rotation, XMFLOAT3 scale)
-	:GameObject(position, rotation, scale), pitch(0), yaw(0), rotationSpeed(0.0015f), speed(15.0f)
+	:GameObject(position, rotation, scale), pitch(0), yaw(0), rotationSpeed(0.002f), speed(15.0f)
 {
 	this->up = { 0,1,0 };
 	this->forward = { 0,0,1 };
@@ -22,10 +22,9 @@ Camera::Camera(float FOV, float aspectRatio, float nearZ, float farZ, XMFLOAT3 p
 
 	this->perspectiveMatrix = XMMatrixPerspectiveFovLH(FOV, aspectRatio, nearZ, farZ);
 
-	this->collider.x = position.x;
-	this->collider.y = position.y;
-	this->collider.z = position.z;
-	this->collider.radius = 2;
+	this->direction = forward;
+	this->boundingsphere = BoundingSphere(transform.position, 1);
+	this->pickingDistance = 0.0001;
 }
 
 void Camera::MoveRight(float dt)
@@ -35,11 +34,13 @@ void Camera::MoveRight(float dt)
 							XMMatrixScaling(speed, speed, speed));
 
 	XMVECTOR rightVec = XMVector3Cross(up, forwardVec);
+	rightVec = XMVector3Normalize(rightVec);
 	XMFLOAT3 rightFloat;
 	XMStoreFloat3(&rightFloat, rightVec);
-	transform.position.x += rightFloat.x * dt;
-	//transform.position.y += rightFloat.y * dt;
-	transform.position.z += rightFloat.z * dt;
+
+	transform.position.x += rightFloat.x * dt * speed;
+	//transform.position.y += rightFloat.y * dt * speed;
+	transform.position.z += rightFloat.z * dt * speed;
 }
 
 void Camera::MoveForward(float dt)
@@ -47,13 +48,13 @@ void Camera::MoveForward(float dt)
 	XMVECTOR forwardVec =	XMVector3Transform(forward,
 							XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0f) *
 							XMMatrixScaling(speed, speed, speed));
-
+	forwardVec = XMVector3Normalize(forwardVec);
 	XMFLOAT3 forwardFloat;
 	XMStoreFloat3(&forwardFloat, forwardVec);
 
-	transform.position.x += forwardFloat.x * dt;
-	//transform.position.y += forwardFloat.y * dt;
-	transform.position.z += forwardFloat.z * dt;
+	transform.position.x += forwardFloat.x * dt * speed;
+	//transform.position.y += forwardFloat.y * dt * speed;
+	transform.position.z += forwardFloat.z * dt * speed;
 }
 
 void Camera::Rotate(float dx, float dy)
@@ -73,19 +74,30 @@ void Camera::PushBack(XMFLOAT3 direction, float dt)
 	transform.position.z += direction.z * dt;
 }
 
-bool Camera::CheckCollision(Collider& other)
+bool Camera::CheckCollision(BoundingOrientedBox& other)
 {
-	return collider.Intersects(other);
+	return boundingsphere.Intersects(other);
+}
+
+bool Camera::CheckCollision(BoundingSphere& other)
+{
+	return boundingsphere.Intersects(other);
+}
+
+bool Camera::CheckIntersection(BoundingOrientedBox& other)
+{
+	return other.Intersects(XMLoadFloat3(&transform.position), direction, pickingDistance);
 }
 
 void Camera::Update()
 {
 	const XMVECTOR lookAtVec = XMVector3Transform(forward, XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0f));
 	const XMVECTOR target = XMLoadFloat3(&transform.position) + lookAtVec;
+	direction = XMVector3Normalize(lookAtVec);
 
 	this->viewMatrix = XMMatrixLookAtLH(XMLoadFloat3(&transform.position), target, up);
 
-	this->collider.x = transform.position.x;
-	this->collider.y = transform.position.y;
-	this->collider.z = transform.position.z;
+	this->boundingsphere.Center.x = transform.position.x;
+	this->boundingsphere.Center.y = transform.position.y;
+	this->boundingsphere.Center.z = transform.position.z;
 }

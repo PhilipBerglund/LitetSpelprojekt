@@ -1,16 +1,15 @@
 #pragma once
 #include <wincodec.h>
-#include "UI_Component.h"
+#include "UIComponent.h"
 
-
-class Image
+class Image :public UIComponent
 {
 private:
-	float uniformScale;
+	float scale;
 	ComPtr<ID2D1Bitmap> bitmap;
-	D2D1_RECT_F rect = {};
 public:
-	Image(LPCWSTR filename, ID2D1RenderTarget& renderTarget, float scale, float x, float y)
+	Image(LPCWSTR filename, ID2D1RenderTarget& renderTarget, float scale, bool visible, D2D_VECTOR_2F position)
+		:UIComponent(visible, position), scale(scale)
 	{
 		HRESULT hr;
 
@@ -54,28 +53,20 @@ public:
 		else
 			Error("FAILED TO CREATE WIC FACTORY");
 
-		this->uniformScale = scale;
+		this->scale = scale;
+		this->width = scale * bitmap->GetSize().width;
+		this->height = scale * bitmap->GetSize().height;
 
-		rect = {
-				x - uniformScale * bitmap->GetSize().width / 2,
-				y - uniformScale * bitmap->GetSize().height / 2,
-				x + uniformScale * bitmap->GetSize().width / 2,
-				y + uniformScale * bitmap->GetSize().height / 2
+		bounds = {
+				position.x - width / 2,
+				position.y - height / 2,
+				position.x + width / 2,
+				position.y + height / 2
 				};
 	}
 
 	void Draw(ID2D1RenderTarget& renderTarget)
 	{
-		renderTarget.DrawBitmap(bitmap.Get(), rect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR, D2D1::RectF(0.0f, 0.0f, bitmap->GetSize().width, bitmap->GetSize().height));
-	}
-
-	void MoveTo(float x, float y)
-	{
-		rect = {
-				x - uniformScale * bitmap->GetSize().width / 2,
-				y - uniformScale * bitmap->GetSize().height / 2,
-				x + uniformScale * bitmap->GetSize().width / 2,
-				y + uniformScale * bitmap->GetSize().height / 2
-		};
+		renderTarget.DrawBitmap(bitmap.Get(), bounds, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR, D2D1::RectF(0.0f, 0.0f, bitmap->GetSize().width, bitmap->GetSize().height));
 	}
 };

@@ -9,8 +9,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	freopen("conout$", "w", stdout);
 	freopen("conout$", "w", stderr);
 
-	const UINT WIDTH = GetSystemMetrics(SM_CXSCREEN);
-	const UINT HEIGHT = GetSystemMetrics(SM_CYSCREEN);
+	UINT WIDTH = GetSystemMetrics(SM_CXSCREEN);
+	UINT HEIGHT = GetSystemMetrics(SM_CYSCREEN);
+
+	WIDTH = 1024;
+	HEIGHT = 567;
+
 	LPCWSTR windowTitle = L"LILLA SPEL";
 	Window window = Window(WIDTH, HEIGHT, windowTitle, hInstance);
 
@@ -41,13 +45,21 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 		if (msg.message == WM_LBUTTONUP)
 			game->CatchInput(window.GetMousePos(msg.lParam), false);
 
-		if (msg.message == WM_INPUT)
+		if (msg.message == WM_INPUT && game->GetState() == GameState::INGAME)
 			game->CatchRawInput(window.GetRawInput(msg.lParam));
 
-		if (game->GetState() == GameState::MAINMENU)
+		if (game->GetState() == GameState::MAINMENU && window.cursorEnabled == false)
 			window.EnableCursor();
 		
-		SetCursorPos(WIDTH / 2, HEIGHT / 2);
+		if (game->GetState() == GameState::PAUSED && window.cursorEnabled == false)
+			window.EnableCursor();
+
+		if (game->GetState() == GameState::INGAME && window.cursorEnabled == true)
+			window.DisableCursor();
+
+		if (game->GetState() == GameState::INGAME)
+			SetCursorPos(WIDTH / 2, HEIGHT / 2);
+
 		game->Render(dt);
 		dt = (float)timer.DeltaTime();
 	}

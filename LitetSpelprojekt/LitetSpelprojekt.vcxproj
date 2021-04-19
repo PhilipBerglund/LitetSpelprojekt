@@ -151,7 +151,7 @@
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="InGameUI.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Print.cpp" />
@@ -161,9 +161,8 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Collider.h" />
     <ClInclude Include="SkeletonAnimation.h" />
-    <ClInclude Include="UI_Button.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ComPtr.h" />
     <ClInclude Include="Print.h" />
@@ -173,7 +172,7 @@
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Light.h" />
-    <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="InGameUI.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Random.h" />
@@ -182,8 +181,10 @@
     <ClInclude Include="ShaderLoader.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="UI_Component.h" />
-    <ClInclude Include="UI_Image.h" />
+    <ClInclude Include="UI.h" />
+    <ClInclude Include="UIComponent.h" />
+    <ClInclude Include="Image.h" />
+    <ClInclude Include="Vector3.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

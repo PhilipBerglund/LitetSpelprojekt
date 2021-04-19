@@ -9,7 +9,7 @@ class Graphics
 {
 private:
 	//3D
-	float backgroundColor[4] = { 1,1,1,1 };
+	float backgroundColor[4] = { 0.5,0.5,0.5,1 };
 
 	D3D11_VIEWPORT viewport;
 	ComPtr<ID3D11Device> device;

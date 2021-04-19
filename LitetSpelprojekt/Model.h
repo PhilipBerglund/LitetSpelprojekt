@@ -1,7 +1,9 @@
 #pragma once
 #include "GameObject.h"
 #include "Geometry.h"
-#include "Collider.h"
+#include <DirectXCollision.h>
+
+enum class ColliderType {BOX, SPHERE};
 
 struct Material
 {
@@ -30,8 +32,9 @@ private:
 	bool LoadModel(std::string path);
 	bool LoadTexture(std::string path);
 public:
+	ColliderType collidertype = ColliderType::BOX;
 	bool isInteractable = true;
-	BoxCollider collider;
+	BoundingOrientedBox  boundingbox;
 
 	Model();
 	void Update(ID3D11DeviceContext& context);

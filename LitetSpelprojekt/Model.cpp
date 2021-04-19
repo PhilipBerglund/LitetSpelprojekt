@@ -144,13 +144,9 @@ bool Model::Initialize(ID3D11Device& device, std::string path)
 
     if (FAILED(device.CreateBuffer(&desc, &data, &vertexBuffer)))
         return false;
-
-    collider.xMin = transform.position.x - 1;
-    collider.xMax = transform.position.x + 1;
-    collider.yMin = transform.position.y - 1;
-    collider.yMax = transform.position.y + 1;
-    collider.zMin = transform.position.z - 1;
-    collider.zMax = transform.position.z + 1;
+    XMFLOAT4 orientation;
+    XMStoreFloat4(&orientation, XMQuaternionIdentity());
+    boundingbox = BoundingOrientedBox(transform.position, { 1,1,1 }, orientation);
 
     return true;
 }

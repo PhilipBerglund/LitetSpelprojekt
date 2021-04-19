@@ -1,17 +1,19 @@
 #pragma once
 #include "Scene.h"
-#include "MainMenu.h"
+#include "InGameUI.h"
+#include "Timer.h"
 
-enum class GameState { MAINMENU, INGAME, PAUSED, END };
+enum class GameState { MAINMENU, INGAME, OPENJOURNAL, PAUSED, END };
 
 class Game
 {
 private:
 	Graphics graphics;
 	Scene scene;
-	MainMenu mainMenu;
+	InGameUI inGameUI;
 	InputHandler input;
 	GameState state = GameState::INGAME;
+	Timer timer;
 public:
 	Game(HWND window, UINT windowWidth, UINT windowHeight);
 	GameState GetState() const { return this->state; };

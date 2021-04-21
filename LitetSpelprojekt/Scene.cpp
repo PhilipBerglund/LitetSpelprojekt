@@ -6,6 +6,17 @@ Scene::Scene(Graphics& graphics, UINT windowWidth, UINT windowHeight, HWND windo
 	sh.Initialize(graphics.GetDevice(), window);
 	AddModel(graphics, "Models/Troll.obj");
 	AddLight();
+
+	scenario.TempLoadClues(graphics, "Models/gubbe.obj");
+
+	for (auto& clue : scenario.clues)
+	{
+		models.push_back(clue.model);
+		gameObjects.push_back(clue.model);
+	}
+
+	scenario.clues[0].model.get()->SetPosition({ 5,-5,0 });
+	scenario.clues[0].model.get()->Update(graphics.GetDeviceContext());
 }
 
 bool Scene::AddModel(Graphics& graphics, const std::string& path)
@@ -18,7 +29,6 @@ bool Scene::AddModel(Graphics& graphics, const std::string& path)
 		Error("FAILED TO INITIALIZE MODEL");
 		return false;
 	}
-
 	return true;
 }
 
@@ -74,6 +84,8 @@ void Scene::Update(InputHandler& input, float dt)
 	}
 
 	camera.Update();
+	scenario.Run(input, dt, camera);
+
 }
 
 void Scene::Render(Graphics& graphics)

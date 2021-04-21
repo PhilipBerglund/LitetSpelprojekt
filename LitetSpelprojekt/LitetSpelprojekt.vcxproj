@@ -155,12 +155,14 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Print.cpp" />
+    <ClCompile Include="Scenario.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SkeletonAnimation.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Scenario.h" />
     <ClInclude Include="SkeletonAnimation.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />

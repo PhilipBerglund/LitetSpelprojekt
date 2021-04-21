@@ -29,6 +29,8 @@ public:
 	void OnLeftPressed(int x, int y);
 	void OnLeftRelease();
 	void ClearRawData();
+
+	bool LeftIsClicked() const;
 	std::pair<int, int> GetMousePos() const;
 	std::optional<RawDelta> ReadRawDelta();
 };
@@ -80,4 +82,9 @@ inline void InputHandler::ClearRawData()
 inline std::pair<int, int> InputHandler::GetMousePos() const
 {
 	return this->lastLeftMouseClick;
+}
+
+inline bool InputHandler::LeftIsClicked() const
+{
+	return leftIsPressed;
 }

@@ -26,6 +26,7 @@ private:
 		XMFLOAT4X4 worldMatrix;
 		XMFLOAT4X4 viewMatrix;
 		XMFLOAT4X4 perspectiveMatrix;
+		XMFLOAT4X4 WVP;
 
 		XMFLOAT4X4 lightViewMatrix;
 		XMFLOAT4X4 lightPerspectiveMatrix;

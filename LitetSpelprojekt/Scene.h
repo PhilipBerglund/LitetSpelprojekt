@@ -6,6 +6,7 @@
 #include "Shader.h"
 #include "Light.h"
 #include "Camera.h"
+#include "Scenario.h"
 #include <vector>
 
 //IDs / sorterad lista (olika shaders, konstanter för framen en gång)
@@ -13,6 +14,7 @@
 class Scene
 {
 private:
+	Scenario scenario;
 	Camera camera;
 	std::vector<std::shared_ptr<Light>> lights;
 	std::vector<std::shared_ptr<Model>> models;

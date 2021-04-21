@@ -19,7 +19,7 @@ bool Shader::UpdateBuffers(ID3D11DeviceContext& context, const Model& model)
 
 	XMMATRIX WVP = model.GetMatrix() * XMLoadFloat4x4(&vertexShaderBuffer.viewMatrix) * XMLoadFloat4x4(&vertexShaderBuffer.perspectiveMatrix);
 
-	XMStoreFloat4x4(&vertexShaderBuffer.viewMatrix, XMMatrixTranspose(WVP));
+	XMStoreFloat4x4(&vertexShaderBuffer.WVP, XMMatrixTranspose(WVP));
 	
 	memcpy(mappedResource.pData, &vertexShaderBuffer, sizeof(VS));
 	context.Unmap(VS_Buffer.Get(), 0);

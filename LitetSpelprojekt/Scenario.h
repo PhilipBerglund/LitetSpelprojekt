@@ -3,34 +3,37 @@
 #include "GameObject.h"
 #include "Geometry.h"
 #include "Model.h"
+#include "Graphics.h"
+#include "InputHandler.h"
+#include "Camera.h"
+#include "Print.h"
 
 enum ScenarioStates
 {
 
 };
 
-class Scenario
+struct Clue
 {
-public:
-	std::vector<std::shared_ptr<Model>> clues;
-	bool succeeded;
-	//void AddClue(Model clue);
-
-	void LoadClues();
-
-	void TempLoadClues(std::string path);
-
-	void Run();
-	void Initialize(const std::string& path);
-};
-
-struct Clue 
-{
-
-	Model *model;
+	std::shared_ptr<Model> model;
 	XMMATRIX worldMatrix;
 
 	bool murderClue;
 	bool found;
-
 };
+
+class Scenario
+{
+
+private: 
+	bool succeeded;
+
+public:
+	Scenario() = default;
+	//void LoadClues();
+	bool TempLoadClues(Graphics& graphics, std::string path);
+	void Run(InputHandler& input, float dt, Camera& camera);
+	std::vector<Clue> clues;
+};
+
+

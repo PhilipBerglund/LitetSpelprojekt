@@ -2,7 +2,13 @@
 
 void Model::Update(ID3D11DeviceContext& context)
 {
+    XMMATRIX translation = XMMatrixTranslationFromVector(XMLoadFloat3(&transform.position));
+    XMMATRIX rotation = XMMatrixRotationRollPitchYawFromVector(XMLoadFloat3(&transform.rotation));
+    XMMATRIX scale = XMMatrixScalingFromVector({1,1,1});
 
+    worldMatrix = scale * translation * rotation;
+
+    boundingbox.Center = transform.position;
 }
 
 bool Model::LoadModel(std::string path)
@@ -144,6 +150,7 @@ bool Model::Initialize(ID3D11Device& device, std::string path)
 
     if (FAILED(device.CreateBuffer(&desc, &data, &vertexBuffer)))
         return false;
+
     XMFLOAT4 orientation;
     XMStoreFloat4(&orientation, XMQuaternionIdentity());
     boundingbox = BoundingOrientedBox(transform.position, { 1,1,1 }, orientation);

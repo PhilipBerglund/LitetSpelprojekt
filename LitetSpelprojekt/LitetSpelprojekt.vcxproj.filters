@@ -28,6 +28,9 @@
     <Filter Include="Header Files\UI">
       <UniqueIdentifier>{c6618d2a-7f5e-4be5-b129-5af3b3b76079}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Scenario">
+      <UniqueIdentifier>{c150bf74-436a-4482-88b4-12f4df8608dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -71,6 +74,9 @@
     </ClCompile>
     <ClCompile Include="InGameUI.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenario.cpp">
+      <Filter>Header Files\Scenario</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +154,9 @@
     </ClInclude>
     <ClInclude Include="Vector3.h">
       <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenario.h">
+      <Filter>Header Files\Scenario</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -12,8 +12,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	UINT WIDTH = GetSystemMetrics(SM_CXSCREEN);
 	UINT HEIGHT = GetSystemMetrics(SM_CYSCREEN);
 
-	WIDTH = 1024;
-	HEIGHT = 567;
+	WIDTH = 1680;
+	HEIGHT = 1050;
 
 	LPCWSTR windowTitle = L"LILLA SPEL";
 	Window window = Window(WIDTH, HEIGHT, windowTitle, hInstance);

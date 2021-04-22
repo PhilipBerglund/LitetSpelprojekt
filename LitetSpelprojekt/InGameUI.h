@@ -18,4 +18,5 @@ public:
 	void Render(ID2D1RenderTarget& renderTarget);
 	void GetInput(int x, int y);
 	void Notify(InputHandler& input);
+	void ShowNotification(bool isShowing);
 };

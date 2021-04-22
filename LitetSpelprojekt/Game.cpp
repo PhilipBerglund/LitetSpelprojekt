@@ -73,7 +73,7 @@ void Game::Render(float dt)
 		if (input.KeyIsPressed(27))
 			state = GameState::PAUSED;
 
-		scene.Update(input, dt);
+		scene.Update(graphics, inGameUI, input, dt);
 		scene.Render(graphics);
 		inGameUI.Render(graphics.Get2DRenderTarget());
 		break;

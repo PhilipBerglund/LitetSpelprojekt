@@ -7,7 +7,10 @@ Scene::Scene(Graphics& graphics, UINT windowWidth, UINT windowHeight, HWND windo
 	AddModel(graphics, "Models/Troll.obj");
 	AddLight();
 
-	scenario.TempLoadClues(graphics, "Models/gubbe.obj");
+	scenario.TempLoadClues(graphics, "Models/testclue.obj");
+	scenario.TempLoadClues(graphics, "Models/testclue.obj");
+	scenario.TempLoadClues(graphics, "Models/testclue.obj");
+	scenario.TempLoadClues(graphics, "Models/testclue.obj");
 
 	for (auto& clue : scenario.clues)
 	{
@@ -15,8 +18,18 @@ Scene::Scene(Graphics& graphics, UINT windowWidth, UINT windowHeight, HWND windo
 		gameObjects.push_back(clue.model);
 	}
 
-	scenario.clues[0].model.get()->SetPosition({ 5,-5,0 });
+	scenario.clues[0].model.get()->SetPosition({ 5,0,0 });
 	scenario.clues[0].model.get()->Update(graphics.GetDeviceContext());
+
+	scenario.clues[1].model.get()->SetPosition({ 7,0,0 });
+	scenario.clues[1].model.get()->Update(graphics.GetDeviceContext());
+
+	scenario.clues[2].model.get()->SetPosition({ 9,0,0 });
+	scenario.clues[2].model.get()->Update(graphics.GetDeviceContext());
+
+	scenario.clues[3].model.get()->SetPosition({ 11,0,0 });
+	scenario.clues[3].model.get()->Update(graphics.GetDeviceContext());
+
 }
 
 bool Scene::AddModel(Graphics& graphics, const std::string& path)
@@ -39,7 +52,7 @@ void Scene::AddLight()
 	gameObjects.push_back(light);
 }
 
-void Scene::Update(InputHandler& input, float dt)
+void Scene::Update(Graphics& graphics, InGameUI ui, InputHandler& input, float dt)
 {
 	camera.Rotate((float)input.ReadRawDelta().value().x, (float)input.ReadRawDelta().value().y);
 
@@ -84,7 +97,7 @@ void Scene::Update(InputHandler& input, float dt)
 	}
 
 	camera.Update();
-	scenario.Run(input, dt, camera);
+	scenario.Run(graphics, ui, input, dt, camera);
 
 }
 

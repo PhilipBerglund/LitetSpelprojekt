@@ -16,7 +16,7 @@ bool Scenario::TempLoadClues(Graphics& graphics, std::string path)
 	return true;
 }
 
-void Scenario::Run(InputHandler& input, float dt, Camera& camera)
+void Scenario::Run(Graphics& graphics, InGameUI ui, InputHandler& input, float dt, Camera& camera)
 {
 	for (auto& clue : clues)
 	{
@@ -35,7 +35,22 @@ void Scenario::Run(InputHandler& input, float dt, Camera& camera)
 		if (camera.CheckIntersection(clue.model->boundingbox) && input.LeftIsClicked() == true)
 		{
 			Print("Clue clicked!");
+			clue.model.get()->SetPosition({ 0, -100, 0 });
+			clue.model.get()->Update(graphics.GetDeviceContext());
+			ui.ShowNotification(true);
+			notificationTime = 5;
 		}
+	}
+
+	if (notificationTime > 0 && notificationTime < 100)
+	{
+		notificationTime -= dt;
+	}
+
+	if (notificationTime <= 0)
+	{
+		ui.ShowNotification(false);
+		notificationTime = 101;
 	}
 }
 

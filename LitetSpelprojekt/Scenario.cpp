@@ -14,8 +14,6 @@ void Scenario::InitializeClueLocations()
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 
 	std::shuffle(clueLocations.begin(), clueLocations.end(), std::default_random_engine(seed));
-
-
 }
 
 void Scenario::SetRandomizedLocations(Graphics &graphics)

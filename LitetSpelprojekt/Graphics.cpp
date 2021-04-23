@@ -24,8 +24,9 @@ HRESULT Graphics::CreateDeviceSwapchain(UINT windowWidth, UINT windowHeight, HWN
 
 	UINT flags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 
-	if (_DEBUG)
+	#ifdef _DEBUG
 		flags = D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_DEBUG;
+	#endif
 
 	D3D_FEATURE_LEVEL featureLevels[] = { D3D_FEATURE_LEVEL_11_0 };
 

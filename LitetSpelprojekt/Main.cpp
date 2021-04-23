@@ -22,6 +22,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	Timer timer;
 	float dt = 0;
 
+	Graphics graphics(WIDTH, HEIGHT, window.GetWindowHandle());
+
 	MSG msg = {};
 	while (msg.message != WM_QUIT)
 	{	

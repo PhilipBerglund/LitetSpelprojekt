@@ -1,5 +1,16 @@
 #include "Graphics.h"
 
+Graphics::Graphics(UINT windowWidth, UINT windowHeight, HWND window)
+	:backgroundColor()
+{
+	viewport = {}; 
+	
+	// Graphics::backgroundColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
+
+	if (!Initialize(windowWidth, windowHeight, window))
+		Error("FAILED TO INITIALIZE GRAPHICS");	
+}
+
 HRESULT Graphics::CreateDeviceSwapchain(UINT windowWidth, UINT windowHeight, HWND window)
 {
 	DXGI_SWAP_CHAIN_DESC swapChainDesc = {};

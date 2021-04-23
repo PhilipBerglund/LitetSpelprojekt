@@ -8,7 +8,6 @@ enum class GameState { MAINMENU, INGAME, OPENJOURNAL, PAUSED, END };
 class Game
 {
 private:
-	Graphics graphics;
 	Scene scene;
 	InGameUI inGameUI;
 	InputHandler input;

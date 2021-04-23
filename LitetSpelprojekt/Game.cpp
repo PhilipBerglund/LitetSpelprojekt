@@ -2,13 +2,13 @@
 
 Game::Game(HWND window, UINT windowWidth, UINT windowHeight)
 {
-	if (graphics.Initialize(windowWidth, windowHeight, window))
+	/*if (Graphics::Initialize(windowWidth, windowHeight, window))
 	{
 		if (!inGameUI.Initialize(graphics.Get2DRenderTarget()))
 			Error("FAILED TO INITIALIZE IN GAME UI");
 	}
 	else
-		Error("FAILED TO INITIALIZE GRAPHICS");
+		Error("FAILED TO INITIALIZE GRAPHICS");*/
 
 	scene = Scene(graphics, windowWidth, windowHeight, window);
 }
@@ -62,6 +62,7 @@ void Game::CatchInput(std::pair<int, int> pos, bool down)
 
 void Game::Render(float dt)
 {
+	Graphics::BeginFrame();
 	graphics.BeginFrame();
 
 	switch (state)

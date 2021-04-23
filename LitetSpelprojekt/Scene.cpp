@@ -7,10 +7,12 @@ Scene::Scene(Graphics& graphics, UINT windowWidth, UINT windowHeight, HWND windo
 	AddModel(graphics, "Models/Troll.obj");
 	AddLight();
 
+	scenario.InitializeClueLocations();
+
 	scenario.TempLoadClues(graphics, "Models/testclue.obj");
-	scenario.TempLoadClues(graphics, "Models/testclue.obj");
-	scenario.TempLoadClues(graphics, "Models/testclue.obj");
-	scenario.TempLoadClues(graphics, "Models/testclue.obj");
+	scenario.TempLoadClues(graphics, "Models/testclue2.obj");
+	scenario.TempLoadClues(graphics, "Models/testclue3.obj");
+	scenario.TempLoadClues(graphics, "Models/testclue4.obj");
 
 	for (auto& clue : scenario.clues)
 	{
@@ -18,17 +20,7 @@ Scene::Scene(Graphics& graphics, UINT windowWidth, UINT windowHeight, HWND windo
 		gameObjects.push_back(clue.model);
 	}
 
-	scenario.clues[0].model.get()->SetPosition({ 5,0,0 });
-	scenario.clues[0].model.get()->Update(graphics.GetDeviceContext());
-
-	scenario.clues[1].model.get()->SetPosition({ 7,0,0 });
-	scenario.clues[1].model.get()->Update(graphics.GetDeviceContext());
-
-	scenario.clues[2].model.get()->SetPosition({ 9,0,0 });
-	scenario.clues[2].model.get()->Update(graphics.GetDeviceContext());
-
-	scenario.clues[3].model.get()->SetPosition({ 11,0,0 });
-	scenario.clues[3].model.get()->Update(graphics.GetDeviceContext());
+	scenario.SetRandomizedLocations(graphics);
 
 }
 
@@ -93,7 +85,7 @@ void Scene::Update(Graphics& graphics, InGameUI ui, InputHandler& input, float d
 			camera.PushBack(direction, dt);
 		}
 
-		Print(std::to_string(camera.CheckIntersection(model->boundingbox)));
+		/*Print(std::to_string(camera.CheckIntersection(model->boundingbox)));*/
 	}
 
 	camera.Update();

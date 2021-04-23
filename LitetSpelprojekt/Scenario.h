@@ -9,6 +9,7 @@
 #include "Print.h"
 #include "InGameUI.h"
 
+
 enum ScenarioStates
 {
 
@@ -30,12 +31,19 @@ private:
 	bool succeeded;
 	float notificationTime = 101;
 
+	
+
 public:
+	std::vector<Clue> clues;
+	std::vector<XMFLOAT3> clueLocations;
+
 	Scenario() = default;
 	//void LoadClues();
+	void InitializeClueLocations();
+	void SetRandomizedLocations(Graphics& graphics);
 	bool TempLoadClues(Graphics& graphics, std::string path);
 	void Run(Graphics& graphics, InGameUI ui, InputHandler& input, float dt, Camera& camera);
-	std::vector<Clue> clues;
+
 };
 
 

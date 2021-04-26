@@ -52,10 +52,13 @@ Window::Window(UINT width, UINT height, LPCWSTR title, HINSTANCE instance)
 	wc.lpszClassName = className;
 
 	RegisterClass(&wc);
-	hWnd = CreateWindowEx(0, className, title,
-		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
-		CW_USEDEFAULT, CW_USEDEFAULT, width, height,
-		nullptr, nullptr, instance, this);
+
+	//hWnd = CreateWindowEx(0, className, title,
+	//	WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
+	//	CW_USEDEFAULT, CW_USEDEFAULT, width, height,
+	//	nullptr, nullptr, instance, this);
+
+	hWnd = CreateWindow(className, title, 0, 0, 0, width, height, nullptr, nullptr, instance, this);
 
 	RAWINPUTDEVICE rid = {};
 	rid.usUsagePage = 0x01;
@@ -64,7 +67,7 @@ Window::Window(UINT width, UINT height, LPCWSTR title, HINSTANCE instance)
 	rid.hwndTarget = nullptr;
 	RegisterRawInputDevices(&rid, 1, sizeof(rid));
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
-	DisableCursor();
+	ShowCursor(false);
 }
 
 Window::~Window()
@@ -106,7 +109,7 @@ void Window::EnableCursor()
 {
 	if (!cursorEnabled)
 	{
-		while (::ShowCursor(TRUE) < 0);
+		//while (::ShowCursor(TRUE) < 0);
 		ClipCursor(nullptr);
 		SetCursorPos(width / 2, height / 2);
 		cursorEnabled = true;
@@ -117,7 +120,7 @@ void Window::DisableCursor()
 {
 	if (cursorEnabled)
 	{
-		while (::ShowCursor(FALSE) >= 0);
+		//while (::ShowCursor(FALSE) >= 0);
 		RECT rect;
 		GetClientRect(hWnd, &rect);
 		MapWindowPoints(hWnd, nullptr, reinterpret_cast<POINT*>(&rect), 2);

@@ -7,8 +7,11 @@ class Image :public UIComponent
 private:
 	float scale;
 	ComPtr<ID2D1Bitmap> bitmap;
+	float opacity = 1.0f;
 public:
-	Image(LPCWSTR filename, ID2D1RenderTarget& renderTarget, float scale, bool visible, D2D_VECTOR_2F position)
+	Image() = default;
+
+	Image(LPCWSTR filename, float scale, bool visible, D2D_VECTOR_2F position)
 		:UIComponent(visible, position), scale(scale)
 	{
 		HRESULT hr;
@@ -34,7 +37,7 @@ public:
 						hr = wicConverter->Initialize(wicFrame.Get(), GUID_WICPixelFormat32bppPBGRA, WICBitmapDitherTypeNone, NULL, 0.0, WICBitmapPaletteTypeCustom);
 						if SUCCEEDED(hr)
 						{
-							hr = renderTarget.CreateBitmapFromWicBitmap(wicConverter.Get(), &bitmap);
+							hr = Graphics::Get2DRenderTarget().CreateBitmapFromWicBitmap(wicConverter.Get(), &bitmap);
 							if FAILED(hr)
 								Error("FAILED TO CREATE BITMAP");
 						}
@@ -65,8 +68,23 @@ public:
 				};
 	}
 
-	void Draw(ID2D1RenderTarget& renderTarget)
+	void SetOpacity(float opacity)
 	{
-		renderTarget.DrawBitmap(bitmap.Get(), bounds, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR, D2D1::RectF(0.0f, 0.0f, bitmap->GetSize().width, bitmap->GetSize().height));
+		this->opacity = opacity;
+	}
+
+	float GetOpacity() const
+	{
+		return this->opacity;
+	}
+
+	void ReduceOpacity(float amount)
+	{
+		this->opacity -= amount;
+	}
+
+	void Draw()
+	{
+		Graphics::Get2DRenderTarget().DrawBitmap(bitmap.Get(), bounds, opacity, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR, D2D1::RectF(0.0f, 0.0f, bitmap->GetSize().width, bitmap->GetSize().height));
 	}
 };

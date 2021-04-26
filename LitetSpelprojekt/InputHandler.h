@@ -13,6 +13,7 @@ struct InputHandler
 private:
 	//MOUSE
 	bool leftIsPressed = false;
+	std::pair<int, int> currentMousePosition;
 	std::pair<int, int> lastLeftMouseClick;
 
 	RawDelta rd = {};
@@ -31,7 +32,9 @@ public:
 	void ClearRawData();
 
 	bool LeftIsClicked() const;
-	std::pair<int, int> GetMousePos() const;
+	std::pair<int, int> GetLastClickPos() const;
+	void OnMouseMove(int x, int y);
+	std::pair<int, int> GetHoveringPosition() const;
 	std::optional<RawDelta> ReadRawDelta();
 };
 
@@ -53,6 +56,11 @@ inline void InputHandler::OnkeyPressed(unsigned int keycode)
 inline void InputHandler::OnkeyReleased(unsigned char keycode)
 {
 	keystates.set(keycode, false);
+}
+
+inline void InputHandler::OnMouseMove(int x, int y)
+{
+	this->currentMousePosition = { x,y };
 }
 
 inline void InputHandler::OnRawDelta(int dx, int dy)
@@ -79,7 +87,7 @@ inline void InputHandler::ClearRawData()
 	this->rd.y = 0;
 }
 
-inline std::pair<int, int> InputHandler::GetMousePos() const
+inline std::pair<int, int> InputHandler::GetLastClickPos() const
 {
 	return this->lastLeftMouseClick;
 }
@@ -87,4 +95,9 @@ inline std::pair<int, int> InputHandler::GetMousePos() const
 inline bool InputHandler::LeftIsClicked() const
 {
 	return leftIsPressed;
+}
+
+inline std::pair<int, int> InputHandler::GetHoveringPosition() const
+{
+	return currentMousePosition;
 }

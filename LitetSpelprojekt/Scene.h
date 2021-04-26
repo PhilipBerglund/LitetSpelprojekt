@@ -22,11 +22,11 @@ private:
 	Shader sh;
 public:
 	Scene() = default;
-	Scene(Graphics& graphics, UINT windowWidth, UINT windowHeight, HWND window);
-	bool AddModel(Graphics& graphics, const std::string& path);
+	Scene(UINT windowWidth, UINT windowHeight, HWND window);
+	bool AddModel(const std::string& path);
 	void AddLight();
-	void Update(Graphics& graphics, InGameUI ui, InputHandler& input ,float dt);
-	void Render(Graphics& graphics);
+	void Update(InGameUI& ui, InputHandler& input, float dt);
+	void Render();
 
 	const std::vector<std::shared_ptr<Light>>& GetLights() const	{ return this->lights; };
 	const std::vector<std::shared_ptr<Model>>& GetModels() const	{ return this->models; };

@@ -26,7 +26,7 @@ private:
 	static void CreateViewport(UINT windowWidth, UINT windowHeight);
 	static bool InitializeD3D11(UINT windowWidth, UINT windowHeight, HWND window);
 
-	 //2D
+	//2D
 	static ComPtr<ID2D1Factory> factory;
 	static ComPtr<ID2D1RenderTarget> renderTarget;
 	 
@@ -34,13 +34,11 @@ private:
 	static HRESULT Create2DRenderTarget(HWND window);
 	static bool InitializeD2D1(HWND window);
 public:
-	Graphics(UINT windowWidth, UINT windowHeight, HWND window);
-	bool Initialize(UINT windowWidth, UINT windowHeight, HWND window);
-
+	static bool Initialize(UINT windowWidth, UINT windowHeight, HWND window);
 	static void BeginFrame();
 	static void EndFrame() { swapChain->Present(0, 0); };
 
-	static ID3D11Device& GetDevice()				{ return *Graphics::device.Get(); };
+	static ID3D11Device& GetDevice()				{ return *device.Get(); };
 	static ID3D11DeviceContext& GetDeviceContext()	{ return *context.Get(); };
 	static IDXGISwapChain& GetSwapChain()			{ return *swapChain.Get(); };
 	static IDXGISurface& GetSurface()				{ return *surface.Get(); };

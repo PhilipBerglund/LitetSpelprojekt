@@ -2,15 +2,13 @@
 
 Game::Game(HWND window, UINT windowWidth, UINT windowHeight)
 {
-	/*if (Graphics::Initialize(windowWidth, windowHeight, window))
-	{
-		if (!inGameUI.Initialize(graphics.Get2DRenderTarget()))
-			Error("FAILED TO INITIALIZE IN GAME UI");
-	}
-	else
-		Error("FAILED TO INITIALIZE GRAPHICS");*/
+	if (!inGameUI.Initialize())
+		Error("FAILED TO INITIALIZE IN GAME UI");
 
-	scene = Scene(graphics, windowWidth, windowHeight, window);
+	if (!mainMenu.Initialize())
+		Error("FAILED TO INITIALIZE MAIN MENU");
+
+	scene = Scene(windowWidth, windowHeight, window);
 }
 
 void Game::CatchInput(unsigned char key, bool down)
@@ -43,57 +41,53 @@ void Game::CatchInput(unsigned char key, bool down)
 
 void Game::CatchInput(std::pair<int, int> pos, bool down)
 {
+	input.OnMouseMove(pos.first, pos.second);
+
 	if (down)
-	{
 		input.OnLeftPressed(pos.first, pos.second);
-		switch(state)
-		{
-		case GameState::MAINMENU:
-			break;
-		case GameState::INGAME:
-			inGameUI.GetInput(pos.first, pos.second);
-			break;
-		}
-	}
-			
+
 	else
 		input.OnLeftRelease();
+
+	switch (state)
+	{
+	case GameState::MAINMENU:
+		mainMenu.GetMousePos(input.GetHoveringPosition().first, input.GetHoveringPosition().second);
+		if (down)
+			SetState((GameState)mainMenu.GetInput(pos.first, pos.second));
+		break;
+	case GameState::INGAME:
+		if (down)
+			inGameUI.GetInput(pos.first, pos.second);
+		break;
+	}
 }
 
 void Game::Render(float dt)
 {
 	Graphics::BeginFrame();
-	graphics.BeginFrame();
 
 	switch (state)
 	{
 	case GameState::MAINMENU:
+		mainMenu.Render();
 		break;
 
 	case GameState::INGAME:
-		if (input.KeyIsPressed(27))
-			state = GameState::PAUSED;
-
-		scene.Update(graphics, inGameUI, input, dt);
-		scene.Render(graphics);
-		inGameUI.Render(graphics.Get2DRenderTarget());
-		break;
-
-	case GameState::OPENJOURNAL:
+		scene.Update(inGameUI, input, dt);
+		scene.Render();
+		inGameUI.Render();
 		break;
 
 	case GameState::PAUSED:
-		if (input.KeyIsPressed(27))
-			state = GameState::INGAME;
-
-		scene.Render(graphics);
-		inGameUI.Render(graphics.Get2DRenderTarget());
+		scene.Render();
+		inGameUI.Render();
 		break;
 
 	case GameState::END:
 		break;
 	}
 
-	graphics.EndFrame();
+	Graphics::EndFrame();
 	input.ClearRawData();
 }

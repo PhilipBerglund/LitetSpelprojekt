@@ -9,7 +9,10 @@ Camera::Camera()
 	this->right = { 1,0,0 };
 	this->viewMatrix = XMMatrixLookAtLH(XMLoadFloat3(&transform.position), forward, up);
 
-	perspectiveMatrix = XMMatrixPerspectiveFovLH(XM_PIDIV4, (float)1024 / float(576), 0.1, 100);
+	perspectiveMatrix = XMMatrixPerspectiveFovLH(XM_PIDIV4, (float)1024 / float(576), 0.1f, 100.0f);
+
+	this->direction = forward;
+	this->pickingDistance = 0.00001f;
 }
 
 Camera::Camera(float FOV, float aspectRatio, float nearZ, float farZ, XMFLOAT3 position, XMFLOAT3 rotation, XMFLOAT3 scale)
@@ -24,7 +27,7 @@ Camera::Camera(float FOV, float aspectRatio, float nearZ, float farZ, XMFLOAT3 p
 
 	this->direction = forward;
 	this->boundingsphere = BoundingSphere(transform.position, 1);
-	this->pickingDistance = 0.0001;
+	this->pickingDistance = 0.00001f;
 }
 
 void Camera::MoveRight(float dt)
@@ -48,8 +51,10 @@ void Camera::MoveForward(float dt)
 	XMVECTOR forwardVec =	XMVector3Transform(forward,
 							XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0f) *
 							XMMatrixScaling(speed, speed, speed));
+
 	forwardVec = XMVector3Normalize(forwardVec);
 	XMFLOAT3 forwardFloat;
+
 	XMStoreFloat3(&forwardFloat, forwardVec);
 
 	transform.position.x += forwardFloat.x * dt * speed;
@@ -60,7 +65,7 @@ void Camera::MoveForward(float dt)
 void Camera::Rotate(float dx, float dy)
 {
 	yaw = (yaw + dx * rotationSpeed);
-	yaw = fmod((double)yaw + XM_PI, XM_2PI);
+	yaw = (float)fmod((double)yaw + XM_PI, XM_2PI);
 	if (yaw < 0)
 		yaw += XM_2PI;
 	yaw -= XM_PI;

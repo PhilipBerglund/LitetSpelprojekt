@@ -153,7 +153,7 @@ bool Model::Initialize(ID3D11Device& device, std::string path)
 
     XMFLOAT4 orientation;
     XMStoreFloat4(&orientation, XMQuaternionIdentity());
-    boundingbox = BoundingOrientedBox(transform.position, { 1,1,1 }, orientation);
+    boundingbox = BoundingOrientedBox(transform.position, { 0.5f, 0.5f, 0.5f }, orientation);
 
     return true;
 }

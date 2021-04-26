@@ -72,9 +72,6 @@
     <ClCompile Include="SkeletonAnimation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InGameUI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Scenario.cpp">
       <Filter>Header Files\Scenario</Filter>
     </ClCompile>
@@ -157,6 +154,9 @@
     </ClInclude>
     <ClInclude Include="Scenario.h">
       <Filter>Header Files\Scenario</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenu.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

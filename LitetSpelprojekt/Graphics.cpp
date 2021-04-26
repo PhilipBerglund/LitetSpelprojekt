@@ -1,15 +1,16 @@
 #include "Graphics.h"
 
-Graphics::Graphics(UINT windowWidth, UINT windowHeight, HWND window)
-	:backgroundColor()
-{
-	viewport = {}; 
-	
-	// Graphics::backgroundColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
-
-	if (!Initialize(windowWidth, windowHeight, window))
-		Error("FAILED TO INITIALIZE GRAPHICS");	
-}
+float Graphics::backgroundColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
+D3D11_VIEWPORT Graphics::viewport = {};
+ComPtr<ID3D11Device> Graphics::device;
+ComPtr<ID3D11DeviceContext> Graphics::context;
+ComPtr<IDXGISwapChain> Graphics::swapChain;
+ComPtr<ID3D11RenderTargetView> Graphics::rtv;
+ComPtr<ID3D11Texture2D> Graphics::dsTexture;
+ComPtr<ID3D11DepthStencilView> Graphics::dsView;
+ComPtr<IDXGISurface> Graphics::surface;
+ComPtr<ID2D1Factory> Graphics::factory;
+ComPtr<ID2D1RenderTarget> Graphics::renderTarget;
 
 HRESULT Graphics::CreateDeviceSwapchain(UINT windowWidth, UINT windowHeight, HWND window)
 {

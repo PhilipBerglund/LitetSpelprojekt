@@ -2,13 +2,13 @@
 #include "ShaderLoader.h"
 #include "Scene.h"
 
-bool Shader::UpdateBuffers(ID3D11DeviceContext& context, const Model& model)
+bool Shader::UpdateBuffers(const Model& model)
 {
 	HRESULT hr;
 	D3D11_MAPPED_SUBRESOURCE mappedResource = {};
 
 	//VERTEX SHADER BUFFER(S)
-	hr = context.Map(VS_Buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	hr = Graphics::GetDeviceContext().Map(VS_Buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	if FAILED(hr)
 	{
 		Error("FAILED TO MAP BUFFER");
@@ -22,11 +22,11 @@ bool Shader::UpdateBuffers(ID3D11DeviceContext& context, const Model& model)
 	XMStoreFloat4x4(&vertexShaderBuffer.WVP, XMMatrixTranspose(WVP));
 	
 	memcpy(mappedResource.pData, &vertexShaderBuffer, sizeof(VS));
-	context.Unmap(VS_Buffer.Get(), 0);
+	Graphics::GetDeviceContext().Unmap(VS_Buffer.Get(), 0);
 
 	//PIXEL SHADER BUFFER(S)
 	PS pixelShaderData = {};
-	hr = context.Map(PS_Buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	hr = Graphics::GetDeviceContext().Map(PS_Buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	if FAILED(hr)
 	{
 		Error("FAILED TO MAP BUFFER");
@@ -34,20 +34,20 @@ bool Shader::UpdateBuffers(ID3D11DeviceContext& context, const Model& model)
 	}
 
 	memcpy(mappedResource.pData, &pixelShaderBuffer.cameraPosition, sizeof(PS));
-	context.Unmap(PS_Buffer.Get(), 0);
+	Graphics::GetDeviceContext().Unmap(PS_Buffer.Get(), 0);
 
 	return true;
 }
 
-bool Shader::Initialize(ID3D11Device& device, HWND window)
+bool Shader::Initialize(HWND window)
 {
 	HRESULT hr;
 	std::string byteCode;
 
-	if (!LoadVertexShader(device, vertexShader, vs_path, byteCode))
+	if (!LoadVertexShader(vertexShader, vs_path, byteCode))
 		return false;
 
-	if (!LoadPixelShader(device, pixelShader, ps_path))
+	if (!LoadPixelShader(pixelShader, ps_path))
 		return false;
 
 	//INPUT LAYOUT
@@ -59,7 +59,7 @@ bool Shader::Initialize(ID3D11Device& device, HWND window)
 		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
-	hr = device.CreateInputLayout(inputDesc, numElements, byteCode.c_str(), byteCode.length(), &layout);
+	hr = Graphics::GetDevice().CreateInputLayout(inputDesc, numElements, byteCode.c_str(), byteCode.length(), &layout);
 	if FAILED(hr)
 	{
 		Error("FAILED TO CREATE INPUT LAYOUT");
@@ -75,7 +75,7 @@ bool Shader::Initialize(ID3D11Device& device, HWND window)
 	bufferDesc.MiscFlags = 0;
 	bufferDesc.StructureByteStride = 0;
 
-	hr = device.CreateBuffer(&bufferDesc, nullptr, &VS_Buffer);
+	hr = Graphics::GetDevice().CreateBuffer(&bufferDesc, nullptr, &VS_Buffer);
 	if FAILED(hr)
 	{
 		Error("FAILED TO CREATE BUFFER");
@@ -84,7 +84,7 @@ bool Shader::Initialize(ID3D11Device& device, HWND window)
 
 	bufferDesc.ByteWidth = sizeof(PS);
 
-	hr = device.CreateBuffer(&bufferDesc, nullptr, &PS_Buffer);
+	hr = Graphics::GetDevice().CreateBuffer(&bufferDesc, nullptr, &PS_Buffer);
 	if FAILED(hr)
 	{
 		Error("FAILED TO CREATE BUFFER");
@@ -94,7 +94,7 @@ bool Shader::Initialize(ID3D11Device& device, HWND window)
 	return true;
 }
 
-void Shader::SetShader(ID3D11DeviceContext& context, const Scene& scene)
+void Shader::SetShader(const Scene& scene)
 {
 	const auto& camera = scene.GetCamera();
 	const auto& lights = scene.GetLights();
@@ -106,14 +106,14 @@ void Shader::SetShader(ID3D11DeviceContext& context, const Scene& scene)
 
 	pixelShaderBuffer.cameraPosition = camera.GetPosition();
 
-	context.IASetInputLayout(layout.Get());
-	context.VSSetShader(vertexShader.Get(), nullptr, 0);
-	context.PSSetShader(pixelShader.Get(), nullptr, 0);
+	Graphics::GetDeviceContext().IASetInputLayout(layout.Get());
+	Graphics::GetDeviceContext().VSSetShader(vertexShader.Get(), nullptr, 0);
+	Graphics::GetDeviceContext().PSSetShader(pixelShader.Get(), nullptr, 0);
 }
 
-void Shader::Render(ID3D11DeviceContext& context, const Scene& scene)
+void Shader::Render(const Scene& scene)
 {
-	SetShader(context, scene);
+	SetShader(scene);
 
 	unsigned int stride = sizeof(Vertex);
 	unsigned int offset = 0;
@@ -122,14 +122,14 @@ void Shader::Render(ID3D11DeviceContext& context, const Scene& scene)
 
 	for (const auto& model : models)
 	{
-		UpdateBuffers(context, *model);
+		UpdateBuffers(*model);
 
 		auto buffer = &model->GetVertexBuffer();
-		context.IASetVertexBuffers(0, 1, &buffer, &stride, &offset);
+		Graphics::GetDeviceContext().IASetVertexBuffers(0, 1, &buffer, &stride, &offset);
 
-		context.PSSetConstantBuffers(0, 1, PS_Buffer.GetAddressOf());
-		context.VSSetConstantBuffers(0, 1, VS_Buffer.GetAddressOf());
+		Graphics::GetDeviceContext().PSSetConstantBuffers(0, 1, PS_Buffer.GetAddressOf());
+		Graphics::GetDeviceContext().VSSetConstantBuffers(0, 1, VS_Buffer.GetAddressOf());
 
-		context.Draw(model->GetVertexCount(), 0);
+		Graphics::GetDeviceContext().Draw(model->GetVertexCount(), 0);
 	}
 }

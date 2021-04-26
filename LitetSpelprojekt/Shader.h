@@ -39,10 +39,10 @@ private:
 		float padding;
 	} pixelShaderBuffer;
 
-	bool UpdateBuffers(ID3D11DeviceContext& context, const Model& model);
+	bool UpdateBuffers(const Model& model);
 public:
 	Shader() = default;
-	bool Initialize(ID3D11Device& device, HWND window);
-	void SetShader(ID3D11DeviceContext& context, const Scene& scene);
-	void Render(ID3D11DeviceContext& context, const Scene& scene);
+	bool Initialize(HWND window);
+	void SetShader(const Scene& scene);
+	void Render(const Scene& scene);
 };

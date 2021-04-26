@@ -1,6 +1,7 @@
 #include "Window.h"
 #include "Game.h"
 #include "Timer.h"
+#include "SoundHandler.h"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
@@ -30,6 +31,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	float dt = 0;
 
 	MSG msg = {};
+
+	SoundHandler soundHandler;
+	soundHandler.Initialize();
+	soundHandler.Start();
+
 	while (msg.message != WM_QUIT)
 	{	
 		timer.Start();
@@ -69,6 +75,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 		dt = (float)timer.DeltaTime();
 	}
 
+	soundHandler.Stop();
 	delete game;
 	return 0;
 }

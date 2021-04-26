@@ -158,6 +158,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SkeletonAnimation.cpp" />
+    <ClCompile Include="SoundHandler.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -181,6 +182,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderLoader.h" />
+    <ClInclude Include="SoundHandler.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="UI.h" />

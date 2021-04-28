@@ -23,12 +23,12 @@ void SoundHandler::addSourceVoiceDetails(XAUDIO2_VOICE_DETAILS voiceDetails)
     masterVoice->GetVoiceDetails(&voiceDetails);
 }
 
-void SoundHandler::StartAudio()
+void SoundHandler::StartAudioEngine()
 {
     pXAudio2->StartEngine();
 }
 
-void SoundHandler::StopAudio()
+void SoundHandler::StopAudioEngine()
 {
     pXAudio2->StopEngine();
 }

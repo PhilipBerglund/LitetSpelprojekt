@@ -41,7 +41,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
 	SoundHandler soundHandler;
 	soundHandler.Initialize();
-	//soundHandler.Start();
+	soundHandler.StartAudioEngine();
 
 	while (msg.message != WM_QUIT)
 	{	
@@ -57,7 +57,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 		dt = (float)timer.DeltaTime();
 	}
 
-	//soundHandler.Stop();
+	soundHandler.StopAudioEngine();
 	delete game;
 	return 0;
 }

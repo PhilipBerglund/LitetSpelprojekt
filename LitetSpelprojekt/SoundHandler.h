@@ -1,6 +1,7 @@
 #pragma once
 #include "Xaudio2.h"
 #include "ComPtr.h"
+#include "AudioChunks.h"
 
 class SoundHandler
 {
@@ -13,8 +14,8 @@ public:
 
 	bool Initialize();
 	void addSourceVoiceDetails(XAUDIO2_VOICE_DETAILS voiceDetails);
-	void StartAudio();
-	void StopAudio();
+	void StartAudioEngine();
+	void StopAudioEngine();
 
 	void DestroyAudio();
 

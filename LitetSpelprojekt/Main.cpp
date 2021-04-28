@@ -1,13 +1,9 @@
 #include "Window.h"
 #include "Game.h"
 #include "Timer.h"
-<<<<<<< Updated upstream
-#include "SoundHandler.h"
-=======
 
-#include <Importer.h>
+#include "SoundHandler.h"
 #include <utility>
->>>>>>> Stashed changes
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
@@ -19,20 +15,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	UINT WIDTH = GetSystemMetrics(SM_CXSCREEN);
 	UINT HEIGHT = GetSystemMetrics(SM_CYSCREEN);
 
-	bool windowed = true;
+	bool windowed = false;
 
 	if (windowed)
 	{
 		//WIDTH = 1680;
 		//HEIGHT = 1050;
-
-<<<<<<< Updated upstream
-	LPCWSTR windowTitle = L"LILLA SPEL";
-	Window window = Window(WIDTH, HEIGHT, windowTitle, hInstance);
-	SetCursorPos((float)WIDTH / 2, (float)HEIGHT / 2);
-=======
-		WIDTH = 1024;
-		HEIGHT = 576;
 	}
 	
 	LPCWSTR windowTitle = L"Jessica Woolf: Murder Mysteries";
@@ -41,7 +29,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	WindowInitializer winInit;
 	winInit.Initialize(window, WIDTH, HEIGHT, windowTitle, hInstance);
 	SetCursorPos(WIDTH / 2, HEIGHT / 2);
->>>>>>> Stashed changes
 
 	Graphics::Initialize(WIDTH, HEIGHT, window.GetWindowHandle(), windowed);
 
@@ -54,7 +41,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
 	SoundHandler soundHandler;
 	soundHandler.Initialize();
-	soundHandler.Start();
+	//soundHandler.Start();
 
 	while (msg.message != WM_QUIT)
 	{	
@@ -70,7 +57,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 		dt = (float)timer.DeltaTime();
 	}
 
-	soundHandler.Stop();
+	//soundHandler.Stop();
 	delete game;
 	return 0;
 }

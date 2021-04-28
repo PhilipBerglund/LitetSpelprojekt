@@ -9,6 +9,8 @@ private:
 	static ComPtr<IXAudio2> pXAudio2;
 	IXAudio2MasteringVoice* masterVoice = nullptr;
 
+	//UnorderedMap för att spara ljudfiler
+	//Enum för "tag" - första som None(default)
 
 public:
 

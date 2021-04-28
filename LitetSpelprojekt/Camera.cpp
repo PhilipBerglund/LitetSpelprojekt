@@ -1,9 +1,18 @@
+#include "Window.h"
 #include "Camera.h"
 #include <algorithm>
+#include "GameSettings.h"
+#include "Print.h"
 
 Camera::Camera()
 	:pitch(0), yaw(0), rotationSpeed(0), speed(0)
 {
+	Event::Bind(this, EventType::W_DOWN);
+	Event::Bind(this, EventType::A_DOWN);
+	Event::Bind(this, EventType::S_DOWN);
+	Event::Bind(this, EventType::D_DOWN);
+	Event::Bind(this, EventType::MOUSEMOVE);
+
 	this->up = { 0,1,0 };
 	this->forward = { 0,0,1 };
 	this->right = { 1,0,0 };
@@ -12,12 +21,18 @@ Camera::Camera()
 	perspectiveMatrix = XMMatrixPerspectiveFovLH(XM_PIDIV4, (float)1024 / float(576), 0.1f, 100.0f);
 
 	this->direction = forward;
-	this->pickingDistance = 0.00001f;
+	this->pickingDistance = 10.0f;
 }
 
-Camera::Camera(float FOV, float aspectRatio, float nearZ, float farZ, XMFLOAT3 position, XMFLOAT3 rotation, XMFLOAT3 scale)
-	:GameObject(position, rotation, scale), pitch(0), yaw(0), rotationSpeed(0.002f), speed(15.0f)
+Camera::Camera(float FOV, float aspectRatio, float nearZ, float farZ, float rotationSpeed, float speed, XMFLOAT3 position, XMFLOAT3 rotation, XMFLOAT3 scale)
+	:GameObject(position, rotation, scale), pitch(0), yaw(0), rotationSpeed(rotationSpeed), speed(speed)
 {
+	Event::Bind(this, EventType::W_DOWN);
+	Event::Bind(this, EventType::A_DOWN);
+	Event::Bind(this, EventType::S_DOWN);
+	Event::Bind(this, EventType::D_DOWN);
+	Event::Bind(this, EventType::MOUSEMOVE);
+
 	this->up = { 0,1,0 };
 	this->forward = { 0,0,1 };
 	this->right = { 1,0,0 };
@@ -27,7 +42,7 @@ Camera::Camera(float FOV, float aspectRatio, float nearZ, float farZ, XMFLOAT3 p
 
 	this->direction = forward;
 	this->boundingsphere = BoundingSphere(transform.position, 1);
-	this->pickingDistance = 0.00001f;
+	this->pickingDistance = 10.0f;
 }
 
 void Camera::MoveRight(float dt)
@@ -75,8 +90,8 @@ void Camera::Rotate(float dx, float dy)
 
 void Camera::PushBack(XMFLOAT3 direction, float dt)
 {
-	transform.position.x += direction.x * dt;
-	transform.position.z += direction.z * dt;
+	transform.position.x += direction.x * dt * speed;
+	transform.position.z += direction.z * dt * speed;
 }
 
 bool Camera::CheckCollision(BoundingOrientedBox& other)
@@ -91,11 +106,79 @@ bool Camera::CheckCollision(BoundingSphere& other)
 
 bool Camera::CheckIntersection(BoundingOrientedBox& other)
 {
-	return other.Intersects(XMLoadFloat3(&transform.position), direction, pickingDistance);
+	XMFLOAT3 distVec = {	transform.position.x - other.Center.x,
+							transform.position.y - other.Center.y,
+							transform.position.z - other.Center.z	};
+
+	float distance = sqrt(pow(distVec.x,2) + pow(distVec.y,2) + pow(distVec.z,2));
+
+	float temp;
+	if (distance <= pickingDistance)
+		return other.Intersects(XMLoadFloat3(&transform.position), direction, temp);
+
+	return false;
 }
 
-void Camera::Update()
+void Camera::OnEvent()
 {
+	if (GameSettings::GetState() != GameState::INGAME)
+		return;
+
+	switch(Event::GetCurrentEvent())
+	{
+	case EventType::W_DOWN:
+		w = true;
+		break;
+
+	case EventType::A_DOWN:
+		a = true;
+		break;
+
+	case EventType::S_DOWN:
+		s = true;
+		break;
+
+	case EventType::D_DOWN:
+		d = true;
+		break;
+
+	case EventType::W_UP:
+		w = false;
+		break;
+
+	case EventType::A_UP:
+		a = false;
+		break;
+
+	case EventType::S_UP:
+		s = false;
+		break;
+
+	case EventType::D_UP:
+		d = false;
+		break;
+
+	case EventType::MOUSEMOVE:
+		std::pair<float, float> delta = Window::GetRawInput().value();
+		Rotate(delta.first, delta.second);
+		break;
+	}
+}
+
+void Camera::Update(float dt)
+{
+	if (w)
+		MoveForward(dt);
+
+	if (a)
+		MoveRight(-dt);
+
+	if (s)
+		MoveForward(-dt);
+
+	if (d)
+		MoveRight(dt);
+
 	const XMVECTOR lookAtVec = XMVector3Transform(forward, XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0f));
 	const XMVECTOR target = XMLoadFloat3(&transform.position) + lookAtVec;
 	direction = XMVector3Normalize(lookAtVec);

@@ -6,12 +6,30 @@
 #include "Graphics.h"
 #include "InputHandler.h"
 #include "Camera.h"
-#include "Print.h"
 #include "InGameUI.h"
+#include "Event.h"
 
-enum ScenarioStates
+enum ScenarioStates {};
+
+struct Information
 {
+	bool valueable;
+	std::string connections[5];
+	std::string info;
+};
 
+struct Suspect
+{
+	std::string name = "UNKNOWN";
+	int age;
+	Information information;
+};
+
+struct Victim
+{
+	std::string name = "UNKNOWN";
+	int age;
+	Information information;
 };
 
 struct Clue
@@ -21,21 +39,22 @@ struct Clue
 
 	bool murderClue;
 	bool found;
+	std::string information;
 };
 
 class Scenario
 {
 private: 
-	bool succeeded;
-	//float notificationTime = 101.0f;
+	bool finished = false;
 public:
+	Victim victim;
 	std::vector<Clue> clues;
+	std::vector<Suspect> suspects;
 	std::vector<XMFLOAT3> clueLocations;
 
-	Scenario() = default;
-	//void LoadClues();
+	Scenario();
 	void InitializeClueLocations();
 	void SetRandomizedLocations();
 	bool TempLoadClues(std::string path);
-	void Run(InGameUI& ui, InputHandler& input, float dt, Camera& camera);
+	void Run(InGameUI& ui, Camera& camera);
 };

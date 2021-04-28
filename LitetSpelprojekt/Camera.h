@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "Event.h"
 #include <DirectXCollision.h>
 
 class Camera :public GameObject
@@ -19,9 +20,14 @@ private:
 	BoundingSphere boundingsphere;
 	float pickingDistance;
 	XMVECTOR direction;
+
+	bool w = false;
+	bool a = false;
+	bool s = false;
+	bool d = false;
 public:
 	Camera();
-	Camera(float FOV, float aspectRatio, float nearZ, float farZ, XMFLOAT3 position, XMFLOAT3 rotation = { 0,0,0 }, XMFLOAT3 scale = { 1,1,1 });
+	Camera(float FOV, float aspectRatio, float nearZ, float farZ, float rotationSpeed, float speed, XMFLOAT3 position, XMFLOAT3 rotation = { 0,0,0 }, XMFLOAT3 scale = { 1,1,1 });
 
 	XMMATRIX GetViewMatrix() const { return this->viewMatrix; };
 	XMMATRIX GetPerspectiveMatrix() const { return this->perspectiveMatrix; };
@@ -38,5 +44,6 @@ public:
 
 	bool CheckIntersection(BoundingOrientedBox& other);
 
-	void Update();
+	void OnEvent();
+	void Update(float dt);
 };

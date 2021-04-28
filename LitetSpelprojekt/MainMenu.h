@@ -1,6 +1,8 @@
 #pragma once
 
-enum class State { MAINMENU, INGAME, OPENJOURNAL, PAUSED, END };
+#include "Window.h"
+#include "Event.h"
+#include "GameSettings.h"
 
 class MainMenu
 {
@@ -34,6 +36,8 @@ public:
 		this->creditButtonArrow = nullptr;
 		this->exitButtonArrow = nullptr;
 
+		this->cursor = nullptr;
+
 		this->playButton = nullptr;
 		this->optionsButton = nullptr;
 		this->helpButton = nullptr;
@@ -43,6 +47,9 @@ public:
 
 	bool Initialize()
 	{
+		Event::Bind(this, EventType::LEFTCLICK);
+		Event::Bind(this, EventType::MOUSEMOVE);
+
 		D2D1_SIZE_F winSize = Graphics::Get2DRenderTarget().GetSize();
 
 		playButton = new Button(true, { winSize.width / 2 - 5, winSize.height / 2 - 105}, 135.0f, 50.0f);
@@ -54,7 +61,7 @@ public:
 		background = new Image(L"UI/MainMenu.png", 1.0f, true, { winSize.width / 2, winSize.height / 2 });
 		images.push_back(background);
 
-		playButtonArrow = new Image(L"UI/PlayArrows.png", 1.0f, true, { playButton->position.x, playButton->position.y });
+		playButtonArrow = new Image(L"UI/PlayArrows.png", 1.0f, false, { playButton->position.x, playButton->position.y });
 		images.push_back(playButtonArrow);
 
 		optionsButtonArrow = new Image(L"UI/OptionsArrows.png", 1.0f, false, { optionsButton->position.x, optionsButton->position.y });
@@ -69,7 +76,7 @@ public:
 		exitButtonArrow = new Image(L"UI/ExitArrows.png", 1.0f, false, { exitButton->position.x, exitButton->position.y });
 		images.push_back(exitButtonArrow);
 
-		cursor = new Image(L"UI/RegularCursor.png", 1.0f, true, { winSize.width / 2, winSize.height / 2});
+		cursor = new Image(L"UI/RegularCursor.png", 1.0f, true, { (float)Window::GetMousePos().first, (float)Window::GetMousePos().second + 30});
 		images.push_back(cursor);
 
 		buttons.push_back(playButton);
@@ -100,36 +107,53 @@ public:
 		Graphics::Get2DRenderTarget().EndDraw();
 	}
 
-	void GetMousePos(int x, int y)
+	void OnEvent()
 	{
-		cursor->SetPosition(x, y + 30);
+		if (GameSettings::GetState() != GameState::MAINMENU)
+			return;
 
-		for (int i = 0; i < buttons.size(); ++i)
+		std::pair<int, int> pos = Window::GetMousePos();
+
+		switch (Event::GetCurrentEvent())
 		{
-			if (buttons[i]->OnHover(x, y))
-				images[i + 1]->SetVisibility(true);
-			else
-				images[i + 1]->SetVisibility(false);
-		}
-	}
+		default:
+			break;
 
-	State GetInput(int x, int y)
-	{
-		if (playButton->OnClick(x, y))
-			return State::INGAME;
+		case EventType::MOUSEMOVE:
+			cursor->SetPosition((float)pos.first, (float)pos.second + 30);
 
-		if (optionsButton->OnClick(x, y))
-			return State::MAINMENU;
+			for (unsigned int i = 0; i < buttons.size(); ++i)
+			{
+				int imageIndex = i + 1;
 
-		if (helpButton->OnClick(x, y))
-			return State::MAINMENU;
+				if (buttons[i]->OnHover(pos.first, pos.second))
+					images[imageIndex]->SetVisibility(true);
+				else
+					images[imageIndex]->SetVisibility(false);
+			}
 
-		if (creditsButton->OnClick(x, y))
-			return State::MAINMENU;
+			break;
 
-		if (exitButton->OnClick(x, y))
-			exit(0);
+		case EventType::LEFTCLICK:
+			{
+				if (playButton->OnClick(pos.first, pos.second))
+					GameSettings::SetState(GameState::INGAME);
 
-		return State::MAINMENU;
+				if (optionsButton->OnClick(pos.first, pos.second))
+					GameSettings::SetState(GameState::MAINMENU);
+
+				if (helpButton->OnClick(pos.first, pos.second))
+					GameSettings::SetState(GameState::MAINMENU);
+
+				if (creditsButton->OnClick(pos.first, pos.second))
+					GameSettings::SetState(GameState::MAINMENU);
+
+				if (exitButton->OnClick(pos.first, pos.second))
+					exit(0);
+
+				Event::DispatchEvent(EventType::STATECHANGE);
+				break;
+			}
+		}	
 	}
 };

@@ -1,25 +1,36 @@
 #pragma once
 #include <Windows.h>
 #include <vector>
+#include "Event.h"
+#include <optional>
 
 class Window
 {
+	friend struct WindowInitializer;
 private:
-	UINT width;
-	UINT height;
-	HWND hWnd;
-	std::vector<char> rawBuffer;
+	static UINT width;
+	static UINT height;
+	static HWND hWnd;
+	static std::vector<char> rawBuffer;
+	static std::pair<int, int> rawInput;
 
-	LRESULT MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	static void StashRawInput(LPARAM lParam);
+	static LRESULT MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 public:
 	static LRESULT CALLBACK WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-	Window(UINT width, UINT height, LPCWSTR title, HINSTANCE instance);
 	~Window();
-	std::pair<int, int> GetRawInput(LPARAM lParam);
-	std::pair<int, int> GetMousePos(LPARAM lParam);
-	HWND GetWindowHandle() const;
-	void EnableCursor();
-	void DisableCursor();
+	static std::optional<std::pair<int, int>> GetRawInput();
+	static std::pair<int, int> GetMousePos();
+	static HWND GetWindowHandle();
+	static void EnableCursor();
+	static void DisableCursor();
+	static bool cursorEnabled;
+	static float GetWidth();
+	static float GetHeight();
+};
 
-	bool cursorEnabled = true;
+struct WindowInitializer
+{
+	void Initialize(Window& window, UINT width, UINT height, LPCWSTR title, HINSTANCE instance);
+	void OnEvent();
 };

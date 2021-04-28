@@ -11,70 +11,18 @@ Game::Game(HWND window, UINT windowWidth, UINT windowHeight)
 	scene = Scene(windowWidth, windowHeight, window);
 }
 
-void Game::CatchInput(unsigned char key, bool down)
-{
-	if (key == 'W' || key == 'A' || key == 'S' || key == 'D')
-	{
-		if (down)
-		{
-			input.OnkeyPressed(key);
-			inGameUI.Notify(input);
-		}
-
-		else
-			input.OnkeyReleased(key);
-	}
-
-	else if (timer.DeltaTime() > 0.05)
-	{
-		timer.Start();
-		if (down)
-		{
-			input.OnkeyPressed(key);
-			inGameUI.Notify(input);
-		}
-
-		else
-			input.OnkeyReleased(key);
-	}
-}
-
-void Game::CatchInput(std::pair<int, int> pos, bool down)
-{
-	input.OnMouseMove(pos.first, pos.second);
-
-	if (down)
-		input.OnLeftPressed(pos.first, pos.second);
-
-	else
-		input.OnLeftRelease();
-
-	switch (state)
-	{
-	case GameState::MAINMENU:
-		mainMenu.GetMousePos(input.GetHoveringPosition().first, input.GetHoveringPosition().second);
-		if (down)
-			SetState((GameState)mainMenu.GetInput(pos.first, pos.second));
-		break;
-	case GameState::INGAME:
-		if (down)
-			inGameUI.GetInput(pos.first, pos.second);
-		break;
-	}
-}
-
 void Game::Render(float dt)
 {
 	Graphics::BeginFrame();
 
-	switch (state)
+	switch (GameSettings::GetState())
 	{
 	case GameState::MAINMENU:
 		mainMenu.Render();
 		break;
 
 	case GameState::INGAME:
-		scene.Update(inGameUI, input, dt);
+		scene.Update(inGameUI, dt);
 		scene.Render();
 		inGameUI.Render();
 		break;
@@ -89,5 +37,4 @@ void Game::Render(float dt)
 	}
 
 	Graphics::EndFrame();
-	input.ClearRawData();
 }

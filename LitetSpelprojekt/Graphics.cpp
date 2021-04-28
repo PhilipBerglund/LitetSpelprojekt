@@ -9,10 +9,11 @@ ComPtr<ID3D11RenderTargetView> Graphics::rtv;
 ComPtr<ID3D11Texture2D> Graphics::dsTexture;
 ComPtr<ID3D11DepthStencilView> Graphics::dsView;
 ComPtr<IDXGISurface> Graphics::surface;
+ComPtr<IDWriteFactory> Graphics::writeFactory;
 ComPtr<ID2D1Factory> Graphics::factory;
 ComPtr<ID2D1RenderTarget> Graphics::renderTarget;
 
-HRESULT Graphics::CreateDeviceSwapchain(UINT windowWidth, UINT windowHeight, HWND window)
+HRESULT Graphics::CreateDeviceSwapchain(UINT windowWidth, UINT windowHeight, HWND window, bool windowed)
 {
 	DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
 
@@ -30,7 +31,7 @@ HRESULT Graphics::CreateDeviceSwapchain(UINT windowWidth, UINT windowHeight, HWN
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	swapChainDesc.BufferCount = 1;
 	swapChainDesc.OutputWindow = window;
-	swapChainDesc.Windowed = true;
+	swapChainDesc.Windowed = windowed;
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	swapChainDesc.Flags = 0;
 
@@ -112,9 +113,9 @@ void Graphics::CreateViewport(UINT windowWidth, UINT windowHeight)
 	viewport.MaxDepth = 1;
 }
 
-bool Graphics::InitializeD3D11(UINT windowWidth, UINT windowHeight, HWND window)
+bool Graphics::InitializeD3D11(UINT windowWidth, UINT windowHeight, HWND window, bool windowed)
 {
-	if FAILED(CreateDeviceSwapchain(windowWidth, windowHeight, window)) 
+	if FAILED(CreateDeviceSwapchain(windowWidth, windowHeight, window, windowed)) 
 	{
 		Error("FAILED TO CREATE DEVICE AND SWAP CHAIN");
 		return false;
@@ -136,6 +137,12 @@ bool Graphics::InitializeD3D11(UINT windowWidth, UINT windowHeight, HWND window)
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	context->RSSetViewports(1, &viewport);
 	return true;
+}
+
+HRESULT Graphics::CreateWriteFactory()
+{
+	HRESULT hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), &writeFactory);
+	return hr;
 }
 
 HRESULT Graphics::CreateFactory()
@@ -164,6 +171,12 @@ HRESULT Graphics::Create2DRenderTarget(HWND window)
 
 bool Graphics::InitializeD2D1(HWND window)
 {
+	if FAILED(CreateWriteFactory())
+	{
+		Error("FAILED TO CREATE WRITE FACTORY");
+		return false;
+	}
+
 	if FAILED(CreateFactory())
 	{
 		Error("FAILED TO CREATE FACTORY");
@@ -179,9 +192,9 @@ bool Graphics::InitializeD2D1(HWND window)
 	return true;
 }
 
-bool Graphics::Initialize(UINT windowWidth, UINT windowHeight, HWND window)
+bool Graphics::Initialize(UINT windowWidth, UINT windowHeight, HWND window, bool windowed)
 {
-	if (!InitializeD3D11(windowWidth, windowHeight, window))
+	if (!InitializeD3D11(windowWidth, windowHeight, window, windowed))
 	{
 		Error("FAILED TO INITIALIZE D3D11");
 		return false;

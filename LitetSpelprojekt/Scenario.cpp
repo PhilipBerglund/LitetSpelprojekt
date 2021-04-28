@@ -1,8 +1,18 @@
 #include "Scenario.h"
-#include <algorithm>
+
 #include <random>
 #include <chrono>
 
+Scenario::Scenario()
+{
+	Suspect testsuspect;
+	testsuspect.age = 34;
+	testsuspect.information.info = "I have some information about Another person";
+	testsuspect.information.connections[0] = "Another person";
+	testsuspect.name = "Steve";
+
+	suspects.push_back(testsuspect);
+}
 
 void Scenario::InitializeClueLocations()
 {
@@ -11,7 +21,7 @@ void Scenario::InitializeClueLocations()
 	clueLocations.push_back({ 2,0,9 });
 	clueLocations.push_back({ 9,0,2 });
 
-	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	unsigned int seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
 
 	std::shuffle(clueLocations.begin(), clueLocations.end(), std::default_random_engine(seed));
 }
@@ -41,28 +51,17 @@ bool Scenario::TempLoadClues(std::string path)
 	return true;
 }
 
-void Scenario::Run(InGameUI& ui, InputHandler& input, float dt, Camera& camera)
+void Scenario::Run(InGameUI& ui, Camera& camera)
 {
-	bool isHoveringClue = false;
+	bool hoveringClue = false;
 
 	for (auto& clue : clues)
 	{
-		//bool hit = false;
-
-		//switch (clue.model->collidertype)
-		//{
-		//case ColliderType::BOX:
-		//	hit = camera.CheckCollision(clue.model->boundingbox);
-		//	break;
-		//case ColliderType::SPHERE:
-		//	break;
-		//}
-
 		if (camera.CheckIntersection(clue.model->boundingbox))
 		{
-			isHoveringClue = true;
+			hoveringClue = true;
 
-			if (input.LeftIsClicked())
+			if (Event::GetCurrentEvent() == EventType::LEFTCLICK)
 			{
 				clue.found = true;
 
@@ -74,25 +73,13 @@ void Scenario::Run(InGameUI& ui, InputHandler& input, float dt, Camera& camera)
 				clue.model.get()->SetPosition({ 0, -100, 0 });
 				clue.model.get()->Update(Graphics::GetDeviceContext());
 				ui.ShowNotification();
-				//notificationTime = 5;
 			}
 		}
 	}
 
-	if (isHoveringClue)
+	if (hoveringClue)
 		ui.SetCursorType(CursorType::CLUE);
 
 	else
 		ui.SetCursorType(CursorType::CROSS);
-
-	//if (notificationTime > 0 && notificationTime < 100)
-	//{
-	//	notificationTime -= dt;
-	//}
-
-	//if (notificationTime <= 0)
-	//{
-	//	ui.ShowNotification();
-	//	notificationTime = 101.0f;
-	//}
 }

@@ -32,6 +32,8 @@ struct UIComponent
 				x + width / 2,
 				y + height / 2
 				};
+
+		position = { x, y };
 	}
 
 	void SetVisibility(bool value)

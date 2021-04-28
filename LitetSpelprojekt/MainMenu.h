@@ -3,81 +3,42 @@
 #include "Window.h"
 #include "Event.h"
 #include "GameSettings.h"
+#include "UI.h"
 
 class MainMenu
 {
 private:
-	std::vector<Button*> buttons;
-	std::vector<Image*> images;
+	std::vector<Button> buttons;
+	std::vector<Image> buttonArrows;
 
-	Image* background;
+	Image background;
 
-	Image* playButtonArrow;
-	Image* optionsButtonArrow;
-	Image* helpButtonArrow;
-	Image* creditButtonArrow;
-	Image* exitButtonArrow;
+	Image cursor;
 
-	Image* cursor;
-
-	Button* playButton;
-	Button* optionsButton;
-	Button* helpButton;
-	Button* creditsButton;
-	Button* exitButton;
+	Button playButton;
+	Button optionsButton;
+	Button helpButton;
+	Button creditsButton;
+	Button exitButton;
 public:
 	MainMenu()
-	{
-		this->background = nullptr;
-
-		this->playButtonArrow = nullptr;
-		this->optionsButtonArrow = nullptr;
-		this->helpButtonArrow = nullptr;
-		this->creditButtonArrow = nullptr;
-		this->exitButtonArrow = nullptr;
-
-		this->cursor = nullptr;
-
-		this->playButton = nullptr;
-		this->optionsButton = nullptr;
-		this->helpButton = nullptr;
-		this->creditsButton = nullptr;
-		this->exitButton = nullptr;
-	};
-
-	bool Initialize()
 	{
 		Event::Bind(this, EventType::LEFTCLICK);
 		Event::Bind(this, EventType::MOUSEMOVE);
 
-		D2D1_SIZE_F winSize = Graphics::Get2DRenderTarget().GetSize();
+		D2D_VECTOR_2F center = { (float)Window::GetCenter().first, (float)Window::GetCenter().second };
 
-		playButton = new Button(true, { winSize.width / 2 - 5, winSize.height / 2 - 105}, 135.0f, 50.0f);
-		optionsButton = new Button(true, { winSize.width / 2 - 5, winSize.height / 2 + 15}, 230.0f, 50.0f);
-		helpButton = new Button(true, { winSize.width / 2 - 5, winSize.height / 2 + 150 }, 350.0f, 50.0f);
-		creditsButton = new Button(true, { winSize.width / 2, winSize.height / 2 + 260 }, 215.0f, 50.0f);
-		exitButton = new Button(true, { winSize.width / 2 - 5, winSize.height / 2 + 380 }, 110.0f, 50.0f);
+		playButton = Button(true, { center.x - 5, center.y - 105 }, 135.0f, 50.0f);
+		optionsButton = Button(true, { center.x - 5, center.y + 15 }, 230.0f, 50.0f);
+		helpButton = Button(true, { center.x - 5,center.y + 150 }, 350.0f, 50.0f);
+		creditsButton = Button(true, { center.x, center.y + 260 }, 215.0f, 50.0f);
+		exitButton = Button(true, { center.x - 5, center.y + 380 }, 110.0f, 50.0f);
 
-		background = new Image(L"UI/MainMenu.png", 1.0f, true, { winSize.width / 2, winSize.height / 2 });
-		images.push_back(background);
-
-		playButtonArrow = new Image(L"UI/PlayArrows.png", 1.0f, false, { playButton->position.x, playButton->position.y });
-		images.push_back(playButtonArrow);
-
-		optionsButtonArrow = new Image(L"UI/OptionsArrows.png", 1.0f, false, { optionsButton->position.x, optionsButton->position.y });
-		images.push_back(optionsButtonArrow);
-
-		helpButtonArrow = new Image(L"UI/HelpArrows.png", 1.0f, false, { helpButton->position.x, helpButton->position.y });
-		images.push_back(helpButtonArrow);
-
-		creditButtonArrow = new Image(L"UI/CreditsArrows.png", 1.0f, false, { creditsButton->position.x, creditsButton->position.y });
-		images.push_back(creditButtonArrow);
-
-		exitButtonArrow = new Image(L"UI/ExitArrows.png", 1.0f, false, { exitButton->position.x, exitButton->position.y });
-		images.push_back(exitButtonArrow);
-
-		cursor = new Image(L"UI/RegularCursor.png", 1.0f, true, { (float)Window::GetMousePos().first, (float)Window::GetMousePos().second + 30});
-		images.push_back(cursor);
+		buttonArrows.push_back(Image(L"UI/PlayArrows.png", 1.0f, false, playButton.position));
+		buttonArrows.push_back(Image(L"UI/OptionsArrows.png", 1.0f, false, optionsButton.position));
+		buttonArrows.push_back(Image(L"UI/HelpArrows.png", 1.0f, false, helpButton.position));
+		buttonArrows.push_back(Image(L"UI/CreditsArrows.png", 1.0f, false, creditsButton.position));
+		buttonArrows.push_back(Image(L"UI/ExitArrows.png", 1.0f, false, exitButton.position));
 
 		buttons.push_back(playButton);
 		buttons.push_back(optionsButton);
@@ -85,26 +46,22 @@ public:
 		buttons.push_back(creditsButton);
 		buttons.push_back(exitButton);
 
-		return true;
-	}
+		background = Image(L"UI/MainMenu.png", 1.0f, true, center);
+
+		cursor = Image(L"UI/RegularCursor.png", 1.0f, true, { (float)Window::GetMousePos().first, (float)Window::GetMousePos().second + 30 });
+	};
 
 	void Render()
 	{
-		Graphics::Get2DRenderTarget().BeginDraw();
+		background.Draw();
 
-		for (auto& image : images)
+		for (auto& arrows : buttonArrows)
 		{
-			if (image->visible)
-				image->Draw();
+			if (arrows.visible)
+				arrows.Draw();
 		}
 
-		//for (auto& button : buttons)
-		//{
-		//	if (button->IsHovered())
-		//		button->DrawBounds();
-		//}
-
-		Graphics::Get2DRenderTarget().EndDraw();
+		cursor.Draw();
 	}
 
 	void OnEvent()
@@ -120,35 +77,36 @@ public:
 			break;
 
 		case EventType::MOUSEMOVE:
-			cursor->SetPosition((float)pos.first, (float)pos.second + 30);
+			cursor.SetPosition((float)pos.first, (float)pos.second + 30);
 
 			for (unsigned int i = 0; i < buttons.size(); ++i)
 			{
-				int imageIndex = i + 1;
-
-				if (buttons[i]->OnHover(pos.first, pos.second))
-					images[imageIndex]->SetVisibility(true);
+				if (buttons[i].OnHover(pos.first, pos.second))
+					buttonArrows[i].SetVisibility(true);
 				else
-					images[imageIndex]->SetVisibility(false);
+					buttonArrows[i].SetVisibility(false);
 			}
 
 			break;
 
 		case EventType::LEFTCLICK:
 			{
-				if (playButton->OnClick(pos.first, pos.second))
+				if (playButton.OnClick(pos.first, pos.second))
+				{
 					GameSettings::SetState(GameState::INGAME);
-
-				if (optionsButton->OnClick(pos.first, pos.second))
+					Event::DispatchEvent(EventType::RESET);
+				}
+					
+				if (optionsButton.OnClick(pos.first, pos.second))
 					GameSettings::SetState(GameState::MAINMENU);
 
-				if (helpButton->OnClick(pos.first, pos.second))
+				if (helpButton.OnClick(pos.first, pos.second))
 					GameSettings::SetState(GameState::MAINMENU);
 
-				if (creditsButton->OnClick(pos.first, pos.second))
+				if (creditsButton.OnClick(pos.first, pos.second))
 					GameSettings::SetState(GameState::MAINMENU);
 
-				if (exitButton->OnClick(pos.first, pos.second))
+				if (exitButton.OnClick(pos.first, pos.second))
 					exit(0);
 
 				Event::DispatchEvent(EventType::STATECHANGE);

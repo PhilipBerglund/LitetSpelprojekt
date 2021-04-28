@@ -73,6 +73,10 @@ LRESULT Window::MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 		case('E'):
 			Event::DispatchEvent(EventType::E_DOWN);
 			break;
+
+		case(27):
+			Event::DispatchEvent(EventType::ESC);
+			break;
 		}
 
 		break;
@@ -201,6 +205,11 @@ float Window::GetHeight()
 	return (float)height;
 }
 
+std::pair<int, int> Window::GetCenter()
+{
+	return std::pair<int, int>({width / 2, height / 2});
+}
+
 void WindowInitializer::Initialize(Window& window, UINT width, UINT height, LPCWSTR title, HINSTANCE instance)
 {
 	window.width = width;
@@ -239,9 +248,14 @@ void WindowInitializer::OnEvent()
 	switch (GameSettings::GetState())
 	{
 	case GameState::INGAME:
+		Event::DispatchEvent(EventType::RESET);
 		Window::DisableCursor();
 		break;
 
+	case GameState::JOURNAL: case GameState::PAUSED:
+		SetCursorPos(Window::width / 2, Window::height / 2);
+		Window::EnableCursor();
+		break;
 	case GameState::MAINMENU:
 		Window::EnableCursor();
 		break;

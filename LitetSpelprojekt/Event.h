@@ -6,6 +6,7 @@ using X = void(*)(void*);
 
 enum class EventType
 {
+	RESET,
 	STATECHANGE,
 	LEFTCLICK,
 	MOUSEMOVE,
@@ -19,7 +20,8 @@ enum class EventType
 	W_UP,
 	A_UP,
 	S_UP,
-	D_UP
+	D_UP,
+	ESC
 };
 
 class Event
@@ -38,6 +40,14 @@ public:
 
 		switch (event)
 		{
+		case EventType::ESC:
+			escape.push_back(pair);
+			break;
+
+		case EventType::RESET:
+			reset.push_back(pair);
+			break;
+
 		case EventType::STATECHANGE:
 			stateChange.push_back(pair);
 			break;
@@ -82,6 +92,11 @@ public:
 
 		switch (event)
 		{
+		case EventType::RESET:
+			for (auto pair : reset)
+				(pair.first)(pair.second);
+			break;
+
 		case EventType::STATECHANGE:
 			for (auto pair : stateChange)
 				(pair.first)(pair.second);
@@ -151,6 +166,11 @@ public:
 			for (auto pair : D)
 				(pair.first)(pair.second);
 			break;
+
+		case EventType::ESC:
+			for (auto pair : escape)
+				(pair.first)(pair.second);
+			break;
 		}
 	}
 
@@ -161,6 +181,8 @@ public:
 
 private:
 	static EventType currentEvent;
+	static std::vector<std::pair<X, void*>> escape;
+	static std::vector<std::pair<X, void*>> reset;
 	static std::vector<std::pair<X, void*>> stateChange;
 	static std::vector<std::pair<X, void*>> buttonDown;
 	static std::vector<std::pair<X, void*>> leftClick;

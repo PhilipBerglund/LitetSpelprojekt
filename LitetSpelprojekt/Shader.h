@@ -41,7 +41,11 @@ private:
 
 	bool UpdateBuffers(const Model& model);
 public:
-	Shader() = default;
+	Shader() 
+	{
+		vertexShaderBuffer = {};
+		pixelShaderBuffer = {};
+	};
 	bool Initialize(HWND window);
 	void SetShader(const Scene& scene);
 	void Render(const Scene& scene);

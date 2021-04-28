@@ -5,7 +5,7 @@ class Button :public UIComponent
 {
 private:
 	ComPtr<ID2D1SolidColorBrush> brush;
-	bool hovering;
+	bool hovering = false;
 public:
 	Button() = default;
 	Button(bool visible, D2D_VECTOR_2F position, float width, float height)

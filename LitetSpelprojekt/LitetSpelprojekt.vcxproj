@@ -167,6 +167,7 @@
     <ClInclude Include="GameSettings.h" />
     <ClInclude Include="Journal.h" />
     <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="Scenario.h" />
     <ClInclude Include="SkeletonAnimation.h" />
     <ClInclude Include="Button.h" />

@@ -5,8 +5,9 @@ class Text :public UIComponent
 {
 private:
 	std::wstring string;
-	ComPtr<ID2D1Brush> brush;
 public:
+	Text() = default;
+
 	Text(std::wstring string, bool visible, D2D_VECTOR_2F position, float width = 0, float height = 0)
 		:UIComponent(visible, position, width, height), string(string)
 	{
@@ -24,5 +25,10 @@ public:
 	void Draw(IDWriteTextFormat& format, ID2D1Brush& brush)
 	{
 		Graphics::Get2DRenderTarget().DrawTextW(string.c_str(), (UINT32)string.size(), &format, bounds, &brush);
+	}
+
+	size_t GetSize() const
+	{
+		return string.size();
 	}
 };

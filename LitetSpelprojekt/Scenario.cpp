@@ -55,6 +55,8 @@ void Scenario::Run(InGameUI& ui, Camera& camera)
 {
 	bool hoveringClue = false;
 
+	std::string names[] = { "Test 1", "Test 2", "Test 3", "Test 4", };
+
 	for (auto& clue : clues)
 	{
 		if (camera.CheckIntersection(clue.model->boundingbox))
@@ -63,9 +65,10 @@ void Scenario::Run(InGameUI& ui, Camera& camera)
 
 			if (Event::GetCurrentEvent() == EventType::LEFTCLICK)
 			{
-				clue.found = true;
+				ui.journal.AddSuspect(identifiedSuspects, names[identifiedSuspects], false);
+				identifiedSuspects++;
 
-				Print("Clue clicked!");
+				clue.found = true;
 
 				if (clue.murderClue == true)
 					Print("I am a murder clue!");

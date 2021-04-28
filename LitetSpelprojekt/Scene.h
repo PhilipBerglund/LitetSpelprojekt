@@ -25,7 +25,7 @@ public:
 	Scene(UINT windowWidth, UINT windowHeight, HWND window);
 	bool AddModel(const std::string& path);
 	void AddLight();
-	void Update(InGameUI& ui, InputHandler& input, float dt);
+	void Update(InGameUI& ui, float dt);
 	void Render();
 
 	const std::vector<std::shared_ptr<Light>>& GetLights() const	{ return this->lights; };

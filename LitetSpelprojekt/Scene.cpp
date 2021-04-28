@@ -1,7 +1,7 @@
 #include "Scene.h"
 
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
-	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 100.0f, { 0,0,-10 })
+	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 100.0f, 0.001f, 15.0f, { 0,0,-10 })
 {
 	sh.Initialize(window);
 	AddModel("Models/Troll.obj");
@@ -43,23 +43,9 @@ void Scene::AddLight()
 	gameObjects.push_back(light);
 }
 
-void Scene::Update(InGameUI& ui, InputHandler& input, float dt)
+void Scene::Update(InGameUI& ui, float dt)
 {
-	camera.Rotate((float)input.ReadRawDelta().value().x, (float)input.ReadRawDelta().value().y);
-
 	XMFLOAT3 lastPosition = camera.GetPosition();
-
-	if (input.KeyIsPressed('W'))
-		camera.MoveForward(dt);
-
-	if (input.KeyIsPressed('S'))
-		camera.MoveForward(-dt);
-
-	if (input.KeyIsPressed('D'))
-		camera.MoveRight(dt);
-
-	if (input.KeyIsPressed('A'))
-		camera.MoveRight(-dt);
 
 	for (auto& model : models)
 	{
@@ -81,14 +67,10 @@ void Scene::Update(InGameUI& ui, InputHandler& input, float dt)
 									camera.GetPosition().z - model->GetPosition().z };
 			camera.PushBack(direction, dt);
 		}
-
-		if (camera.CheckIntersection(model->boundingbox))
-			Print("INTERSECTS");
 	}
 
-	scenario.Run(ui, input, dt, camera);
-
-	camera.Update();
+	scenario.Run(ui, camera);
+	camera.Update(dt);
 }
 
 void Scene::Render()

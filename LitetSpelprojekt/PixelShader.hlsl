@@ -16,8 +16,7 @@ cbuffer Camera
 
 float4 main(PixelShaderInput input) : SV_TARGET
 {
-
-    float4 baseColor = float4(0.6, 0.6, 0.6, 1);
+    float4 baseColor = float4(1.0f, 0.6, 0.6, 1);
     
     //FOG ? 
     //float4 fogColor = { 0.4, 0.4, 0.4, 1.0 };
@@ -27,9 +26,10 @@ float4 main(PixelShaderInput input) : SV_TARGET
     //float4 finalColor = fogFactor * baseColor + (1.0 - fogFactor) * fogColor;
     
     //SIMPLE DIFFUSE (UNDEFINED POINT LIGHT AT CAMERA POSITION)
-    float diffuse = saturate(dot(input.normal, cameraPosition));
     
-    float4 finalColor = baseColor * diffuse;
+    float diffuse = saturate(dot(input.normal, float3(40, 40, 40)));
+    
+    float4 finalColor = float4(input.normal, 1.0f);
     
     return finalColor;
 }

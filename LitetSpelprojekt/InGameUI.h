@@ -87,6 +87,16 @@ private:
 public:
 	Journal journal;
 public:
+	~InGameUI()
+	{
+		delete journalIcon;
+		delete pauseMenuIcon;
+		delete newInformationNotation;
+
+		delete crossCursor;
+		delete clueCursor;
+	}
+
 	InGameUI()
 	{
 		currentCursorType = CursorType::CROSS;

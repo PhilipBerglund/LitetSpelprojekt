@@ -15,6 +15,5 @@ private:
 	Timer timer;
 public:
 	Game(HWND window, UINT windowWidth, UINT windowHeight);
-
 	void Render(float dt);
 };

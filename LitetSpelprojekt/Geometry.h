@@ -4,15 +4,15 @@
 #include <vector>
 #include <fstream>
 
-struct Vertex
+struct Vert
 {
 	float pos[3];
 	float uv[2];
 	float nrml[3];
 
-	Vertex() = default;
+	Vert() = default;
 
-	Vertex(const std::array<float, 3>& position, const std::array<float, 2>& uvCoords, const std::array<float, 3> normal)
+	Vert(const std::array<float, 3>& position, const std::array<float, 2>& uvCoords, const std::array<float, 3> normal)
 	{
 		for (int i = 0; i < 3; i++)
 		{
@@ -24,7 +24,7 @@ struct Vertex
 		uv[1] = uvCoords[1];
 	}
 
-	Vertex& operator=(const Vertex& vertex)
+	Vert& operator=(const Vert& vertex)
 	{
 		for (int i = 0; i < 3; ++i)
 		{
@@ -41,11 +41,11 @@ struct Vertex
 
 struct Face
 {
-	Vertex vertices[3];
+	Vert vertices[3];
 
 	Face() = default;
 
-	Face(Vertex v1, Vertex v2, Vertex v3)
+	Face(Vert v1, Vert v2, Vert v3)
 	{
 		vertices[0] = v1;
 		vertices[1] = v2;

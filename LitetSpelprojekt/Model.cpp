@@ -93,7 +93,7 @@ bool Model::LoadModel(std::string path)
     	std::array<float, 3> pos;
     	std::array<float, 2> tex;
     	std::array<float, 3> nor;
-    	std::array<Vertex, 3> vertices;
+    	std::array<Vert, 3> vertices;
     
     	for (int j = 0; j < 3; ++j)
     	{
@@ -114,7 +114,7 @@ bool Model::LoadModel(std::string path)
     		nor[1] = vn[index][1];
     		nor[2] = vn[index][2];
     
-    		vertices[j] = Vertex(pos, tex, nor);
+    		vertices[j] = Vert(pos, tex, nor);
     		vertexCount++;
     	}
     
@@ -150,6 +150,38 @@ bool Model::Initialize(ID3D11Device& device, std::string path)
 
     if (FAILED(device.CreateBuffer(&desc, &data, &vertexBuffer)))
         return false;
+
+    XMFLOAT4 orientation;
+    XMStoreFloat4(&orientation, XMQuaternionIdentity());
+    boundingbox = BoundingOrientedBox(transform.position, { 0.5f, 0.5f, 0.5f }, orientation);
+
+    return true;
+}
+
+Model::Model(const Mesh& mesh)
+{
+    this->mesh = mesh;
+    this->name = mesh.name;
+    this->worldMatrix = XMMatrixIdentity();
+
+    if (!this->mesh.Initialize(Graphics::GetDevice()))
+    {
+        Error("FAILED TO INITIALIZE MESH");
+        return;
+    }
+
+    XMFLOAT4 orientation;
+    XMStoreFloat4(&orientation, XMQuaternionIdentity());
+    boundingbox = BoundingOrientedBox(transform.position, { 0.5f, 0.5f, 0.5f }, orientation);
+}
+
+bool Model::Initialize()
+{
+    if (!mesh.Initialize(Graphics::GetDevice()))
+    {
+        Error("FAILED TO INITIALIZE MESH");
+        return false;
+    }
 
     XMFLOAT4 orientation;
     XMStoreFloat4(&orientation, XMQuaternionIdentity());

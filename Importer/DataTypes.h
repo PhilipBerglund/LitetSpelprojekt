@@ -114,7 +114,8 @@ struct Texture
 	TextureType type = TextureType::UNKNOWN;
 	int width = 0;
 	int height = 0;
-	char data[MAX_TEXTURESIZE] = "";
+	int fileSize = 0;
+	char* data = nullptr;
 
 	ID3D11ShaderResourceView** Get() { return this->view.GetAddressOf(); }
 	Texture() = default;

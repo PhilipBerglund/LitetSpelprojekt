@@ -21,21 +21,24 @@ bool LoadTexture(Texture& texture, ID3D11Device& device)
 	data.pSysMem = texture.data;
 	data.SysMemPitch = texture.width * 4;
 
-	ID3D11Texture2D* img;
-	if FAILED(device.CreateTexture2D(&textureDesc, &data, &img))
+	if (texture.data)
 	{
-		std::cout << "FAILED TO CREATE TEXTURE 2D" << std::endl;
-		return false;
-	}
+		ID3D11Texture2D* img;
+		if FAILED(device.CreateTexture2D(&textureDesc, &data, &img))
+		{
+			std::cout << "FAILED TO CREATE TEXTURE 2D" << std::endl;
+			return false;
+		}
 
-	if FAILED(device.CreateShaderResourceView(img, nullptr, texture.Get()))
-	{
-		std::cout << "FAILED TO CREATE SHADER RESOURCE VIEW" << std::endl;
-		return false;
-	}
+		if FAILED(device.CreateShaderResourceView(img, nullptr, texture.Get()))
+		{
+			std::cout << "FAILED TO CREATE SHADER RESOURCE VIEW" << std::endl;
+			return false;
+		}
 
-	img->Release();
-	img = nullptr;
+		img->Release();
+		img = nullptr;
+	}
 
 	return true;
 }
@@ -75,10 +78,11 @@ namespace Importer
 			currentPosition += MAX_CHAR + sizeof(char);
 		}
 
-		void ReadTextureFile(char data[])
+		void ReadTextureFile(char data[], int size)
 		{
-			std::memcpy(data, buffer.data() + currentPosition, MAX_TEXTURESIZE);
-			currentPosition += MAX_TEXTURESIZE + sizeof(char);
+			data = (char*)malloc(size);
+			std::memcpy(data, buffer.data() + currentPosition, size);
+			currentPosition += size + sizeof(char);
 		}
 
 	public:
@@ -192,7 +196,9 @@ namespace Importer
 				Read(texture.type);
 				Read(texture.width);
 				Read(texture.height);
-				ReadTextureFile(texture.data);
+				Read(texture.fileSize);
+
+				ReadTextureFile(texture.data, texture.fileSize);
 
 				material.textures.push_back(texture);
 			}

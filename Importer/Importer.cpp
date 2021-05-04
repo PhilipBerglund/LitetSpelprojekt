@@ -2,17 +2,11 @@
 #include <iostream>
 #include <fstream>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
 bool LoadTexture(Texture& texture, ID3D11Device& device)
 {
-	int imgWidth, imgHeight;
-	unsigned char* image = stbi_load(texture.path, &imgWidth, &imgHeight, nullptr, STBI_rgb_alpha);
-
 	D3D11_TEXTURE2D_DESC textureDesc = {};
-	textureDesc.Width = imgWidth;
-	textureDesc.Height = imgHeight;
+	textureDesc.Width = texture.width;
+	textureDesc.Height = texture.height;
 	textureDesc.MipLevels = 1;
 	textureDesc.ArraySize = 1;
 	textureDesc.MiscFlags = 0;
@@ -24,8 +18,8 @@ bool LoadTexture(Texture& texture, ID3D11Device& device)
 	textureDesc.CPUAccessFlags = 0;
 
 	D3D11_SUBRESOURCE_DATA data = {};
-	data.pSysMem = image;
-	data.SysMemPitch = imgWidth * STBI_rgb_alpha;
+	data.pSysMem = texture.data;
+	data.SysMemPitch = texture.width * 4;
 
 	ID3D11Texture2D* img;
 	if FAILED(device.CreateTexture2D(&textureDesc, &data, &img))
@@ -40,7 +34,6 @@ bool LoadTexture(Texture& texture, ID3D11Device& device)
 		return false;
 	}
 
-	stbi_image_free(image);
 	img->Release();
 	img = nullptr;
 
@@ -80,6 +73,12 @@ namespace Importer
 		{
 			std::memcpy(name, buffer.data() + currentPosition, MAX_CHAR);
 			currentPosition += MAX_CHAR + sizeof(char);
+		}
+
+		void ReadTextureFile(char data[])
+		{
+			std::memcpy(data, buffer.data() + currentPosition, MAX_TEXTURESIZE);
+			currentPosition += MAX_TEXTURESIZE + sizeof(char);
 		}
 
 	public:
@@ -191,8 +190,10 @@ namespace Importer
 
 				Read(texture.ID);
 				Read(texture.type);
-				ReadName(texture.path);
-				
+				Read(texture.width);
+				Read(texture.height);
+				ReadTextureFile(texture.data);
+
 				material.textures.push_back(texture);
 			}
 

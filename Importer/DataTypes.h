@@ -8,6 +8,7 @@ template <typename T>
 using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 #define MAX_CHAR 100
+#define MAX_TEXTURESIZE 4096
 
 enum class DataType
 {
@@ -111,7 +112,9 @@ struct Texture
 {
 	int ID = -1;
 	TextureType type = TextureType::UNKNOWN;
-	char path[MAX_CHAR] = "";
+	int width = 0;
+	int height = 0;
+	char data[MAX_TEXTURESIZE] = "";
 
 	ID3D11ShaderResourceView** Get() { return this->view.GetAddressOf(); }
 	Texture() = default;

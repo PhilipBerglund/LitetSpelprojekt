@@ -115,6 +115,8 @@ namespace Importer
 					break;
 				}
 			}
+
+			file.close();
 		}
 
 	private:

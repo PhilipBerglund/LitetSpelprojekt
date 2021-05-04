@@ -72,15 +72,14 @@ namespace Importer
 			currentPosition += sizeof(T);
 		}
 
-		void ReadName(char name[])
+		void ReadName(char* name)
 		{
 			std::memcpy(name, buffer.data() + currentPosition, MAX_CHAR);
 			currentPosition += MAX_CHAR + sizeof(char);
 		}
 
-		void ReadTextureFile(char data[], int size)
+		void ReadTextureFile(char* data, int size)
 		{
-			data = (char*)malloc(size);
 			std::memcpy(data, buffer.data() + currentPosition, size);
 			currentPosition += size + sizeof(char);
 		}
@@ -198,6 +197,7 @@ namespace Importer
 				Read(texture.height);
 				Read(texture.fileSize);
 
+				texture.data = (char*)malloc(texture.fileSize);
 				ReadTextureFile(texture.data, texture.fileSize);
 
 				material.textures.push_back(texture);

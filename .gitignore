@@ -360,6 +360,7 @@ MigrationBackup/
 .ionide/
 
 # Fody - auto-generated XML schema
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 FodyWeavers.xsd
 Importer/Importer.vcxproj
@@ -379,3 +380,7 @@ FodyWeavers.xsd
 !Importer/Importer.vcxproj.filters
 >>>>>>> Stashed changes
 >>>>>>> ScenarioTest
+=======
+
+FodyWeavers.xsd
+>>>>>>> Stashed changes

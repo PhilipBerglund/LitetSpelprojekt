@@ -361,3 +361,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+Importer/Importer.vcxproj
+Importer/Importer.vcxproj.filters
+Importer/stb_image.h
+*.filters
+Importer/Importer.vcxproj.filters

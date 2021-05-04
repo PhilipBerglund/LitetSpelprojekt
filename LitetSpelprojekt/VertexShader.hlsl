@@ -1,15 +1,19 @@
 struct VertexShaderInput
 {
 	float3 position : POSITION;
+    float3 normal : NORMAL;
 	float2 uv : UV;
-	float3 normal : NORMAL;
+    float3 tangent : TANGENT;
+    float3 binormal : BINORMAL;
+    float3 weights : WEIGHTS;
+    float4 boneIDs : BONEIDS;
 };
 
 struct VertexShaderOutput
 {
 	float4 position: SV_POSITION;
+    float3 normal : NORMAL;
 	float2 uv : UV;
-	float3 normal : NORMAL;
     float4 worldPosition : WORLD_POSITION;
 };
 
@@ -33,7 +37,7 @@ VertexShaderOutput main(VertexShaderInput input)
 	
 	output.uv = input.uv;
 	
-    output.normal = mul(input.normal, (float3x3)worldMatrix);
+    output.normal = normalize(mul(input.normal, (float3x3) worldMatrix));
 
 	return output;
 }

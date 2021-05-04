@@ -20,10 +20,12 @@ private:
 	static ComPtr<ID3D11Texture2D> dsTexture;
 	static ComPtr<ID3D11DepthStencilView> dsView;
 	static ComPtr<IDXGISurface> surface;
+	static ComPtr<ID3D11SamplerState> wrapSampler;
 
 	static HRESULT CreateDeviceSwapchain(UINT windowWidth, UINT windowHeight, HWND window, bool windowed);
 	static HRESULT CreateRenderTarget();
 	static HRESULT CreateDepthStencil(UINT windowWidth, UINT windowHeight);
+	static HRESULT CreateWrapSamplerState();
 	static void CreateViewport(UINT windowWidth, UINT windowHeight);
 	static bool InitializeD3D11(UINT windowWidth, UINT windowHeight, HWND window, bool windowed);
 
@@ -45,6 +47,7 @@ public:
 	static ID3D11DeviceContext& GetDeviceContext()	{ return *context.Get(); };
 	static IDXGISwapChain& GetSwapChain()			{ return *swapChain.Get(); };
 	static IDXGISurface& GetSurface()				{ return *surface.Get(); };
+	static ID3D11SamplerState** GetWrapSampler()	{ return wrapSampler.GetAddressOf(); }
 	
 	static IDWriteFactory& GetWriteFactory()		{ return *writeFactory.Get(); };
 	static ID2D1Factory& GetFactory()				{ return *factory.Get(); };

@@ -20,6 +20,8 @@ struct Information
 
 struct Suspect
 {
+	std::shared_ptr<Model> model;
+
 	std::string name = "UNKNOWN";
 	int age;
 	Information information;
@@ -44,7 +46,8 @@ struct Clue
 
 class Scenario
 {
-private: 
+private:
+	int identifiedSuspects = 0;
 	bool finished = false;
 public:
 	Victim victim;

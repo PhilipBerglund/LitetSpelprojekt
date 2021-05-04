@@ -27,6 +27,7 @@ public:
 	static bool cursorEnabled;
 	static float GetWidth();
 	static float GetHeight();
+	static std::pair<int, int> GetCenter();
 };
 
 struct WindowInitializer

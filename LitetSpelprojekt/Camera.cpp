@@ -12,6 +12,7 @@ Camera::Camera()
 	Event::Bind(this, EventType::S_DOWN);
 	Event::Bind(this, EventType::D_DOWN);
 	Event::Bind(this, EventType::MOUSEMOVE);
+	Event::Bind(this, EventType::RESET);
 
 	this->up = { 0,1,0 };
 	this->forward = { 0,0,1 };
@@ -32,6 +33,7 @@ Camera::Camera(float FOV, float aspectRatio, float nearZ, float farZ, float rota
 	Event::Bind(this, EventType::S_DOWN);
 	Event::Bind(this, EventType::D_DOWN);
 	Event::Bind(this, EventType::MOUSEMOVE);
+	Event::Bind(this, EventType::RESET);
 
 	this->up = { 0,1,0 };
 	this->forward = { 0,0,1 };
@@ -126,6 +128,13 @@ void Camera::OnEvent()
 
 	switch(Event::GetCurrentEvent())
 	{
+	case EventType::RESET:
+		w = false;
+		a = false;
+		s = false;
+		d = false;
+		break;
+
 	case EventType::W_DOWN:
 		w = true;
 		break;

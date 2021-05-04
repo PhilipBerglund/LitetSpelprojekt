@@ -5,7 +5,7 @@
 class Image :public UIComponent
 {
 private:
-	float scale;
+	float scale = 1.0f;
 	ComPtr<ID2D1Bitmap> bitmap;
 	float opacity = 1.0f;
 public:
@@ -66,6 +66,32 @@ public:
 				position.x + width / 2,
 				position.y + height / 2
 				};
+	}
+
+	void SetScale(float value)
+	{
+		this->width = value * bitmap->GetSize().width;
+		this->height = value * bitmap->GetSize().height;
+
+		bounds = {
+				position.x - width / 2,
+				position.y - height / 2,
+				position.x + width / 2,
+				position.y + height / 2
+		};
+	}
+
+	void ResetScale()
+	{
+		this->width = scale * bitmap->GetSize().width;
+		this->height = scale * bitmap->GetSize().height;
+
+		bounds = {
+				position.x - width / 2,
+				position.y - height / 2,
+				position.x + width / 2,
+				position.y + height / 2
+		};
 	}
 
 	void SetOpacity(float opacity)

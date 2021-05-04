@@ -1,26 +1,35 @@
 #include "Scene.h"
 
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
-	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 100.0f, 0.001f, 15.0f, { 0,0,-10 })
+	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.001f, 40.0f, { 0, 10, 30 })
 {
-	sh.Initialize(window);
-	AddModel("Models/Troll.obj");
-	AddLight();
+	Importer::LoadScene("Models/Office.mff");	
+	Importer::Initialize(Graphics::GetDevice());
 
-	scenario.InitializeClueLocations();
-
-	scenario.TempLoadClues("Models/testclue.obj");
-	scenario.TempLoadClues("Models/testclue2.obj");
-	scenario.TempLoadClues("Models/testclue3.obj");
-	scenario.TempLoadClues("Models/testclue4.obj");
-
-	for (auto& clue : scenario.clues)
+	std::vector<Mesh> meshes = Importer::Data::GetMeshes();
+	for (auto& mesh : meshes)
 	{
-		models.push_back(clue.model);
-		gameObjects.push_back(clue.model);
+		auto model = std::make_shared<Model>(mesh);
+		models.push_back(model);
 	}
 
-	scenario.SetRandomizedLocations();
+	sh.Initialize(window);
+	AddLight();
+
+	//scenario.InitializeClueLocations();
+
+	//scenario.TempLoadClues("Models/testclue.obj");
+	//scenario.TempLoadClues("Models/testclue2.obj");
+	//scenario.TempLoadClues("Models/testclue3.obj");
+	//scenario.TempLoadClues("Models/testclue4.obj");
+
+	//for (auto& clue : scenario.clues)
+	//{
+	//	models.push_back(clue.model);
+	//	gameObjects.push_back(clue.model);
+	//}
+
+	//scenario.SetRandomizedLocations();
 }
 
 bool Scene::AddModel(const std::string& path)
@@ -28,11 +37,11 @@ bool Scene::AddModel(const std::string& path)
 	auto model = std::make_shared<Model>();
 	models.push_back(model);
 	gameObjects.push_back(model);
-	if (!model->Initialize(Graphics::GetDevice(), path))
-	{
-		Error("FAILED TO INITIALIZE MODEL");
-		return false;
-	}
+	//if (!model->Initialize(Graphics::GetDevice(), path))
+	//{
+	//	Error("FAILED TO INITIALIZE MODEL");
+	//	return false;
+	//}
 	return true;
 }
 

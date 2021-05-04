@@ -2,18 +2,13 @@
 
 Game::Game(HWND window, UINT windowWidth, UINT windowHeight)
 {
-	if (!inGameUI.Initialize())
-		Error("FAILED TO INITIALIZE IN GAME UI");
-
-	if (!mainMenu.Initialize())
-		Error("FAILED TO INITIALIZE MAIN MENU");
-
 	scene = Scene(windowWidth, windowHeight, window);
 }
 
 void Game::Render(float dt)
 {
 	Graphics::BeginFrame();
+	Graphics::Get2DRenderTarget().BeginDraw();
 
 	switch (GameSettings::GetState())
 	{
@@ -22,7 +17,13 @@ void Game::Render(float dt)
 		break;
 
 	case GameState::INGAME:
+		SetCursorPos((int)Window::GetWidth() / 2, (int)Window::GetHeight() / 2);
 		scene.Update(inGameUI, dt);
+		scene.Render();
+		inGameUI.Render();
+		break;
+	
+	case GameState::JOURNAL:
 		scene.Render();
 		inGameUI.Render();
 		break;
@@ -36,5 +37,6 @@ void Game::Render(float dt)
 		break;
 	}
 
+	Graphics::Get2DRenderTarget().EndDraw();
 	Graphics::EndFrame();
 }

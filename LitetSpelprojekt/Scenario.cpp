@@ -30,6 +30,8 @@ void Scenario::SetRandomizedLocations()
 {
 	for (int i = 0; i < clues.size(); i++)
 	{
+		//GET == ->
+		//clues[i].model->SetPosition();
 		clues[i].model.get()->SetPosition(clueLocations[i]);
 		clues[i].model.get()->Update(Graphics::GetDeviceContext());
 	}
@@ -40,11 +42,11 @@ bool Scenario::TempLoadClues(std::string path)
 	Clue clue;
 	clue.model = std::make_shared<Model>();
 
-	if (!clue.model->Initialize(Graphics::GetDevice(), path))
-	{
-		Error("FAILED TO INITIALIZE CLUE");
-		return false;
-	}
+	//if (!clue.model->Initialize(Graphics::GetDevice(), path))
+	//{
+	//	Error("FAILED TO INITIALIZE CLUE");
+	//	return false;
+	//}
 
 	clues.push_back(clue);
 
@@ -55,6 +57,8 @@ void Scenario::Run(InGameUI& ui, Camera& camera)
 {
 	bool hoveringClue = false;
 
+	std::string names[] = { "Test 1", "Test 2", "Test 3", "Test 4", };
+
 	for (auto& clue : clues)
 	{
 		if (camera.CheckIntersection(clue.model->boundingbox))
@@ -63,9 +67,10 @@ void Scenario::Run(InGameUI& ui, Camera& camera)
 
 			if (Event::GetCurrentEvent() == EventType::LEFTCLICK)
 			{
-				clue.found = true;
+				ui.journal.AddSuspect(identifiedSuspects, names[identifiedSuspects], false);
+				identifiedSuspects++;
 
-				Print("Clue clicked!");
+				clue.found = true;
 
 				if (clue.murderClue == true)
 					Print("I am a murder clue!");

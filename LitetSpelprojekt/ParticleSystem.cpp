@@ -24,12 +24,12 @@ ParticleSystem::ParticleSystem(XMFLOAT3 bounds, float velocity, float velocityVa
 bool ParticleSystem::Initialize(ID3D11Device& device)
 {
 	vertexCount = maxParticles * 6;
-	vertices = new Vertex[vertexCount];
+	vertices = new Vert[vertexCount];
 	
 	//VERTEX BUFFER
 	D3D11_BUFFER_DESC vBufferDesc = {};
 	vBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	vBufferDesc.ByteWidth = sizeof(Vertex) * vertexCount;
+	vBufferDesc.ByteWidth = sizeof(Vert) * vertexCount;
 	vBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	vBufferDesc.MiscFlags = 0;

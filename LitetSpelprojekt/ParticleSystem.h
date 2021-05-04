@@ -18,6 +18,7 @@ private:
 		XMFLOAT3 direction;
 		XMFLOAT3 position;
 		XMFLOAT3 color;
+		float time;
 		float velocity;
 		bool active;
 	};

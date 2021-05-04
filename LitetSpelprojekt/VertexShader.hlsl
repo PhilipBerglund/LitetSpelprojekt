@@ -1,8 +1,8 @@
 struct VertexShaderInput
 {
 	float3 position : POSITION;
+    float3 normal : NORMAL;
 	float2 uv : UV;
-	float3 normal : NORMAL;
     float3 tangent : TANGENT;
     float3 binormal : BINORMAL;
     float3 weights : WEIGHTS;
@@ -12,8 +12,8 @@ struct VertexShaderInput
 struct VertexShaderOutput
 {
 	float4 position: SV_POSITION;
+    float3 normal : NORMAL;
 	float2 uv : UV;
-	float3 normal : NORMAL;
     float4 worldPosition : WORLD_POSITION;
 };
 

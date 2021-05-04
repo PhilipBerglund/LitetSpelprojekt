@@ -9,6 +9,7 @@ ComPtr<ID3D11RenderTargetView> Graphics::rtv;
 ComPtr<ID3D11Texture2D> Graphics::dsTexture;
 ComPtr<ID3D11DepthStencilView> Graphics::dsView;
 ComPtr<IDXGISurface> Graphics::surface;
+ComPtr<ID3D11SamplerState> Graphics::wrapSampler;
 ComPtr<IDWriteFactory> Graphics::writeFactory;
 ComPtr<ID2D1Factory> Graphics::factory;
 ComPtr<ID2D1RenderTarget> Graphics::renderTarget;
@@ -103,6 +104,23 @@ HRESULT Graphics::CreateDepthStencil(UINT windowWidth, UINT windowHeight)
 	return hr;
 }
 
+HRESULT Graphics::CreateWrapSamplerState()
+{
+	D3D11_SAMPLER_DESC samplerDesc = {};
+	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.MipLODBias = 0.0f;
+	samplerDesc.MaxAnisotropy = 1;
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+	samplerDesc.MinLOD = 0;
+	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+	HRESULT hr = device->CreateSamplerState(&samplerDesc, &wrapSampler);
+	return hr;
+}
+
 void Graphics::CreateViewport(UINT windowWidth, UINT windowHeight)
 {
 	viewport.Width = static_cast<float>(windowWidth);
@@ -130,6 +148,12 @@ bool Graphics::InitializeD3D11(UINT windowWidth, UINT windowHeight, HWND window,
 	if FAILED(CreateDepthStencil(windowWidth, windowHeight)) 
 	{
 		Error("FAILED TO CREATE DEPTH STENCIL");
+		return false;
+	}
+
+	if FAILED(CreateWrapSamplerState())
+	{
+		Error("FAILED TO CREATE WRAP SAMPLER STATE");
 		return false;
 	}
 

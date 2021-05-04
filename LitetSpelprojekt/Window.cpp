@@ -161,12 +161,6 @@ std::pair<int, int> Window::GetMousePos()
 
 	return points;
 }
-//
-//std::pair<int, int> Window::GetMousePos(LPARAM lParam)
-//{
-//	POINTS pt = MAKEPOINTS(lParam);
-//	return std::pair<int, int>(pt.x, pt.y);
-//}
 
 HWND Window::GetWindowHandle()
 {
@@ -237,6 +231,7 @@ void WindowInitializer::Initialize(Window& window, UINT width, UINT height, LPCW
 	rid.dwFlags = 0;
 	rid.hwndTarget = nullptr;
 	RegisterRawInputDevices(&rid, 1, sizeof(rid));
+
 	ShowWindow(window.hWnd, SW_SHOWDEFAULT);
 	ShowCursor(false);
 

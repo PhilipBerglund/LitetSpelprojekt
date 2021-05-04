@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="DataTypes.h" />
     <ClInclude Include="Importer.h" />
+    <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Importer.cpp" />

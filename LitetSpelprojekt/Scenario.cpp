@@ -30,6 +30,8 @@ void Scenario::SetRandomizedLocations()
 {
 	for (int i = 0; i < clues.size(); i++)
 	{
+		//GET == ->
+		//clues[i].model->SetPosition();
 		clues[i].model.get()->SetPosition(clueLocations[i]);
 		clues[i].model.get()->Update(Graphics::GetDeviceContext());
 	}
@@ -40,11 +42,11 @@ bool Scenario::TempLoadClues(std::string path)
 	Clue clue;
 	clue.model = std::make_shared<Model>();
 
-	if (!clue.model->Initialize(Graphics::GetDevice(), path))
-	{
-		Error("FAILED TO INITIALIZE CLUE");
-		return false;
-	}
+	//if (!clue.model->Initialize(Graphics::GetDevice(), path))
+	//{
+	//	Error("FAILED TO INITIALIZE CLUE");
+	//	return false;
+	//}
 
 	clues.push_back(clue);
 

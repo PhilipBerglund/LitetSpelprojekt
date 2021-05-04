@@ -1,18 +1,19 @@
 #include "Scene.h"
 
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
-	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.001f, 40.0f, { 0, 10, 50 })
+	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.001f, 40.0f, { 0, 10, 30 })
 {
-	Importer::LoadScene("Models/GameWorldTest.mff");	
+	Importer::LoadScene("Models/Office.mff");	
+	Importer::Initialize(Graphics::GetDevice());
 
-	for (auto& mesh : Importer::GetMeshes())
+	std::vector<Mesh> meshes = Importer::Data::GetMeshes();
+	for (auto& mesh : meshes)
 	{
 		auto model = std::make_shared<Model>(mesh);
 		models.push_back(model);
 	}
 
 	sh.Initialize(window);
-	//AddModel("Models/Troll.obj");
 	AddLight();
 
 	//scenario.InitializeClueLocations();
@@ -36,11 +37,11 @@ bool Scene::AddModel(const std::string& path)
 	auto model = std::make_shared<Model>();
 	models.push_back(model);
 	gameObjects.push_back(model);
-	if (!model->Initialize(Graphics::GetDevice(), path))
-	{
-		Error("FAILED TO INITIALIZE MODEL");
-		return false;
-	}
+	//if (!model->Initialize(Graphics::GetDevice(), path))
+	//{
+	//	Error("FAILED TO INITIALIZE MODEL");
+	//	return false;
+	//}
 	return true;
 }
 

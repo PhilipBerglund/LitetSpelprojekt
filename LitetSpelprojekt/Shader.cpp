@@ -15,26 +15,61 @@ bool Shader::UpdateBuffers(const Model& model)
 		return false;
 	}
 
-	XMStoreFloat4x4(&vertexShaderBuffer.worldMatrix, XMMatrixTranspose(model.GetMatrix()));
+	XMStoreFloat4x4(&vertexCbuf.worldMatrix, XMMatrixTranspose(model.GetMatrix()));
 
-	XMMATRIX WVP = model.GetMatrix() * XMLoadFloat4x4(&vertexShaderBuffer.viewMatrix) * XMLoadFloat4x4(&vertexShaderBuffer.perspectiveMatrix);
+	XMMATRIX WVP = model.GetMatrix() * XMLoadFloat4x4(&vertexCbuf.viewMatrix) * XMLoadFloat4x4(&vertexCbuf.perspectiveMatrix);
 
-	XMStoreFloat4x4(&vertexShaderBuffer.WVP, XMMatrixTranspose(WVP));
-	
-	memcpy(mappedResource.pData, &vertexShaderBuffer, sizeof(VS));
+	XMStoreFloat4x4(&vertexCbuf.WVP, XMMatrixTranspose(WVP));
+
+	memcpy(mappedResource.pData, &vertexCbuf, sizeof(VS));
 	Graphics::GetDeviceContext().Unmap(VS_Buffer.Get(), 0);
 
 	//PIXEL SHADER BUFFER(S)
 	PS pixelShaderData = {};
-	hr = Graphics::GetDeviceContext().Map(PS_Buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	hr = Graphics::GetDeviceContext().Map(cameraBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	if FAILED(hr)
 	{
 		Error("FAILED TO MAP BUFFER");
 		return false;
 	}
 
-	memcpy(mappedResource.pData, &pixelShaderBuffer.cameraPosition, sizeof(PS));
-	Graphics::GetDeviceContext().Unmap(PS_Buffer.Get(), 0);
+	memcpy(mappedResource.pData, &cameraCbuf.cameraPosition, sizeof(PS));
+	Graphics::GetDeviceContext().Unmap(cameraBuffer.Get(), 0);
+
+	hr = Graphics::GetDeviceContext().Map(materialBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	if FAILED(hr)
+	{
+		Error("FAILED TO MAP BUFFER");
+		return false;
+	}
+
+	MATERIAL materialData = {};
+	Material modelMaterial = model.GetMaterial();
+
+	materialData.diffuse[0] = modelMaterial.diffuse[0];
+	materialData.diffuse[1] = modelMaterial.diffuse[1];
+	materialData.diffuse[2] = modelMaterial.diffuse[2];
+
+	materialData.opacity = modelMaterial.opacity;
+
+	materialData.ambient[0] = modelMaterial.ambient[0];
+	materialData.ambient[1] = modelMaterial.ambient[1];
+	materialData.ambient[2] = modelMaterial.ambient[2];
+
+	materialData.shininess = modelMaterial.shininess;
+
+	materialData.emissive[0] = modelMaterial.emissive[0];
+	materialData.emissive[1] = modelMaterial.emissive[1];
+	materialData.emissive[2] = modelMaterial.emissive[2];
+
+	materialData.reflectivity = modelMaterial.reflectivity;
+
+	materialData.specular[0] = modelMaterial.specular[0];
+	materialData.specular[1] = modelMaterial.specular[1];
+	materialData.specular[2] = modelMaterial.specular[2];
+
+	memcpy(mappedResource.pData, &materialData, sizeof(MATERIAL));
+	Graphics::GetDeviceContext().Unmap(materialBuffer.Get(), 0);
 
 	return true;
 }
@@ -50,13 +85,19 @@ bool Shader::Initialize(HWND window)
 	if (!LoadPixelShader(pixelShader, ps_path))
 		return false;
 
+	if (!LoadPixelShader(texturePixelShader, texture_ps_path))
+		return false;
+
+	if (!LoadPixelShader(colorPixelShader, color_ps_path))
+		return false;
+
 	//INPUT LAYOUT
 	const UINT numElements = 7;
 	D3D11_INPUT_ELEMENT_DESC inputDesc[numElements] =
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"UV", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"UV", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"WEIGHTS", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
@@ -87,8 +128,15 @@ bool Shader::Initialize(HWND window)
 	}
 
 	bufferDesc.ByteWidth = sizeof(PS);
+	hr = Graphics::GetDevice().CreateBuffer(&bufferDesc, nullptr, &cameraBuffer);
+	if FAILED(hr)
+	{
+		Error("FAILED TO CREATE BUFFER");
+		return false;
+	}
 
-	hr = Graphics::GetDevice().CreateBuffer(&bufferDesc, nullptr, &PS_Buffer);
+	bufferDesc.ByteWidth = sizeof(MATERIAL);
+	hr = Graphics::GetDevice().CreateBuffer(&bufferDesc, nullptr, &materialBuffer);
 	if FAILED(hr)
 	{
 		Error("FAILED TO CREATE BUFFER");
@@ -103,21 +151,23 @@ void Shader::SetShader(const Scene& scene)
 	const auto& camera = scene.GetCamera();
 	const auto& lights = scene.GetLights();
 
-	XMStoreFloat4x4(&vertexShaderBuffer.viewMatrix, camera.GetViewMatrix());
-	XMStoreFloat4x4(&vertexShaderBuffer.perspectiveMatrix, camera.GetPerspectiveMatrix());
-	XMStoreFloat4x4(&vertexShaderBuffer.lightViewMatrix, lights[0]->GetViewMatrix());
-	XMStoreFloat4x4(&vertexShaderBuffer.lightPerspectiveMatrix, lights[0]->GetPerspectiveMatrix());
+	XMStoreFloat4x4(&vertexCbuf.viewMatrix, camera.GetViewMatrix());
+	XMStoreFloat4x4(&vertexCbuf.perspectiveMatrix, camera.GetPerspectiveMatrix());
+	XMStoreFloat4x4(&vertexCbuf.lightViewMatrix, lights[0]->GetViewMatrix());
+	XMStoreFloat4x4(&vertexCbuf.lightPerspectiveMatrix, lights[0]->GetPerspectiveMatrix());
 
-	pixelShaderBuffer.cameraPosition = camera.GetPosition();
+	cameraCbuf.cameraPosition = camera.GetPosition();
 
 	Graphics::GetDeviceContext().IASetInputLayout(layout.Get());
 	Graphics::GetDeviceContext().VSSetShader(vertexShader.Get(), nullptr, 0);
-	Graphics::GetDeviceContext().PSSetShader(pixelShader.Get(), nullptr, 0);
+	Graphics::GetDeviceContext().PSSetSamplers(0, 1, Graphics::GetWrapSampler());
 }
 
 void Shader::Render(const Scene& scene)
 {
 	SetShader(scene);
+
+	float baseLambert[3] = { 0.5,0.5,0.5 };
 
 	unsigned int stride = sizeof(Vertex);
 	unsigned int offset = 0;
@@ -131,7 +181,23 @@ void Shader::Render(const Scene& scene)
 		auto buffer = &model->GetVertexBuffer();
 		Graphics::GetDeviceContext().IASetVertexBuffers(0, 1, &buffer, &stride, &offset);
 
-		Graphics::GetDeviceContext().PSSetConstantBuffers(0, 1, PS_Buffer.GetAddressOf());
+		Graphics::GetDeviceContext().PSSetShader(texturePixelShader.Get(), nullptr, 0);
+		Graphics::GetDeviceContext().PSSetConstantBuffers(0, 1, cameraBuffer.GetAddressOf());
+		Graphics::GetDeviceContext().PSSetConstantBuffers(1, 1, materialBuffer.GetAddressOf());
+
+		const float mat[] = { model->GetMaterial().diffuse[0], model->GetMaterial().diffuse[1], model->GetMaterial().diffuse[2] };
+
+		if (*model->GetDiffuseTexture())
+			Graphics::GetDeviceContext().PSSetShaderResources(0, 1, model->GetDiffuseTexture());
+
+		else if (	(mat[0] == 0.5f && mat[1] == 0.5f && mat[2] == 0.5f) ||
+					(mat[0] == 1.0f && mat[1] == 1.0f && mat[2] == 1.0f) ||
+					(mat[0] == 0.0f && mat[1] == 0.0f && mat[2] == 0.0f))
+			Graphics::GetDeviceContext().PSSetShader(pixelShader.Get(), nullptr, 0);
+
+		else
+			Graphics::GetDeviceContext().PSSetShader(colorPixelShader.Get(), nullptr, 0);
+
 		Graphics::GetDeviceContext().VSSetConstantBuffers(0, 1, VS_Buffer.GetAddressOf());
 
 		Graphics::GetDeviceContext().Draw(model->GetVertexCount(), 0);

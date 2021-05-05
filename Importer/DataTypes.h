@@ -158,7 +158,7 @@ struct VertexBuffer
 	int ID = -1;
 	unsigned int vertexCount = 0;
 	std::vector<Vertex> vertices;
-	ID3D11Buffer& GetBuffer() {	return *this->buffer.Get();	}
+	ID3D11Buffer** GetBuffer() {	return this->buffer.GetAddressOf();	}
 
 	bool Initialize(ID3D11Device& device)
 	{

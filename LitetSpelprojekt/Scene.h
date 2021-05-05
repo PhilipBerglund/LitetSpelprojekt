@@ -9,8 +9,8 @@
 #include "Scenario.h"
 #include "ParticleSystem.h"
 #include <vector>
-#include "ShaderData.h"
 #include "ParticleShader.h"
+#include "RegularShader.h"
 
 //IDs / sorterad lista (olika shaders, konstanter för framen en gång)
 
@@ -25,9 +25,9 @@ private:
 	std::vector<std::shared_ptr<ParticleSystem>> particleSystems;
 
 	//SHADERS
-	Shader sh;
 	ShaderData shaderData;
 	ParticleShader particleShader;
+	RegularShader regularShader;
 
 	void AddParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size);
 public:

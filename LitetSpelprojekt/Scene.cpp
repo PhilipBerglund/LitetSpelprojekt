@@ -3,7 +3,11 @@
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.001f, 40.0f, { 0, 10, 30 })
 {
+<<<<<<< HEAD
 	Importer::LoadScene("Models/Test4.mff");	
+=======
+	Importer::LoadScene("Models/Office.mff");	
+>>>>>>> Sophia_Branch
 	Importer::Initialize(Graphics::GetDevice());
 
 	std::vector<Mesh> meshes = Importer::Data::GetMeshes();
@@ -15,8 +19,6 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 
 	AddParticleSystem({ 50,50,50 }, { 60, 50,0 }, 50, 1, 100, 200, 0.2f);
 
-	//rainSystem.Initialize();
-	sh.Initialize(window);
 	AddLight();
 
 	//scenario.InitializeClueLocations();
@@ -46,11 +48,6 @@ bool Scene::AddModel(const std::string& path)
 	auto model = std::make_shared<Model>();
 	models.push_back(model);
 	gameObjects.push_back(model);
-	//if (!model->Initialize(Graphics::GetDevice(), path))
-	//{
-	//	Error("FAILED TO INITIALIZE MODEL");
-	//	return false;
-	//}
 	return true;
 }
 
@@ -65,27 +62,27 @@ void Scene::Update(InGameUI& ui, float dt)
 {
 	XMFLOAT3 lastPosition = camera.GetPosition();
 
-	for (auto& model : models)
-	{
-		bool hit = false;
+	//for (auto& model : models)
+	//{
+	//	bool hit = false;
 
-		switch (model->collidertype)
-		{
-		case ColliderType::BOX:
-			hit = camera.CheckCollision(model->boundingbox);
-			break;
-		case ColliderType::SPHERE:
-			break;
-		}
+	//	switch (model->collidertype)
+	//	{
+	//	case ColliderType::BOX:
+	//		hit = camera.CheckCollision(model->boundingbox);
+	//		break;
+	//	case ColliderType::SPHERE:
+	//		break;
+	//	}
 
-		if (hit)
-		{
-			camera.SetPosition(lastPosition);
-			XMFLOAT3 direction = { camera.GetPosition().x - model->GetPosition().x, 0.0f,
-									camera.GetPosition().z - model->GetPosition().z };
-			camera.PushBack(direction, dt);
-		}
-	}
+	//	if (hit)
+	//	{
+	//		camera.SetPosition(lastPosition);
+	//		XMFLOAT3 direction = { camera.GetPosition().x - model->GetPosition().x, 0.0f,
+	//								camera.GetPosition().z - model->GetPosition().z };
+	//		camera.PushBack(direction, dt);
+	//	}
+	//}
 
 	for (auto& particleSystem : particleSystems)
 		particleSystem->Update(dt, camera.GetPosition());
@@ -98,5 +95,5 @@ void Scene::Update(InGameUI& ui, float dt)
 void Scene::Render()
 {
 	particleShader.Render(shaderData, *this);
-	sh.Render(*this);
+	regularShader.Render(shaderData, *this);
 }

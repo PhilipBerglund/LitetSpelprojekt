@@ -178,8 +178,7 @@ void Shader::Render(const Scene& scene)
 	{
 		UpdateBuffers(*model);
 
-		auto buffer = &model->GetVertexBuffer();
-		Graphics::GetDeviceContext().IASetVertexBuffers(0, 1, &buffer, &stride, &offset);
+		Graphics::GetDeviceContext().IASetVertexBuffers(0, 1, model->GetVertexBuffer(), &stride, &offset);
 
 		Graphics::GetDeviceContext().PSSetShader(texturePixelShader.Get(), nullptr, 0);
 		Graphics::GetDeviceContext().PSSetConstantBuffers(0, 1, cameraBuffer.GetAddressOf());

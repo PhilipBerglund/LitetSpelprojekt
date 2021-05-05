@@ -163,6 +163,7 @@
     <ClCompile Include="ParticleShader.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Print.cpp" />
+    <ClCompile Include="RegularShader.cpp" />
     <ClCompile Include="Scenario.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="ParticleShader.h" />
     <ClInclude Include="PauseMenu.h" />
+    <ClInclude Include="RegularShader.h" />
     <ClInclude Include="Scenario.h" />
     <ClInclude Include="ShaderData.h" />
     <ClInclude Include="SkeletonAnimation.h" />

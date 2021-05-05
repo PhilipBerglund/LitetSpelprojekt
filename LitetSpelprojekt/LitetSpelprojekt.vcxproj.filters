@@ -38,6 +38,7 @@
     <ClCompile Include="ParticleShader.cpp">
       <Filter>Particle</Filter>
     </ClCompile>
+    <ClCompile Include="RegularShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioChunks.h" />
@@ -81,6 +82,7 @@
     <ClInclude Include="ParticleShader.h">
       <Filter>Particle</Filter>
     </ClInclude>
+    <ClInclude Include="RegularShader.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Particle">

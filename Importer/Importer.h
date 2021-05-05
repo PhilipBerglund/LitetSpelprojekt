@@ -12,7 +12,7 @@ namespace Importer
 		static std::vector<VertexBuffer> GetVertexBuffers() { return vertexBuffers; }
 		static Mesh& GetMeshAt(int index) { return meshes.at(index); }
 		static Material& GetMaterialAt(int index) { return materials.at(index); }
-		static ID3D11Buffer& GetVertexBufferAt(int index) { return vertexBuffers.at(index).GetBuffer(); }
+		static ID3D11Buffer** GetVertexBufferAt(int index) { return vertexBuffers.at(index).GetBuffer(); }
 		static int GetVertexCountAt(int index) { return vertexBuffers.at(index).vertexCount; }
 
 		static std::vector<Mesh> meshes;

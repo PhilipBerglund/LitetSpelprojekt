@@ -11,7 +11,7 @@ struct VS_OUTPUT
     float4 color : COLOR;
 };
 
-cbuffer MATRIXBUFFER : register(b1)
+cbuffer MATRIXBUFFER : register(b2)
 {
    float4x4 viewProj;
 };

@@ -88,5 +88,8 @@
     <Filter Include="Particle">
       <UniqueIdentifier>{637396cf-a880-429c-b01c-7fe767a5e5bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{c42741a2-13fa-4cc1-a77e-e5eb85d75ee4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

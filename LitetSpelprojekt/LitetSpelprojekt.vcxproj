@@ -164,11 +164,13 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SkeletonAnimation.cpp" />
+    <ClCompile Include="SkinnedData.cpp" />
     <ClCompile Include="SoundHandler.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSettings.h" />
+    <ClInclude Include="SkinnedData.h" />
     <ClInclude Include="Journal.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="PauseMenu.h" />

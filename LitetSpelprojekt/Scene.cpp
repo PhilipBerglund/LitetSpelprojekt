@@ -3,7 +3,7 @@
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.001f, 40.0f, { 0, 10, 30 })
 {
-	Importer::LoadScene("Models/World.mff");	
+	Importer::LoadScene("Models/Test4.mff");	
 	Importer::Initialize(Graphics::GetDevice());
 
 	std::vector<Mesh> meshes = Importer::Data::GetMeshes();
@@ -13,7 +13,7 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 		models.push_back(model);
 	}
 
-	AddParticleSystem({ 50,50,50 }, { 60, 50,0 }, 50, 1, 100, 5000, 0.2f);
+	AddParticleSystem({ 50,50,50 }, { 60, 50,0 }, 50, 1, 100, 200, 0.2f);
 
 	//rainSystem.Initialize();
 	sh.Initialize(window);

@@ -81,8 +81,9 @@ void RegularShader::Render(ShaderData& data, Scene& scene)
 
 	const auto& models = scene.GetModels();
 
-	for (const auto& model : models)
+	for (const auto& pair : models)
 	{
+		auto& model = pair.second;
 		UpdatePerMesh(data, *model);
 
 		Graphics::GetDeviceContext().IASetVertexBuffers(0, 1, model->GetVertexBuffer(), &stride, &offset);

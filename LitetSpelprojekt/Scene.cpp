@@ -12,28 +12,14 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 		for (auto& mesh : Importer::Data::GetMeshes(i))
 		{
 			auto model = std::make_shared<Model>(mesh);
-			models.push_back(model);
+			models.insert(std::make_pair(model->GetName(), model));
 		}
 	}
 
-	AddParticleSystem({ 50,50,50 }, { 60, 50,0 }, 50, 1, 100, 200, 0.2f);
-
+	AddParticleSystem({ 50,50,50 }, { 60, 50,80 }, 50, 1, 100, 200, 0.2f);
 	AddLight();
 
-	//scenario.InitializeClueLocations();
-
-	//scenario.TempLoadClues("Models/testclue.obj");
-	//scenario.TempLoadClues("Models/testclue2.obj");
-	//scenario.TempLoadClues("Models/testclue3.obj");
-	//scenario.TempLoadClues("Models/testclue4.obj");
-
-	//for (auto& clue : scenario.clues)
-	//{
-	//	models.push_back(clue.model);
-	//	gameObjects.push_back(clue.model);
-	//}
-
-	//scenario.SetRandomizedLocations();
+	scenario = Scenario(*this);
 }
 
 void Scene::AddParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size)
@@ -42,12 +28,9 @@ void Scene::AddParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, 
 	particleSystems.push_back(particleSystem);
 }
 
-bool Scene::AddModel(const std::string& path)
+void Scene::AddModel(std::shared_ptr<Model> model)
 {
-	auto model = std::make_shared<Model>();
-	models.push_back(model);
-	gameObjects.push_back(model);
-	return true;
+	models.insert(std::make_pair(model->GetName(), model));
 }
 
 void Scene::AddLight()
@@ -86,7 +69,7 @@ void Scene::Update(InGameUI& ui, float dt)
 	for (auto& particleSystem : particleSystems)
 		particleSystem->Update(dt, camera.GetPosition());
 
-	scenario.Run(ui, camera);
+	scenario.Update(*this, ui, camera);
 	camera.Update(dt);
 	shaderData.Update(camera);
 }

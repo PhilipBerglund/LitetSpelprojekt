@@ -136,7 +136,7 @@ private:
 	bool slideIn = false;
 	bool slideOut = false;
 
-	double slideSpeed = 0.0000001;
+	double slideSpeed = 10.0f;
 
 	void SlideIn()
 	{
@@ -192,11 +192,12 @@ public:
 
 	}
 
-	void Draw(IDWriteTextFormat& format, ID2D1Brush& brush)
+	void Draw(IDWriteTextFormat& format, ID2D1Brush& brush, float dt)
 	{
 		if (slideIn)
 		{
-			double amount = pow(maxX - journalBase.position.x, 2) * slideSpeed + 1;
+			float distance = maxX - journalBase.position.x;
+			float amount = slideSpeed / ((distance + 100.0f) * dt);
 			journalBase.SetPosition(journalBase.position.x - (float)amount, journalBase.position.y);
 			exitCross.SetPosition(exitCross.position.x - (float)amount, exitCross.position.y);
 			exitButton.SetPosition(exitButton.position.x - (float)amount, exitButton.position.y);
@@ -216,7 +217,8 @@ public:
 
 		if (slideOut)
 		{
-			double amount = pow(maxX - journalBase.position.x, 2) * slideSpeed + 1;
+			float distance = maxX - journalBase.position.x;
+			float amount = slideSpeed / ((distance + 100.0f) * dt);
 			journalBase.SetPosition(journalBase.position.x + (float)amount, journalBase.position.y);
 			exitCross.SetPosition(exitCross.position.x + (float)amount, exitCross.position.y);
 			exitButton.SetPosition(exitButton.position.x + (float)amount, exitButton.position.y);
@@ -340,8 +342,5 @@ public:
 		fullyShowing = false;
 	}
 
-	bool Exit()
-	{
-		return exit;
-	}
+	bool Exit()	{	return exit;	}
 };

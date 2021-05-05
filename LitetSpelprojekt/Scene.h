@@ -1,5 +1,6 @@
 #pragma once
 
+#include <map>
 #include "Graphics.h"
 #include "Model.h"
 #include "Light.h"
@@ -10,13 +11,15 @@
 
 class Scene
 {
+	friend class Scenario;
 private:
 	Scenario scenario;
 
 	Camera camera;
 
+	std::map<std::string, std::shared_ptr<Model>> models;
 	std::vector<std::shared_ptr<Light>> lights;
-	std::vector<std::shared_ptr<Model>> models;
+	//std::vector<std::shared_ptr<Model>> models;
 	std::vector<std::shared_ptr<GameObject>> gameObjects;
 	std::vector<std::shared_ptr<ParticleSystem>> particleSystems;
 
@@ -26,7 +29,7 @@ private:
 	RegularShader regularShader;
 
 	void AddParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size);
-	bool AddModel(const std::string& path);
+	void AddModel(std::shared_ptr<Model> model);
 	void AddLight();
 public:
 	Scene() = default;
@@ -36,7 +39,7 @@ public:
 	void Render();
 
 	const std::vector<std::shared_ptr<Light>>& GetLights() const					{ return this->lights; }
-	const std::vector<std::shared_ptr<Model>>& GetModels() const					{ return this->models; }
+	const std::map<std::string, std::shared_ptr<Model>>& GetModels() const			{ return this->models; }
 	const std::vector<std::shared_ptr<ParticleSystem>>& GetParticleSystems() const	{ return this->particleSystems; }
 	const Camera& GetCamera() const													{ return this->camera; }
 };

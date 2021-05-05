@@ -44,7 +44,7 @@ Camera::Camera(float FOV, float aspectRatio, float nearZ, float farZ, float rota
 
 	this->direction = forward;
 	this->boundingsphere = BoundingSphere(transform.position, 1);
-	this->pickingDistance = 10.0f;
+	this->pickingDistance = 50.0f;
 }
 
 void Camera::MoveRight(float dt)

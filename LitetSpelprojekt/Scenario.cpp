@@ -1,17 +1,26 @@
 #include "Scenario.h"
+#include "Scene.h"
 
 #include <random>
 #include <chrono>
 
-Scenario::Scenario()
+Clue::Clue(std::string path)
 {
-	Suspect testsuspect;
-	testsuspect.age = 34;
-	testsuspect.information.info = "I have some information about Another person";
-	testsuspect.information.connections[0] = "Another person";
-	testsuspect.name = "Steve";
+	Importer::LoadScene(path);
+	information = "I GOT SOME INFORMATION";
 
-	suspects.push_back(testsuspect);
+	Mesh mesh = Importer::Data::GetMeshes(Importer::Data::scenes.size() - 1).front();
+	model = std::make_shared<Model>(mesh);
+	model->SetPosition({ -30,10,90 });
+	model->Update(Graphics::GetDeviceContext());
+}
+
+Scenario::Scenario(Scene& scene)
+{
+	Clue clue("Models/TestClue.mff");
+	scene.AddModel(clue.model);
+	clues.push_back(clue);
+	Importer::Initialize(Graphics::GetDevice());
 }
 
 void Scenario::InitializeClueLocations()
@@ -30,16 +39,14 @@ void Scenario::SetRandomizedLocations()
 {
 	for (int i = 0; i < clues.size(); i++)
 	{
-		//GET == ->
-		//clues[i].model->SetPosition();
-		clues[i].model.get()->SetPosition(clueLocations[i]);
-		clues[i].model.get()->Update(Graphics::GetDeviceContext());
+		clues[i].model->SetPosition(clueLocations[i]);
+		clues[i].model->Update(Graphics::GetDeviceContext());
 	}
 }
 
 bool Scenario::TempLoadClues(std::string path)
 {
-	Clue clue;
+	Clue clue("");
 	clue.model = std::make_shared<Model>();
 
 	//if (!clue.model->Initialize(Graphics::GetDevice(), path))
@@ -53,7 +60,7 @@ bool Scenario::TempLoadClues(std::string path)
 	return true;
 }
 
-void Scenario::Run(InGameUI& ui, Camera& camera)
+void Scenario::Update(Scene& scene, InGameUI& ui, Camera& camera)
 {
 	bool hoveringClue = false;
 
@@ -61,22 +68,14 @@ void Scenario::Run(InGameUI& ui, Camera& camera)
 
 	for (auto& clue : clues)
 	{
-		if (camera.CheckIntersection(clue.model->boundingbox))
+		if (!clue.found && camera.CheckIntersection(clue.model->boundingbox))
 		{
 			hoveringClue = true;
 
 			if (Event::GetCurrentEvent() == EventType::LEFTCLICK)
 			{
-				ui.journal.AddSuspect(identifiedSuspects, names[identifiedSuspects], false);
-				identifiedSuspects++;
-
+				scene.models.erase(clue.model->GetName());
 				clue.found = true;
-
-				if (clue.murderClue == true)
-					Print("I am a murder clue!");
-
-				clue.model.get()->SetPosition({ 0, -100, 0 });
-				clue.model.get()->Update(Graphics::GetDeviceContext());
 				ui.ShowNotification();
 			}
 		}

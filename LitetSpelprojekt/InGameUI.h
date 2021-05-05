@@ -156,7 +156,7 @@ public:
 		textFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 	};
 
-	void Render()
+	void Render(float dt)
 	{
 		//PRE DRAW ADJUSTMENTS
 		if (journal.Exit())
@@ -169,18 +169,18 @@ public:
 			newInformationNotation->SetVisibility(false);
 
 		else
-			newInformationNotation->ReduceOpacity(0.0001f);
+			newInformationNotation->ReduceOpacity(0.5f * dt);
 		
 		if (drawOverlay)
 		{
 			if (brushOpacity < 0.7f)
-			brushOpacity += 0.001f;
+			brushOpacity += 3.0f * dt;
 		}
 
 		else
 		{
 			if (brushOpacity > 0.0f)
-				brushOpacity -= 0.001f;
+				brushOpacity -= 2.0f * dt;
 		}
 
 		opacityBrush->SetOpacity(brushOpacity);
@@ -194,7 +194,7 @@ public:
 
 		Graphics::Get2DRenderTarget().FillRectangle(pauseOverlay, opacityBrush.Get());
 
-		journal.Draw(*textFormat.Get(), *brush.Get());
+		journal.Draw(*textFormat.Get(), *brush.Get(), dt);
 
 		if (GameSettings::GetState() == GameState::PAUSED)
 			pauseMenu.Draw();

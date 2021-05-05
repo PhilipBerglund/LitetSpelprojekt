@@ -1,13 +1,11 @@
 #pragma once
-#include <vector>
-#include "GameObject.h"
 #include "Model.h"
 #include "Graphics.h"
 #include "Camera.h"
 #include "InGameUI.h"
 #include "Event.h"
 
-enum ScenarioStates {};
+class Scene;
 
 struct Information
 {
@@ -35,27 +33,25 @@ struct Victim
 struct Clue
 {
 	std::shared_ptr<Model> model;
-	XMMATRIX worldMatrix;
-
-	bool murderClue;
-	bool found;
 	std::string information;
+	bool found = false;
+
+	Clue(std::string path);
 };
 
 class Scenario
 {
 private:
 	int identifiedSuspects = 0;
-	bool finished = false;
 public:
-	Victim victim;
 	std::vector<Clue> clues;
 	std::vector<Suspect> suspects;
 	std::vector<XMFLOAT3> clueLocations;
 
-	Scenario();
+	Scenario() = default;
+	Scenario(Scene& scene);
 	void InitializeClueLocations();
 	void SetRandomizedLocations();
 	bool TempLoadClues(std::string path);
-	void Run(InGameUI& ui, Camera& camera);
+	void Update(Scene& scene, InGameUI& ui, Camera& camera);
 };

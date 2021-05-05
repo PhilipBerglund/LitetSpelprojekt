@@ -3,7 +3,7 @@
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.001f, 40.0f, { 0, 10, 30 })
 {
-	Importer::LoadScene("Models/Office.mff");	
+	Importer::LoadScene("Models/World.mff");	
 	Importer::Initialize(Graphics::GetDevice());
 
 	std::vector<Mesh> meshes = Importer::Data::GetMeshes();

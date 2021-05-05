@@ -8,16 +8,17 @@ using namespace DirectX;
 class ShaderData
 {
 	friend class Shader;
+	friend class ParticleShader;
 private:
 	//-----GENERAL-----
 	//CAMERA
-	XMFLOAT3 cameraPosition;
-	XMMATRIX viewMatrix;
-	XMMATRIX projectionMatrix;
+	XMFLOAT3 cameraPosition = {};
+	XMMATRIX viewMatrix = {};
+	XMMATRIX projectionMatrix = {};
 
 	//-----PARTICLE SYSTEM-----
 	//BUFFERS
-	ComPtr<ID3D11Buffer> viewProj;
+	ComPtr<ID3D11Buffer> viewProjBuffer;
 
 	//SHADERS
 	ComPtr<ID3D11VertexShader> particleVertexShader;
@@ -28,5 +29,5 @@ private:
 
 public:
 	ShaderData();
-	void Update();
+	void Update(const Camera& camera);
 };

@@ -160,6 +160,7 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ParticleShader.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Print.cpp" />
     <ClCompile Include="Scenario.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="GameSettings.h" />
     <ClInclude Include="Journal.h" />
     <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="ParticleShader.h" />
     <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="Scenario.h" />
     <ClInclude Include="ShaderData.h" />

@@ -36,14 +36,14 @@ ParticleSystem::ParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity,
 	:bounds({ 10.0f, 10.0f, 10.0f }), center({ 0.0f,10.0f,0.0f }), velocity(1.0f), velocityVariation(0.9f), particlesPerSecond(50), maxParticles(500), size(0.006f)
 {
 	vertexCount = maxParticles * 6; //TWO TRIANGLES
-	vertices = new Vertex[vertexCount];
+	vertices = new ParticleVertex[vertexCount];
 	if (!vertices)
 		return;
 
 	//VERTEX BUFFER
 	D3D11_BUFFER_DESC vBufferDesc = {};
 	vBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	vBufferDesc.ByteWidth = sizeof(Vertex) * vertexCount;
+	vBufferDesc.ByteWidth = sizeof(ParticleVertex) * vertexCount;
 	vBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	vBufferDesc.MiscFlags = 0;
@@ -76,6 +76,11 @@ void ParticleSystem::Update(float dt, XMFLOAT3 cameraPosition)
 		Print("FAILED TO UPDATE PARTICLE SYSTEM BUFFER");
 		return;
 	}
+}
+
+void ParticleSystem::Render()
+{
+	RenderBuffers();
 }
 
 int ParticleSystem::GetVertexCount() const
@@ -130,7 +135,7 @@ bool ParticleSystem::UpdateBuffer(XMFLOAT3 cameraPosition)
 {
 	int index = 0;
 
-	Vertex* vertex;
+	ParticleVertex* vertex;
 	XMMATRIX worldMatrix;
 	XMMATRIX translationMatrix;
 	XMMATRIX rotationMatrix;
@@ -182,8 +187,8 @@ bool ParticleSystem::UpdateBuffer(XMFLOAT3 cameraPosition)
 	if FAILED(Graphics::GetDeviceContext().Map(vertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource))
 		return false;
 
-	vertex = (Vertex*)mappedResource.pData;
-	memcpy(vertex, (void*)vertices, (sizeof(Vertex) * vertexCount));
+	vertex = (ParticleVertex*)mappedResource.pData;
+	memcpy(vertex, (void*)vertices, (sizeof(ParticleVertex) * vertexCount));
 	Graphics::GetDeviceContext().Unmap(vertexBuffer.Get(), 0);
 
 	return true;
@@ -191,7 +196,7 @@ bool ParticleSystem::UpdateBuffer(XMFLOAT3 cameraPosition)
 
 void ParticleSystem::RenderBuffers()
 {
-	UINT stride = sizeof(Vertex);
+	UINT stride = sizeof(ParticleVertex);
 	UINT offset = 0;
 
 	Graphics::GetDeviceContext().IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);

@@ -15,7 +15,7 @@ private:
 	XMMATRIX viewMatrix;
 	XMMATRIX projectionMatrix;
 
-	//-----PARTICLES-----
+	//-----PARTICLE SYSTEM-----
 	//BUFFERS
 	ComPtr<ID3D11Buffer> viewProj;
 
@@ -27,5 +27,6 @@ private:
 	ComPtr<ID3D11InputLayout> particleLayout;
 
 public:
+	ShaderData();
 	void Update();
 };

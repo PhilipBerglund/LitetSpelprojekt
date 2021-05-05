@@ -32,6 +32,9 @@
     <ClCompile Include="ParticleSystem.cpp">
       <Filter>Particle</Filter>
     </ClCompile>
+    <ClCompile Include="ShaderData.cpp">
+      <Filter>Particle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioChunks.h" />

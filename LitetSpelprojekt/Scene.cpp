@@ -88,5 +88,6 @@ void Scene::Update(InGameUI& ui, float dt)
 
 void Scene::Render()
 {
+	//rainSystem.Render();
 	sh.Render(*this);
 }

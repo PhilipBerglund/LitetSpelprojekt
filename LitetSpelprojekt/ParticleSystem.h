@@ -18,7 +18,7 @@ private:
         float velocity;
     };
 
-    struct Vertex
+    struct ParticleVertex
     {
         XMFLOAT3 position;
         XMFLOAT4 color;
@@ -41,9 +41,14 @@ private:
 
     int vertexCount;
 
-    Vertex* vertices;
+    ParticleVertex* vertices;
     ComPtr<ID3D11Buffer> vertexBuffer;
     std::vector<Particle> activeParticles;
+
+    //ComPtr<ID3D11PixelShader> particlePS;
+    //ComPtr<ID3D11VertexShader> particleVS;
+
+
 
     /*bool LoadTexture(ID3D11Device* device, std::string textureFile);
     void ReleaseTexture();*/

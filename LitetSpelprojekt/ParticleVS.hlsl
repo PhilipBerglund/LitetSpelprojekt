@@ -11,12 +11,12 @@ struct VS_OUTPUT
     float4 color : COLOR;
 };
 
-cbuffer MATRIX
+cbuffer MATRIXBUFFER
 {
    float4x4 viewProj;
 };
 
-VS_OUTPUT main(VS_INPUT input) : SV_POSITION
+VS_OUTPUT main (VS_INPUT input)
 {
     VS_OUTPUT output;
     

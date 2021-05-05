@@ -24,7 +24,7 @@ public:
 
 	Type type() const override { return Type::MODEL; };
 
-	ID3D11Buffer& GetVertexBuffer() const	{ return Importer::Data::GetVertexBufferAt(mesh.vertexBufferID); };
+	ID3D11Buffer** GetVertexBuffer() const	{ return Importer::Data::GetVertexBufferAt(mesh.vertexBufferID); };
 	std::string GetName() const				{ return this->name; };
 	XMMATRIX GetMatrix() const				{ return this->worldMatrix; };
 	int GetVertexCount() const				{ return Importer::Data::GetVertexCountAt(mesh.vertexBufferID); };

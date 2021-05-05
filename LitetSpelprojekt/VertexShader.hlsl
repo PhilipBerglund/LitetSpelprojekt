@@ -20,13 +20,13 @@ struct VertexShaderOutput
 cbuffer Matrices : register(b0)
 {
     float4x4 worldMatrix;
-    float4x4 viewMatrix;
-    float4x4 perspectiveMatrix;
     float4x4 WVPMatrix;
-	
-    float4x4 lightViewMatrix;
-    float4x4 lightPerspectiveMatrix;
 };
+
+cbuffer LightMatrix : register(b1)
+{
+    float4x4 lightWVPMatrix;
+}
 
 VertexShaderOutput main(VertexShaderInput input)
 {

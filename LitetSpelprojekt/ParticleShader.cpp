@@ -1,5 +1,4 @@
 #include "ParticleShader.h"
-
 #include "Scene.h"
 
 void ParticleShader::SetShader(ShaderData& data)

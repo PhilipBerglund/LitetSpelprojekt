@@ -3,7 +3,7 @@
 #include "Print.h"
 #include "Graphics.h"
 
-bool LoadVertexShader(ComPtr<ID3D11VertexShader>& vertexShader, std::string path, std::string& vertexShaderByteCode)
+inline bool LoadVertexShader(ComPtr<ID3D11VertexShader>& vertexShader, std::string path, std::string& vertexShaderByteCode)
 {
 	std::string shaderData;
 	std::ifstream reader;
@@ -34,7 +34,7 @@ bool LoadVertexShader(ComPtr<ID3D11VertexShader>& vertexShader, std::string path
 	return true;
 };
 
-bool LoadPixelShader(ComPtr<ID3D11PixelShader>& pixelShader, std::string path)
+inline bool LoadPixelShader(ComPtr<ID3D11PixelShader>& pixelShader, std::string path)
 {
 	std::string shaderData;
 	std::ifstream reader;

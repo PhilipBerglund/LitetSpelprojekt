@@ -5,6 +5,12 @@
     <FxCompile Include="PixelShader.hlsl" />
     <FxCompile Include="TexturePixelShader.hlsl" />
     <FxCompile Include="VertexShader.hlsl" />
+    <FxCompile Include="ParticleVS.hlsl">
+      <Filter>Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="ParticlePS.hlsl">
+      <Filter>Particle</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
@@ -16,7 +22,6 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Model.cpp" />
-    <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Print.cpp" />
     <ClCompile Include="Scenario.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -24,6 +29,15 @@
     <ClCompile Include="SkeletonAnimation.cpp" />
     <ClCompile Include="SoundHandler.cpp" />
     <ClCompile Include="Window.cpp" />
+    <ClCompile Include="ParticleSystem.cpp">
+      <Filter>Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderData.cpp">
+      <Filter>Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleShader.cpp">
+      <Filter>Particle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioChunks.h" />
@@ -45,7 +59,6 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="InGameUI.h" />
     <ClInclude Include="Model.h" />
-    <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
@@ -59,5 +72,19 @@
     <ClInclude Include="Image.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="Window.h" />
+    <ClInclude Include="ParticleSystem.h">
+      <Filter>Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderData.h">
+      <Filter>Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleShader.h">
+      <Filter>Particle</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Particle">
+      <UniqueIdentifier>{637396cf-a880-429c-b01c-7fe767a5e5bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

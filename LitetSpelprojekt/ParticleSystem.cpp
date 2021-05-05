@@ -1,35 +1,36 @@
 #include "ParticleSystem.h"
+#include <time.h>
+#include <stdlib.h>
+#include <iostream>
 #include "Random.h"
 
 ParticleSystem::ParticleSystem()
 {
-	this->bounds = { 10, 10, 10 };
-	this->baseVelocity = 1.0f;
-	this->velocityVariation = 0.2f;
-	this->size = 1.0f;
-	this->maxParticles = 50;
-	this->particlesPerSecond = 5;
-	this->type = EmissionType::CUBE;
 	this->vertices = nullptr;
-	this->coneAngel = 0;
-	this->radius = 0;
+	this->vertexBuffer = nullptr;
+	this->vertexCount = 0;
+	this->velocity = 0;
+	this->velocityVariation = 0;
+	this->size = 0;
+	this->particlesPerSecond = 0;
+	this->maxParticles = 0;
+	this->timeSinceLastSpawn = 0;
+	this->bounds = { 0,0,0 };
+	this->center = { 0,0,0 };
 }
 
-ParticleSystem::ParticleSystem(XMFLOAT3 bounds, float velocity, float velocityVariation, float size, int maxParticles, int particlesPerSecond, EmissionType type, XMFLOAT3 position, XMFLOAT3 rotation, float coneAngel, XMFLOAT3 scale)
-	:GameObject(position, rotation, scale), bounds(bounds), baseVelocity(velocity), velocityVariation(velocityVariation), size(size), maxParticles(maxParticles), particlesPerSecond(particlesPerSecond), type(type), vertices(nullptr), coneAngel(coneAngel)
+ParticleSystem::ParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size)
+	:bounds(bounds), center(center), velocity(velocity), velocityVariation(velocityVariation), particlesPerSecond(particlesPerSecond), maxParticles(maxParticles), size(size), timeSinceLastSpawn(0)
 {
-	this->radius = tan(coneAngel) * bounds.y;
-}
+	vertexCount = maxParticles * 6; //TWO TRIANGLES
+	vertices = new ParticleVertex[vertexCount];
+	if (!vertices)
+		return;
 
-bool ParticleSystem::Initialize(ID3D11Device& device)
-{
-	vertexCount = maxParticles * 6;
-	vertices = new Vert[vertexCount];
-	
 	//VERTEX BUFFER
 	D3D11_BUFFER_DESC vBufferDesc = {};
 	vBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	vBufferDesc.ByteWidth = sizeof(Vert) * vertexCount;
+	vBufferDesc.ByteWidth = sizeof(ParticleVertex) * vertexCount;
 	vBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	vBufferDesc.MiscFlags = 0;
@@ -40,87 +41,196 @@ bool ParticleSystem::Initialize(ID3D11Device& device)
 	vertexData.SysMemPitch = 0;
 	vertexData.SysMemSlicePitch = 0;
 
-	if (FAILED(device.CreateBuffer(&vBufferDesc, &vertexData, &vertexBuffer)))
-		return false;
-
-	return true;
+	HRESULT hr = Graphics::GetDevice().CreateBuffer(&vBufferDesc, &vertexData, &vertexBuffer);
+	if FAILED(hr)
+	{
+		Print("FAILED TO CREATE BUFFER");
+		return;
+	}
 }
+
+void ParticleSystem::Update(float dt, XMFLOAT3 cameraPosition)
+{
+	EmitParticles(dt);
+
+	for (int i = 0; i < activeParticles.size(); ++i)
+	{
+		activeParticles[i].position.y -= (activeParticles[i].velocity * dt);
+	}
+
+	if (!UpdateBuffer(cameraPosition))
+	{
+		Print("FAILED TO UPDATE PARTICLE SYSTEM BUFFER");
+		return;
+	}
+
+	KillParticles();
+}
+
+//void ParticleSystem::Render()
+//{
+//	RenderBuffers();
+//}
+//
+//int ParticleSystem::GetVertexCount() const
+//{
+//	return activeParticles.size() * 6;
+//}
 
 void ParticleSystem::EmitParticles(float dt)
 {
 	bool emitNewParticle = false;
 	bool found = false;
 
-	XMFLOAT3 spawnPosition = {};
+	XMFLOAT4 particleColor;
+
+	XMFLOAT3 spawnPosition;
 	float particleVelocity;
-	
+	int index = 0;
+
 	timeSinceLastSpawn += dt;
 
-	if (timeSinceLastSpawn > (1000.0f / particlesPerSecond))
+	if (timeSinceLastSpawn > (particlesPerSecond / 6000.0f))
 	{
-		timeSinceLastSpawn = 0;
+		timeSinceLastSpawn = 0.0f;
 		emitNewParticle = true;
 	}
 
 	if ((emitNewParticle == true) && (activeParticles.size() < (maxParticles - 1.0)))
 	{
+
+		particleColor.x = 146.0f / 255.0f;
+		particleColor.y = 186.0f / 255.0f;
+		particleColor.z = 210.0f / 255.0f;
+		particleColor.w = 1.0f;
+
+		spawnPosition.x = center.x + Random::Real(-bounds.x, bounds.x);
+		spawnPosition.y = center.y;
+		spawnPosition.z = center.z + Random::Real(-bounds.z, bounds.z);
+
+		particleVelocity = velocity + Random::Real() * velocityVariation;
+
 		Particle newParticle = {};
-
-		switch (type)
-		{
-		case EmissionType::CUBE:
-			spawnPosition.x = transform.position.x;
-			spawnPosition.y = transform.position.y;
-			spawnPosition.z = transform.position.z;
-			//RANDOM DIRECTION TOWARDS BOUNDS THING
-			newParticle.direction = {};
-			break;
-
-		case EmissionType::CONE:
-			spawnPosition = transform.position;
-			XMFLOAT2 center = { spawnPosition.x, spawnPosition.z };
-
-			float x = Random::Real(-radius, radius);
-			float z = Random::Real(-radius, radius);
-
-			if (pow(x - center.x, 2) + pow(z - center.x, 2) < pow(radius, 2))
-			{
-				XMFLOAT3 destination = { x, z, bounds.y };
-				newParticle.direction = {
-										destination.x - transform.position.x,
-										destination.y - transform.position.y,
-										destination.z - transform.position.z
-										};
-			}
-
-			break;
-		}
-
-		particleVelocity = baseVelocity * velocityVariation;
-
+		newParticle.color = particleColor;
 		newParticle.position = spawnPosition;
 		newParticle.velocity = particleVelocity;
-		newParticle.color = { 0.5, 0.5, 0.8 };
-		newParticle.active = true;
 
-		//activeParticles.push_back(newParticle);
+		activeParticles.push_back(newParticle);
 	}
-}
-
-void ParticleSystem::UpdateParticles(float dt)
-{
-	for (int i = 0; i < activeParticles.size(); ++i)
-	{
-		float speed = (activeParticles[i].velocity * dt);
-		activeParticles[i].position.x -= activeParticles[i].direction.x * speed;
-		activeParticles[i].position.y -= activeParticles[i].direction.y * speed;
-		activeParticles[i].position.z -= activeParticles[i].direction.z * speed;
-	};
 }
 
 void ParticleSystem::KillParticles()
 {
-	auto removeFrom = std::remove_if(activeParticles.begin(), activeParticles.end(), [this](const Particle& p)
-		{return p.position.y < (transform.position.y - bounds.y); });
+	auto removeFrom = std::remove_if(activeParticles.begin(), activeParticles.end(), [this](const Particle& p) 
+	{
+		return p.position.y < (center.y - bounds.y);
+	});
+
 	activeParticles.erase(removeFrom, activeParticles.end());
+}
+
+bool ParticleSystem::UpdateBuffer(XMFLOAT3 cameraPosition)
+{
+	int index = 0;
+
+	ParticleVertex* vertex;
+	XMMATRIX worldMatrix;
+	XMMATRIX translationMatrix;
+	XMMATRIX rotationMatrix;
+	float angle;
+
+	for (int i = 0; i < activeParticles.size(); ++i)
+	{
+		//BOTTOM LEFT
+		vertices[index].position = XMFLOAT3(-size / 2, -size * 2, size / 2);
+		vertices[index].color = XMFLOAT4(activeParticles[i].color.x, activeParticles[i].color.y, activeParticles[i].color.z, 1.0f);
+		index++;
+
+		//TOP LEFT
+		vertices[index].position = XMFLOAT3(-size / 4, size, size/ 4);
+		vertices[index].color = XMFLOAT4(activeParticles[i].color.x, activeParticles[i].color.y, activeParticles[i].color.z, 1.0f);
+		index++;
+
+		//BOTTOM RIGHT
+		vertices[index].position = XMFLOAT3(size / 2, -size * 2, size / 2);
+		vertices[index].color = XMFLOAT4(activeParticles[i].color.x, activeParticles[i].color.y, activeParticles[i].color.z, 1.0f);
+		index++;
+
+		//BOTTOM RIGHT
+		vertices[index].position = XMFLOAT3(size / 2, -size * 2, size / 2);
+		vertices[index].color = XMFLOAT4(activeParticles[i].color.x, activeParticles[i].color.y, activeParticles[i].color.z, 1.0f);
+		index++;
+
+		//TOP LEFT
+		vertices[index].position = XMFLOAT3(-size/ 4, size, size / 4);
+		vertices[index].color = XMFLOAT4(activeParticles[i].color.x, activeParticles[i].color.y, activeParticles[i].color.z, 1.0f);
+		index++;
+
+		//TOP RIGHT
+		vertices[index].position = XMFLOAT3(size / 4, size, size / 4);
+		vertices[index].color = XMFLOAT4(activeParticles[i].color.x, activeParticles[i].color.y, activeParticles[i].color.z, 1.0f);
+		index++;
+
+		for (int j = index - 6; j < index; ++j)
+		{
+			angle = atan2(activeParticles[i].position.x - cameraPosition.x, activeParticles[i].position.z - cameraPosition.z);
+			rotationMatrix = XMMatrixRotationY(angle);
+			translationMatrix = XMMatrixTranslation(activeParticles[i].position.x, activeParticles[i].position.y, activeParticles[i].position.z);
+			worldMatrix = XMMatrixMultiply(rotationMatrix, translationMatrix);
+			XMStoreFloat3(&vertices[j].position, XMVector3Transform(XMLoadFloat3(&vertices[j].position), worldMatrix));
+		}
+	}
+
+	D3D11_MAPPED_SUBRESOURCE mappedResource = {};
+	if FAILED(Graphics::GetDeviceContext().Map(vertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource))
+		return false;
+
+	vertex = (ParticleVertex*)mappedResource.pData;
+	memcpy(vertex, (void*)vertices, (sizeof(ParticleVertex) * vertexCount));
+	Graphics::GetDeviceContext().Unmap(vertexBuffer.Get(), 0);
+
+	return true;
+}
+
+bool ParticleSystem::CreateRandomTexture()
+{
+	XMFLOAT4 randomValues[1024];
+
+	for(int i = 0; i < 1024; i++)
+	{
+		randomValues[i].x = Random::Real(-1.0f,1.0f);
+		randomValues[i].y = Random::Real(-1.0f,1.0f);
+		randomValues[i].z = Random::Real(-1.0f,1.0f);
+		randomValues[i].w = Random::Real(-1.0f,1.0f);
+	}
+
+	D3D11_SUBRESOURCE_DATA data;
+	data.pSysMem = randomValues;
+	data.SysMemPitch = 1024 * sizeof(XMFLOAT4);
+	data.SysMemSlicePitch = 0;
+
+	//Creating Texture
+	D3D11_TEXTURE1D_DESC texDesc;
+	texDesc.Width = 1024;
+	texDesc.MipLevels = 1;
+	texDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	texDesc.Usage = D3D11_USAGE_IMMUTABLE;
+	texDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	texDesc.CPUAccessFlags = 0;
+	texDesc.MiscFlags = 0;
+
+	randomTex = 0;
+	Graphics::GetDevice().CreateTexture1D(&texDesc, &data, &randomTex);
+
+	//Creating SRV
+	D3D11_SHADER_RESOURCE_VIEW_DESC SRVdesc;
+	SRVdesc.Format = texDesc.Format;
+	SRVdesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE1D;
+	SRVdesc.Texture1D.MipLevels = texDesc.MipLevels;
+	SRVdesc.Texture1D.MostDetailedMip = 0;
+
+	randomTexSRV = 0;
+	Graphics::GetDevice().CreateShaderResourceView(randomTex, &SRVdesc, &randomTexSRV);
+	
+	return true;
 }

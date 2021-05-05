@@ -13,6 +13,9 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 		models.push_back(model);
 	}
 
+	AddParticleSystem({ 50,50,50 }, { 60, 50,0 }, 50, 1, 100, 5000, 0.2f);
+
+	//rainSystem.Initialize();
 	sh.Initialize(window);
 	AddLight();
 
@@ -30,6 +33,12 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	//}
 
 	//scenario.SetRandomizedLocations();
+}
+
+void Scene::AddParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size)
+{
+	auto particleSystem = std::make_shared<ParticleSystem>(bounds, center, velocity, velocityVariation, particlesPerSecond, maxParticles, size);
+	particleSystems.push_back(particleSystem);
 }
 
 bool Scene::AddModel(const std::string& path)
@@ -78,11 +87,16 @@ void Scene::Update(InGameUI& ui, float dt)
 		}
 	}
 
+	for (auto& particleSystem : particleSystems)
+		particleSystem->Update(dt, camera.GetPosition());
+
 	scenario.Run(ui, camera);
 	camera.Update(dt);
+	shaderData.Update(camera);
 }
 
 void Scene::Render()
 {
+	particleShader.Render(shaderData, *this);
 	sh.Render(*this);
 }

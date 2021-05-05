@@ -29,7 +29,7 @@ private:
 	ShaderData shaderData;
 	ParticleShader particleShader;
 
-	void AddParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size);
+	void AddParticleSystem(EmitterType emitterType, XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size);
 public:
 	Scene() = default;
 	Scene(UINT windowWidth, UINT windowHeight, HWND window);

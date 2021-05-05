@@ -1,6 +1,6 @@
 #include "Graphics.h"
 
-float Graphics::backgroundColor[4] = { 1.0f, 0.5f, 0.5f, 1.0f };
+float Graphics::backgroundColor[4] = { 255 / 255, 206.0f / 255.0f, 150.0f / 255, 1.0f };
 D3D11_VIEWPORT Graphics::viewport = {};
 ComPtr<ID3D11Device> Graphics::device;
 ComPtr<ID3D11DeviceContext> Graphics::context;

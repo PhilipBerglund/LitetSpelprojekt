@@ -8,15 +8,28 @@
 
 using namespace DirectX;
 
+enum class EmitterType
+{
+    NONE,
+    CUBE,
+    CONE
+};
+
 class ParticleSystem
 {
+    
+    
     friend class ParticleShader;
 private:
+
+    EmitterType emitterType;
+
     struct Particle
     {
         XMFLOAT3 position;
         XMFLOAT4 color;
         float velocity;
+        XMFLOAT3 direction;
     };
 
     struct ParticleVertex
@@ -53,7 +66,8 @@ private:
 
     bool CreateRandomTexture();
 public:
+
     ParticleSystem();
-    ParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size);
+    ParticleSystem(EmitterType emitterType, XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size);
     void Update(float dt, XMFLOAT3 cameraPosition);
 };

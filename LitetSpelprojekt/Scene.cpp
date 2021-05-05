@@ -3,7 +3,7 @@
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.001f, 40.0f, { 0, 10, 30 })
 {
-	Importer::LoadScene("Models/World.mff");	
+	Importer::LoadScene("Models/Office.mff");	
 	Importer::Initialize(Graphics::GetDevice());
 
 	std::vector<Mesh> meshes = Importer::Data::GetMeshes();
@@ -13,7 +13,7 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 		models.push_back(model);
 	}
 
-	AddParticleSystem({ 50,50,50 }, { 60, 50,0 }, 50, 1, 100, 5000, 0.2f);
+	AddParticleSystem(EmitterType::CUBE, { 100,50,100 }, { 60, 50 ,0 }, 75, 1, 400, 1000, 0.2f);
 
 	//rainSystem.Initialize();
 	sh.Initialize(window);
@@ -35,9 +35,9 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	//scenario.SetRandomizedLocations();
 }
 
-void Scene::AddParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size)
+void Scene::AddParticleSystem(EmitterType emitterType, XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size)
 {
-	auto particleSystem = std::make_shared<ParticleSystem>(bounds, center, velocity, velocityVariation, particlesPerSecond, maxParticles, size);
+	auto particleSystem = std::make_shared<ParticleSystem>(emitterType, bounds, center, velocity, velocityVariation, particlesPerSecond, maxParticles, size);
 	particleSystems.push_back(particleSystem);
 }
 

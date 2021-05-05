@@ -17,10 +17,14 @@ ParticleSystem::ParticleSystem()
 	this->timeSinceLastSpawn = 0;
 	this->bounds = { 0,0,0 };
 	this->center = { 0,0,0 };
+	this->emitterType = EmitterType::NONE;
+	this->randomTex = nullptr;
+	this->randomTexSRV = nullptr;
+	
 }
 
-ParticleSystem::ParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size)
-	:bounds(bounds), center(center), velocity(velocity), velocityVariation(velocityVariation), particlesPerSecond(particlesPerSecond), maxParticles(maxParticles), size(size), timeSinceLastSpawn(0)
+ParticleSystem::ParticleSystem(EmitterType emitterType, XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size)
+	:emitterType(emitterType), bounds(bounds), center(center), velocity(velocity), velocityVariation(velocityVariation), particlesPerSecond(particlesPerSecond), maxParticles(maxParticles), size(size), timeSinceLastSpawn(0)
 {
 	vertexCount = maxParticles * 6; //TWO TRIANGLES
 	vertices = new ParticleVertex[vertexCount];
@@ -82,15 +86,15 @@ void ParticleSystem::EmitParticles(float dt)
 	bool emitNewParticle = false;
 	bool found = false;
 
-	XMFLOAT4 particleColor;
+	XMFLOAT4 particleColor = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 	XMFLOAT3 spawnPosition;
 	float particleVelocity;
 	int index = 0;
 
 	timeSinceLastSpawn += dt;
-
-	if (timeSinceLastSpawn > (particlesPerSecond / 6000.0f))
+	
+	if (timeSinceLastSpawn > (particlesPerSecond / 60000.0f))
 	{
 		timeSinceLastSpawn = 0.0f;
 		emitNewParticle = true;
@@ -98,35 +102,75 @@ void ParticleSystem::EmitParticles(float dt)
 
 	if ((emitNewParticle == true) && (activeParticles.size() < (maxParticles - 1.0)))
 	{
+		int randomColor = Random::Integer(0, 3);
+		if (emitterType == EmitterType::CUBE)
+		{
+			if (randomColor == 0)
+			{
+				particleColor.x = 57.0f / 255.0f;
+				particleColor.y = 88.0f / 255.0f;
+				particleColor.z = 119.0f / 255.0f;
+				particleColor.w = 1.0f;
+			}
+			else if (randomColor == 1)
+			{
+				particleColor.x = 108.0f / 255.0f;
+				particleColor.y = 128.0f / 255.0f;
+				particleColor.z = 148.0f / 255.0f;
+				particleColor.w = 1.0f;
 
-		particleColor.x = 146.0f / 255.0f;
-		particleColor.y = 186.0f / 255.0f;
-		particleColor.z = 210.0f / 255.0f;
-		particleColor.w = 1.0f;
+			}
+			else if (randomColor == 2)
+			{
+				particleColor.x = 105.0f / 255.0f;
+				particleColor.y = 122.0f / 255.0f;
+				particleColor.z = 140.0f / 255.0f;
+				particleColor.w = 1.0f;
+			}
+			else if (randomColor == 3)
+			{
+				particleColor.x = 78.0f / 255.0f;
+				particleColor.y = 104.0f / 255.0f;
+				particleColor.z = 129.0f / 255.0f;
+				particleColor.w = 1.0f;
+			}
 
-		spawnPosition.x = center.x + Random::Real(-bounds.x, bounds.x);
-		spawnPosition.y = center.y;
-		spawnPosition.z = center.z + Random::Real(-bounds.z, bounds.z);
 
-		particleVelocity = velocity + Random::Real() * velocityVariation;
 
-		Particle newParticle = {};
-		newParticle.color = particleColor;
-		newParticle.position = spawnPosition;
-		newParticle.velocity = particleVelocity;
+			spawnPosition.x = center.x + Random::Real(-bounds.x, bounds.x);
+			spawnPosition.y = center.y;
+			spawnPosition.z = center.z + Random::Real(-bounds.z, bounds.z);
 
-		activeParticles.push_back(newParticle);
+			particleVelocity = velocity + Random::Real() * velocityVariation;
+
+			Particle newParticle = {};
+			newParticle.color = particleColor;
+			newParticle.position = spawnPosition;
+			newParticle.velocity = particleVelocity;
+
+			activeParticles.push_back(newParticle);
+		}
+
+		else if (emitterType == EmitterType::CONE)
+		{
+			particleColor.x = 0.0f;
+			particleColor.y = 0.0f;
+			particleColor.z = 0.0f;
+			particleColor.w = 0.0f;
+
+		}
 	}
 }
 
 void ParticleSystem::KillParticles()
 {
-	auto removeFrom = std::remove_if(activeParticles.begin(), activeParticles.end(), [this](const Particle& p) 
-	{
-		return p.position.y < (center.y - bounds.y);
-	});
+	
+	//auto removeFrom = std::remove_if(activeParticles.begin(), activeParticles.end(), [this](const Particle& p) 
+	//{
+	//	return p.position.y < (center.y - bounds.y);
+	//});
 
-	activeParticles.erase(removeFrom, activeParticles.end());
+	//activeParticles.erase(removeFrom, activeParticles.end());
 }
 
 bool ParticleSystem::UpdateBuffer(XMFLOAT3 cameraPosition)

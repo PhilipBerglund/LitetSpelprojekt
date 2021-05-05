@@ -9,8 +9,8 @@ enum class ColliderType {BOX, SPHERE};
 class Model :public GameObject
 {
 private:
-	std::string name;
 	Mesh mesh;
+	std::string name;
 	XMMATRIX worldMatrix;
 public:
 	ColliderType collidertype = ColliderType::BOX;
@@ -23,16 +23,16 @@ public:
 
 	Type type() const override { return Type::MODEL; };
 
-	ID3D11Buffer** GetVertexBuffer() const	{ return Importer::Data::GetVertexBufferAt(mesh.vertexBufferID); };
+	ID3D11Buffer** GetVertexBuffer() const	{ return Importer::Data::GetVertexBufferAt(mesh.sceneID, mesh.vertexBufferID); };
 	std::string GetName() const				{ return this->name; };
 	XMMATRIX GetMatrix() const				{ return this->worldMatrix; };
-	int GetVertexCount() const				{ return Importer::Data::GetVertexCountAt(mesh.vertexBufferID); };
+	int GetVertexCount() const				{ return Importer::Data::GetVertexCountAt(mesh.sceneID, mesh.vertexBufferID); };
 	
 	ID3D11ShaderResourceView** GetDiffuseTexture() 
 	{  
 		for (auto& ID : mesh.materialIDs)
 		{
-			for (auto& texture : Importer::Data::GetMaterialAt(ID).textures)
+			for (auto& texture : Importer::Data::GetMaterialAt(mesh.sceneID, ID).textures)
 			{
 				if (texture.type == TextureType::DIFFUSE_COLOR)
 					return texture.Get();
@@ -43,5 +43,5 @@ public:
 		return nulltexture.Get();
 	}
 
-	Material GetMaterial() const				{ return Importer::Data::GetMaterialAt(mesh.materialIDs[0]); };
+	Material GetMaterial() const				{ return Importer::Data::GetMaterialAt(mesh.sceneID, mesh.materialIDs[0]); };
 };

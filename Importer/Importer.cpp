@@ -45,9 +45,7 @@ bool LoadTexture(Texture& texture, ID3D11Device& device)
 
 namespace Importer
 {
-	std::vector<Mesh> Data::meshes;
-	std::vector<Material> Data::materials;
-	std::vector<VertexBuffer> Data::vertexBuffers;
+	std::vector<SceneData> Data::scenes;
 
 	class Reader
 	{
@@ -93,6 +91,7 @@ namespace Importer
 				std::cerr << "COULD NOT OPEN FILE" << std::endl;
 
 			buffer = std::vector<unsigned char>(std::istreambuf_iterator<char>(file), {});
+			SceneData scene;
 
 			int header;
 			while (currentPosition < buffer.size())
@@ -103,27 +102,28 @@ namespace Importer
 				switch ((DataType)header)
 				{
 				case DataType::MESH:
-					ReadMesh();
+					ReadMesh(scene);
 					break;
 
 				case DataType::MATERIAL:
-					ReadMaterial();
+					ReadMaterial(scene);
 					break;
 
 				case DataType::VERTEXBUFFER:
-					ReadVertexBuffer();
+					ReadVertexBuffer(scene);
 					break;
 				}
 			}
 
+			Data::scenes.push_back(scene);
 			file.close();
 		}
 
 	private:
-		void ReadMesh()
+		void ReadMesh(SceneData& scene)
 		{
 			Mesh mesh;
-
+			
 			Read(mesh.ID);
 			ReadName(mesh.name);
 
@@ -134,7 +134,6 @@ namespace Importer
 			Read(mesh.skeletonID);
 			Read(mesh.vertexBufferID);
 
-			//ReadVector(mesh.matrix, 16);
 			ReadVector(mesh.translation, 3);
 			ReadVector(mesh.rotation, 4);
 			ReadVector(mesh.scale, 3);
@@ -146,10 +145,11 @@ namespace Importer
 				mesh.materialIDs.push_back(ID);
 			}
 
-			Data::meshes.push_back(mesh);
+			mesh.sceneID = Data::scenes.size();
+			scene.meshes.push_back(mesh);
 		}
 
-		void ReadVertexBuffer()
+		void ReadVertexBuffer(SceneData& scene)
 		{
 			VertexBuffer vertexBuffer;
 
@@ -171,10 +171,11 @@ namespace Importer
 				vertexBuffer.vertices.push_back(vertex);
 			}
 
-			Data::vertexBuffers.push_back(vertexBuffer);
+			vertexBuffer.sceneID = Data::scenes.size();
+			scene.vertexBuffers.push_back(vertexBuffer);
 		}
 
-		void ReadMaterial()
+		void ReadMaterial(SceneData& scene)
 		{
 			Material material;
 
@@ -205,7 +206,8 @@ namespace Importer
 				material.textures.push_back(texture);
 			}
 
-			Data::materials.push_back(material);
+			material.sceneID = Data::scenes.size();
+			scene.materials.push_back(material);
 		}
 	};
 
@@ -217,21 +219,29 @@ namespace Importer
 
 	bool Initialize(ID3D11Device& device)
 	{
-		for (auto& material : Data::materials)
+		for (auto& scene : Data::scenes)
 		{
-			for (auto& texture : material.textures)
+			if (!scene.isInitialized)
 			{
-				if (!LoadTexture(texture, device))
-					return false;
+				for (auto& material : scene.materials)
+				{
+					for (auto& texture : material.textures)
+					{
+						if (!LoadTexture(texture, device))
+							return false;
+					}
+				}
+
+				for (int i = 0; i < scene.vertexBuffers.size(); ++i)
+				{
+					if (!scene.vertexBuffers[i].Initialize(device))
+						return false;
+				}
+
+				scene.isInitialized = true;
 			}
 		}
-
-		for (int i = 0; i < Data::vertexBuffers.size(); ++i)
-		{
-			if (!Data::vertexBuffers[i].Initialize(device))
-				return false;
-		}
-
+		
 		return true;
 	}
 }

@@ -6,18 +6,13 @@ namespace Importer
 {
 	struct Data
 	{
-		friend class Reader;
+		static std::vector<SceneData> scenes;
 
-		static std::vector<Mesh> GetMeshes() { return meshes; }
-		static std::vector<VertexBuffer> GetVertexBuffers() { return vertexBuffers; }
-		static Mesh& GetMeshAt(int index) { return meshes.at(index); }
-		static Material& GetMaterialAt(int index) { return materials.at(index); }
-		static ID3D11Buffer** GetVertexBufferAt(int index) { return vertexBuffers.at(index).GetBuffer(); }
-		static int GetVertexCountAt(int index) { return vertexBuffers.at(index).vertexCount; }
-
-		static std::vector<Mesh> meshes;
-		static std::vector<Material> materials;
-		static std::vector<VertexBuffer> vertexBuffers;
+		static std::vector<Mesh> GetMeshes(int sceneID) { return scenes.at(sceneID).meshes; }
+		static Mesh& GetMeshAt(int sceneID, int index) { return scenes.at(sceneID).meshes.at(index); }
+		static Material& GetMaterialAt(int sceneID, int index) { return scenes.at(sceneID).materials.at(index); }
+		static ID3D11Buffer** GetVertexBufferAt(int sceneID, int index) { return scenes.at(sceneID).vertexBuffers.at(index).GetBuffer(); }
+		static int GetVertexCountAt(int sceneID, int index) { return scenes.at(sceneID).vertexBuffers.at(index).vertexCount; }
 	};
 
 	void LoadScene(std::string path);

@@ -31,7 +31,6 @@ enum class DataType
 	KEYFRAME,
 	MISC
 };
-
 //enum class AttributeType { UNKNOWN, VECTOR3, VECTOR4, INTEGER, STRING, FLOAT, BOOLEAN, DOUBLE, ENUM };
 //
 //struct Value
@@ -99,7 +98,7 @@ enum class DataType
 struct Node
 {
 	DataType type = DataType::UNKNOWN;
-
+	unsigned int sceneID = 0;
 	unsigned int attributeCount = 0;
 	//std::vector<Attribute> attributes;
 
@@ -155,10 +154,11 @@ struct Vertex
 
 struct VertexBuffer
 {
+	int sceneID = 0;
 	int ID = -1;
 	unsigned int vertexCount = 0;
 	std::vector<Vertex> vertices;
-	ID3D11Buffer** GetBuffer() {	return this->buffer.GetAddressOf();	}
+	ID3D11Buffer** GetBuffer() { return this->buffer.GetAddressOf(); }
 
 	bool Initialize(ID3D11Device& device)
 	{
@@ -194,10 +194,6 @@ struct Mesh :public Node
 	int parentID = -1;
 	int skeletonID = -1;
 	int vertexBufferID = -1;
-	//float matrix[16] = { 1, 0, 0, 0,
-	//					0, 1, 0, 0,
-	//					0, 0, 1, 0,
-	//					0, 0, 0, 1 };
 
 	float translation[3] = { 0.0f, 0.0f, 0.0f };
 	float rotation[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -206,24 +202,12 @@ struct Mesh :public Node
 	std::vector<int> materialIDs;
 
 	Mesh() = default;
-	/*bool Initialize(ID3D11Device& device)
-	{
-		D3D11_BUFFER_DESC desc = {};
-		desc.ByteWidth = vertexCount * sizeof(Vertex);
-		desc.Usage = D3D11_USAGE_IMMUTABLE;
-		desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		desc.CPUAccessFlags = 0;
-		desc.MiscFlags = 0;
-		desc.StructureByteStride = sizeof(Vertex);
+};
 
-		Vertex* v = vertices.data();
-
-		D3D11_SUBRESOURCE_DATA data = {};
-		data.pSysMem = vertices.data();
-
-		if (FAILED(device.CreateBuffer(&desc, &data, &vertexBuffer)))
-			return false;
-
-		return true;
-	}*/
+struct SceneData
+{
+	bool isInitialized = false;
+	std::vector<Mesh> meshes;
+	std::vector<Material> materials;
+	std::vector<VertexBuffer> vertexBuffers;
 };

@@ -24,9 +24,6 @@
     <ClCompile Include="ParticleSystem.cpp">
       <Filter>ParticleSystem</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderData.cpp">
-      <Filter>ParticleSystem</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -72,12 +69,12 @@
     <ClCompile Include="ParticleShader.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
+    <ClCompile Include="ShaderData.cpp">
+      <Filter>Source Files\Shaders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ParticleSystem.h">
-      <Filter>ParticleSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderData.h">
       <Filter>ParticleSystem</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
@@ -166,6 +163,9 @@
     </ClInclude>
     <ClInclude Include="Event.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderData.h">
+      <Filter>Header Files\Shaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

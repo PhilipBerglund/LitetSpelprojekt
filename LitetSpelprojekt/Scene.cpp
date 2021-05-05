@@ -1,17 +1,19 @@
 #include "Scene.h"
 
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
-	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.001f, 40.0f, { 0, 10, 30 })
+	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.001f, 40.0f, { 0, 20, 0 })
 {
-	Importer::LoadScene("Models/Test4.mff");	
-
+	Importer::LoadScene("Models/Test4.mff");
+	Importer::LoadScene("Models/Office.mff");
 	Importer::Initialize(Graphics::GetDevice());
 
-	std::vector<Mesh> meshes = Importer::Data::GetMeshes();
-	for (auto& mesh : meshes)
+	for (int i = 0; i < Importer::Data::scenes.size(); ++i)
 	{
-		auto model = std::make_shared<Model>(mesh);
-		models.push_back(model);
+		for (auto& mesh : Importer::Data::GetMeshes(i))
+		{
+			auto model = std::make_shared<Model>(mesh);
+			models.push_back(model);
+		}
 	}
 
 	AddParticleSystem({ 50,50,50 }, { 60, 50,0 }, 50, 1, 100, 200, 0.2f);

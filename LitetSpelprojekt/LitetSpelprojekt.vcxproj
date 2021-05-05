@@ -162,13 +162,10 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ParticleShader.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
-    <ClCompile Include="Print.cpp" />
     <ClCompile Include="RegularShader.cpp" />
     <ClCompile Include="Scenario.cpp" />
     <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderData.cpp" />
-    <ClCompile Include="SkeletonAnimation.cpp" />
     <ClCompile Include="SoundHandler.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
@@ -182,16 +179,13 @@
     <ClInclude Include="RegularShader.h" />
     <ClInclude Include="Scenario.h" />
     <ClInclude Include="ShaderData.h" />
-    <ClInclude Include="SkeletonAnimation.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ComPtr.h" />
     <ClInclude Include="Print.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="Geometry.h" />
     <ClInclude Include="Graphics.h" />
-    <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="InGameUI.h" />
     <ClInclude Include="Model.h" />
@@ -207,7 +201,6 @@
     <ClInclude Include="UI.h" />
     <ClInclude Include="UIComponent.h" />
     <ClInclude Include="Image.h" />
-    <ClInclude Include="Vector3.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

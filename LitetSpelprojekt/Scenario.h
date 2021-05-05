@@ -1,10 +1,8 @@
 #pragma once
 #include <vector>
 #include "GameObject.h"
-#include "Geometry.h"
 #include "Model.h"
 #include "Graphics.h"
-#include "InputHandler.h"
 #include "Camera.h"
 #include "InGameUI.h"
 #include "Event.h"

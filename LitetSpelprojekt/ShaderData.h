@@ -8,7 +8,6 @@ using namespace DirectX;
 
 class ShaderData
 {
-	friend class Shader;
 	friend class ParticleShader;
 	friend class RegularShader;
 private:

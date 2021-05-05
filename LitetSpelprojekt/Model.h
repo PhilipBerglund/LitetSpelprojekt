@@ -1,7 +1,6 @@
 #pragma once
 #include "Importer.h"
 #include "GameObject.h"
-#include "Geometry.h"
 #include <DirectXCollision.h>
 #include "Graphics.h"
 

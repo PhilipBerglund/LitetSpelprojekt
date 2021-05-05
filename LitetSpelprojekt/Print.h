@@ -2,5 +2,12 @@
 #include <iostream>
 #include <string>
 
-void Error(std::string string);
-void Print(std::string string);
+inline void Error(std::string string)
+{
+	std::cerr << string << std::endl;
+}
+
+inline void Print(std::string string)
+{
+	std::cout << string << std::endl;
+}

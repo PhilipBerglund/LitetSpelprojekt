@@ -13,6 +13,9 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 		models.push_back(model);
 	}
 
+	rainSystem = ParticleSystem({ 10,10,10 }, { 0,10,10 }, 5, 1, 2, 5, 1);
+
+	//rainSystem.Initialize();
 	sh.Initialize(window);
 	AddLight();
 
@@ -78,6 +81,7 @@ void Scene::Update(InGameUI& ui, float dt)
 		}
 	}
 
+	rainSystem.Update(dt, camera.GetPosition());
 	scenario.Run(ui, camera);
 	camera.Update(dt);
 }

@@ -1,53 +1,75 @@
 #pragma once
 
-#include <DirectXMath.h>
 #include <d3d11.h>
-#include <vector>
+#include <DirectXMath.h>
 #include <string>
+#include "Graphics.h"
+#include <vector>
 
-#include "GameObject.h"
-#include "Geometry.h"
+using namespace DirectX;
 
-enum class EmissionType { CONE, CUBE };
-
-class ParticleSystem : public GameObject
+class ParticleSystem
 {
 private:
-	struct Particle
-	{
-		XMFLOAT3 direction;
-		XMFLOAT3 position;
-		XMFLOAT3 color;
-		float velocity;
-		bool active;
-	};
+    struct Particle
+    {
+        XMFLOAT3 position;
+        XMFLOAT4 color;
+        float velocity;
+    };
 
-	float radius;
-	XMFLOAT3 bounds;
-	float coneAngel;
+    struct Vertex
+    {
+        XMFLOAT3 position;
+        XMFLOAT4 color;
+    };
 
-	float baseVelocity;
-	float velocityVariation;
+    XMFLOAT3 bounds;
+    XMFLOAT3 center;
 
-	float size;
-	int maxParticles;
-	int particlesPerSecond;
-	float timeSinceLastSpawn = 0;
+    XMFLOAT3 deviation;
+    float velocity;
+    float velocityVariation;
+    float size;
+    int particlesPerSecond;
+    int maxParticles;
 
-	int vertexCount = 0;
-	Vert* vertices;
-	ComPtr<ID3D11Buffer> vertexBuffer;
-	std::vector<Particle> activeParticles;
-	EmissionType type;
+    float timeSinceLastSpawn;
 
-	void EmitParticles(float dt);
-	void UpdateParticles(float dt);
-	void KillParticles();
+    ID3D11Texture1D* randomTex;
+    ID3D11ShaderResourceView* randomTexSRV;
+
+    int vertexCount;
+
+    Vertex* vertices;
+    ComPtr<ID3D11Buffer> vertexBuffer;
+    std::vector<Particle> activeParticles;
+
+    /*bool LoadTexture(ID3D11Device* device, std::string textureFile);
+    void ReleaseTexture();*/
+
+    bool InitializeSystem();
+
+    bool InitializeBuffers();
+
+    void EmitParticles(float dt);
+    void UpdateParticles(float frameTime);
+    void KillParticles();
+
+    bool UpdateBuffer(XMFLOAT3 cameraPosition);
+    void RenderBuffers();
+
+    bool CreateRandomTexture();
+
 public:
-	ParticleSystem();
-	ParticleSystem(XMFLOAT3 bounds, float velocity, float velocityVariation, float size, int maxParticles, int particlesPerSecond, EmissionType type, XMFLOAT3 position, XMFLOAT3 rotation = { 0,0,0 }, float coneAngel = 0, XMFLOAT3 scale = { 1,1,1 });
-	bool Initialize(ID3D11Device& device);
-	bool Update(float dt, XMFLOAT3 cameraPosition);
-	Vert& GetVertices() const;
-	int GetVertexCount() const;
+    ParticleSystem();
+    ParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size);
+    ~ParticleSystem() = default;
+    bool Initialize();
+    ////bool Initialize(ID3D11Device* device, std::string textureFile);
+    bool Frame(float frameTime, XMFLOAT3 cameraPosition);
+    void Render();
+    //ID3D11ShaderResourceView* GetTexture();
+    int GetVertexCount() const;
+    void Update(float dt, XMFLOAT3 cameraPosition);
 };

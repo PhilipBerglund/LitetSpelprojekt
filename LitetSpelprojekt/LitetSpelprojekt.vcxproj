@@ -192,7 +192,6 @@
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Scene.h" />
-    <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderLoader.h" />
     <ClInclude Include="SoundHandler.h" />
     <ClInclude Include="Event.h" />

@@ -140,9 +140,6 @@
     <ClInclude Include="UIComponent.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Header Files\Shaders</Filter>
-    </ClInclude>
     <ClInclude Include="RegularShader.h">
       <Filter>Header Files\Shaders</Filter>
     </ClInclude>

@@ -63,3 +63,33 @@ inline bool LoadPixelShader(ComPtr<ID3D11PixelShader>& pixelShader, std::string 
 	reader.close();
 	return true;
 };
+
+inline bool LoadGeometryShader(ComPtr<ID3D11GeometryShader>& geometryShader, std::string path)
+{
+	std::string shaderData;
+	std::ifstream reader;
+
+	reader.open(path, std::ios::binary | std::ios::beg);
+
+	if (!reader.is_open())
+	{
+		Error("COULD NOT OPEN FILE: " + path);
+		return false;
+	}
+
+	reader.seekg(0, std::ios::end);
+	shaderData.reserve(static_cast<unsigned int>(reader.tellg()));
+	reader.seekg(0, std::ios::beg);
+	shaderData.assign((std::istreambuf_iterator<char>(reader)), std::istreambuf_iterator<char>());
+
+	HRESULT hr = Graphics::GetDevice().CreateGeometryShader(shaderData.c_str(), shaderData.length(), nullptr, &geometryShader);
+	if FAILED(hr)
+	{
+		Error("FAILED TO CREATE GEOMETRY SHADER");
+		return false;
+	}
+
+	shaderData.clear();
+	reader.close();
+	return true;
+}

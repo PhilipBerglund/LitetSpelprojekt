@@ -19,6 +19,18 @@
     <FxCompile Include="VertexShader.hlsl">
       <Filter>Resource Files</Filter>
     </FxCompile>
+    <FxCompile Include="ParticleGeometryShader.hlsl">
+      <Filter>Header Files\ParticleSystem2</Filter>
+    </FxCompile>
+    <FxCompile Include="Particle2PixelShader.hlsl">
+      <Filter>Header Files\ParticleSystem2</Filter>
+    </FxCompile>
+    <FxCompile Include="Particle2VertexShader.hlsl">
+      <Filter>Header Files\ParticleSystem2</Filter>
+    </FxCompile>
+    <FxCompile Include="Particle2ComputeShader.hlsl">
+      <Filter>Header Files\ParticleSystem2</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ParticleSystem.cpp">
@@ -70,6 +82,12 @@
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="ShaderData.cpp">
+      <Filter>Source Files\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSystem2.cpp">
+      <Filter>Header Files\ParticleSystem2</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleShader2.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
   </ItemGroup>
@@ -167,6 +185,12 @@
     <ClInclude Include="ShaderData.h">
       <Filter>Header Files\Shaders</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleSystem2.h">
+      <Filter>Header Files\ParticleSystem2</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleShader2.h">
+      <Filter>Header Files\Shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
@@ -198,6 +222,9 @@
     </Filter>
     <Filter Include="ParticleSystem">
       <UniqueIdentifier>{637396cf-a880-429c-b01c-7fe767a5e5bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ParticleSystem2">
+      <UniqueIdentifier>{bef46962-4d6b-4310-bcb1-4bd8294035c8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

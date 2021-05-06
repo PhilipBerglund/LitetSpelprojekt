@@ -2,8 +2,8 @@
 #include "ShaderData.h"
 
 class Scene;
-	
-class ParticleShader
+
+class ParticleShader2
 {
 private:
 	void SetShader(ShaderData& data);

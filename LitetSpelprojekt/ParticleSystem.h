@@ -50,8 +50,6 @@ private:
     void KillParticles();
 
     bool UpdateBuffer(XMFLOAT3 cameraPosition);
-
-    bool CreateRandomTexture();
 public:
     ParticleSystem();
     ParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size);

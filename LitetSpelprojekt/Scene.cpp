@@ -16,17 +16,17 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 		}
 	}
 
-	AddParticleSystem({ 50,50,50 }, { 60, 50,80 }, 50, 1, 100, 200, 0.2f);
+	//AddParticleSystem({ 50,50,50 }, { 60, 50,80 }, 50, 1, 100, 200, 0.2f);
 	AddLight();
 
 	//scenario = Scenario(*this);
 }
 
-void Scene::AddParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size)
-{
-	auto particleSystem = std::make_shared<ParticleSystem>(bounds, center, velocity, velocityVariation, particlesPerSecond, maxParticles, size);
-	particleSystems.push_back(particleSystem);
-}
+//void Scene::AddParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size)
+//{
+//	auto particleSystem = std::make_shared<ParticleSystem>(bounds, center, velocity, velocityVariation, particlesPerSecond, maxParticles, size);
+//	particleSystems.push_back(particleSystem);
+//}
 
 void Scene::AddModel(std::shared_ptr<Model> model)
 {

@@ -7,6 +7,8 @@
 #include "Scenario.h"
 #include "ParticleSystem.h"
 #include "ParticleShader.h"
+#include "ParticleSystem2.h"
+#include "ParticleShader2.h"
 #include "RegularShader.h"
 
 class Scene
@@ -22,13 +24,14 @@ private:
 	//std::vector<std::shared_ptr<Model>> models;
 	std::vector<std::shared_ptr<GameObject>> gameObjects;
 	std::vector<std::shared_ptr<ParticleSystem>> particleSystems;
+	std::vector<std::shared_ptr<ParticleSystem2>> particleSystems2;
 
 	//SHADERS
 	ShaderData shaderData;
 	ParticleShader particleShader;
 	RegularShader regularShader;
 
-	void AddParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size);
+	//void AddParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size);
 	void AddModel(std::shared_ptr<Model> model);
 	void AddLight();
 public:

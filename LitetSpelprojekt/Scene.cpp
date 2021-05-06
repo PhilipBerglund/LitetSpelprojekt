@@ -3,8 +3,8 @@
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.001f, 40.0f, { 0, 20, 0 })
 {
-	Importer::LoadScene("Models/Test4.mff");
-	Importer::LoadScene("Models/Office.mff");
+	Importer::LoadScene("Models/Dumpster.mff");
+	//Importer::LoadScene("Models/Office.mff");
 	Importer::Initialize(Graphics::GetDevice());
 
 	for (int i = 0; i < Importer::Data::scenes.size(); ++i)
@@ -19,7 +19,7 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	AddParticleSystem({ 50,50,50 }, { 60, 50,80 }, 50, 1, 100, 200, 0.2f);
 	AddLight();
 
-	scenario = Scenario(*this);
+	//scenario = Scenario(*this);
 }
 
 void Scene::AddParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size)

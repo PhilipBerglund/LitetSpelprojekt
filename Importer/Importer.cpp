@@ -73,13 +73,13 @@ namespace Importer
 		void ReadName(char* name)
 		{
 			std::memcpy(name, buffer.data() + currentPosition, MAX_CHAR);
-			currentPosition += MAX_CHAR + sizeof(char);
+			currentPosition += MAX_CHAR;
 		}
 
 		void ReadTextureFile(char* data, int size)
 		{
 			std::memcpy(data, buffer.data() + currentPosition, size);
-			currentPosition += size + sizeof(char);
+			currentPosition += size;
 		}
 
 	public:

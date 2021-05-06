@@ -92,7 +92,8 @@ void RegularShader::Render(ShaderData& data, Scene& scene)
 		const float mat[] = { model->GetMaterial().diffuse[0], model->GetMaterial().diffuse[1], model->GetMaterial().diffuse[2] };
 
 		if (*model->GetDiffuseTexture())
-			Graphics::GetDeviceContext().PSSetShader(data.regularPixelShader.Get(), nullptr, 0);//Graphics::GetDeviceContext().PSSetShaderResources(0, 1, model->GetDiffuseTexture());
+			/*Graphics::GetDeviceContext().PSSetShader(data.regularPixelShader.Get(), nullptr, 0);*/
+			Graphics::GetDeviceContext().PSSetShaderResources(0, 1, model->GetDiffuseTexture());
 
 		else if ((mat[0] == 0.5f && mat[1] == 0.5f && mat[2] == 0.5f) ||
 			(mat[0] == 1.0f && mat[1] == 1.0f && mat[2] == 1.0f) ||

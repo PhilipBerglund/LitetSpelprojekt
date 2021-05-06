@@ -50,8 +50,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	{	
 		timer.Start();
 
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&msg);
 			DispatchMessage(&msg);
+		}
 
 		if (msg.wParam == VK_RETURN)
 			break;

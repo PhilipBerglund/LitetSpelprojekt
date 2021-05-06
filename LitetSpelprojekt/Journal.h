@@ -136,7 +136,7 @@ private:
 	bool slideIn = false;
 	bool slideOut = false;
 
-	double slideSpeed = 10.0f;
+	double slideSpeed = 90.0f;
 
 	void SlideIn()
 	{
@@ -197,16 +197,16 @@ public:
 		if (slideIn)
 		{
 			float distance = maxX - journalBase.position.x;
-			float amount = slideSpeed / ((distance + 100.0f) * dt);
-			journalBase.SetPosition(journalBase.position.x - (float)amount, journalBase.position.y);
-			exitCross.SetPosition(exitCross.position.x - (float)amount, exitCross.position.y);
-			exitButton.SetPosition(exitButton.position.x - (float)amount, exitButton.position.y);
+			float amount = slideSpeed / ((distance + 100.0f) * 0.0002f) * dt;
+			journalBase.SetPosition(journalBase.position.x - amount, journalBase.position.y);
+			exitCross.SetPosition(exitCross.position.x - amount, exitCross.position.y);
+			exitButton.SetPosition(exitButton.position.x - amount, exitButton.position.y);
 
 			for (auto& page : pages)
-				page.Move(-(float)amount);
+				page.Move(-amount);
 
 			for (auto& slot : slots)
-				slot.SetPosition(slot.position.x - (float)amount, slot.position.y);
+				slot.SetPosition(slot.position.x - amount, slot.position.y);
 
 			if (journalBase.position.x <= minX)
 			{
@@ -218,16 +218,16 @@ public:
 		if (slideOut)
 		{
 			float distance = maxX - journalBase.position.x;
-			float amount = slideSpeed / ((distance + 100.0f) * dt);
-			journalBase.SetPosition(journalBase.position.x + (float)amount, journalBase.position.y);
-			exitCross.SetPosition(exitCross.position.x + (float)amount, exitCross.position.y);
-			exitButton.SetPosition(exitButton.position.x + (float)amount, exitButton.position.y);
+			float amount = slideSpeed / ((distance + 100.0f) * 0.0002f) * dt;
+			journalBase.SetPosition(journalBase.position.x + amount, journalBase.position.y);
+			exitCross.SetPosition(exitCross.position.x + amount, exitCross.position.y);
+			exitButton.SetPosition(exitButton.position.x + amount, exitButton.position.y);
 			
 			for (auto& page : pages)
-				page.Move((float)amount);
+				page.Move(amount);
 
 			for (auto& slot : slots)
-				slot.SetPosition(slot.position.x + (float)amount, slot.position.y);
+				slot.SetPosition(slot.position.x + amount, slot.position.y);
 
 			if (journalBase.position.x >= maxX)
 			{

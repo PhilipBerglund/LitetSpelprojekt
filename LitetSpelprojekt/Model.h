@@ -39,8 +39,7 @@ public:
 			}
 		}
 		
-		Texture nulltexture;
-		return nulltexture.Get();
+		return nullptr;
 	}
 
 	Material GetMaterial() const				{ return Importer::Data::GetMaterialAt(mesh.sceneID, mesh.materialIDs[0]); };

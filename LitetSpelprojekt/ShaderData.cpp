@@ -58,42 +58,42 @@ ShaderData::ShaderData()
 
 	//-----SECOND PARTICLE SYSTEM-----
 	//SHADERS
-	vs_path = "../x64/Debug/Particle2VertexShader.cso";
-	if (!LoadVertexShader(particle2VS, vs_path, byteCode))
-		return;
+	//vs_path = "../x64/Debug/Particle2VertexShader.cso";
+	//if (!LoadVertexShader(particle2VS, vs_path, byteCode))
+	//	return;
 
-	ps_path = "../x64/Debug/Particle2PixelShader.cso";
-	if (!LoadPixelShader(particle2PS, ps_path))
-		return;
+	//ps_path = "../x64/Debug/Particle2PixelShader.cso";
+	//if (!LoadPixelShader(particle2PS, ps_path))
+	//	return;
 
-	std::string gs_path = "../x64/Debug/ParticleGeometryShader.cso";
-	if (!LoadGeometryShader(particle2GS, ps_path))
-		return;
+	//std::string gs_path = "../x64/Debug/ParticleGeometryShader.cso";
+	//if (!LoadGeometryShader(particle2GS, ps_path))
+	//	return;
 
-	//Buffer
-	hr = Graphics::GetDevice().CreateBuffer(&SOBufferDesc, nullptr, &streamOutVB);
-	if FAILED(hr)
-	{
-		Error("FAILED TO CREATE BUFFER");
-		return;
-	}
+	////Buffer
+	//hr = Graphics::GetDevice().CreateBuffer(&SOBufferDesc, nullptr, &streamOutVB);
+	//if FAILED(hr)
+	//{
+	//	Error("FAILED TO CREATE BUFFER");
+	//	return;
+	//}
 
-	hr = Graphics::GetDevice().CreateBuffer(&bufferDesc, nullptr, &initVB);
-	if FAILED(hr)
-	{
-		Error("FAILED TO CREATE BUFFER");
-		return;
-	}
+	//hr = Graphics::GetDevice().CreateBuffer(&bufferDesc, nullptr, &initVB);
+	//if FAILED(hr)
+	//{
+	//	Error("FAILED TO CREATE BUFFER");
+	//	return;
+	//}
 
-	hr = Graphics::GetDevice().CreateBuffer(&bufferDesc, nullptr, &drawVB);
-	if FAILED(hr)
-	{
-		Error("FAILED TO CREATE BUFFER");
-		return;
-	}
+	//hr = Graphics::GetDevice().CreateBuffer(&bufferDesc, nullptr, &drawVB);
+	//if FAILED(hr)
+	//{
+	//	Error("FAILED TO CREATE BUFFER");
+	//	return;
+	//}
 
-	//RANDOM TEXTURE
-	CreateRandomTexture();
+	////RANDOM TEXTURE
+	//CreateRandomTexture();
 
 	//-----REGULAR-----
 	//SHADERS

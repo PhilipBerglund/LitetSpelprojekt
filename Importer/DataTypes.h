@@ -2,6 +2,7 @@
 
 #include <d3d11.h>
 #include <vector>
+#include <iostream>
 
 #include <wrl.h>
 template <typename T>
@@ -116,7 +117,55 @@ struct Texture
 	int fileSize = 0;
 	char* data = nullptr;
 
-	ID3D11ShaderResourceView** Get() { return this->view.GetAddressOf(); }
+	ID3D11ShaderResourceView** Get() 
+	{	
+		if (view.Get() == nullptr)
+			return nullptr;
+
+		return this->view.GetAddressOf(); 
+	}
+
+	bool Load(ID3D11Device& device)
+	{
+		D3D11_TEXTURE2D_DESC textureDesc = {};
+		textureDesc.Width = width;
+		textureDesc.Height = height;
+		textureDesc.MipLevels = 1;
+		textureDesc.ArraySize = 1;
+		textureDesc.MiscFlags = 0;
+		textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		textureDesc.SampleDesc.Count = 1;
+		textureDesc.SampleDesc.Quality = 0;
+		textureDesc.Usage = D3D11_USAGE_IMMUTABLE;
+		textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+		textureDesc.CPUAccessFlags = 0;
+
+		D3D11_SUBRESOURCE_DATA data = {};
+		data.pSysMem = this->data;
+		data.SysMemPitch = width * 4;
+
+		if (this->data)
+		{
+			ID3D11Texture2D* img;
+			if FAILED(device.CreateTexture2D(&textureDesc, &data, &img))
+			{
+				std::cout << "FAILED TO CREATE TEXTURE 2D" << std::endl;
+				return false;
+			}
+
+			if FAILED(device.CreateShaderResourceView(img, nullptr, &view))
+			{
+				std::cout << "FAILED TO CREATE SHADER RESOURCE VIEW" << std::endl;
+				return false;
+			}
+
+			img->Release();
+			img = nullptr;
+		}
+
+		return true;
+	}
+
 	Texture() = default;
 private:
 	ComPtr<ID3D11ShaderResourceView> view = nullptr;

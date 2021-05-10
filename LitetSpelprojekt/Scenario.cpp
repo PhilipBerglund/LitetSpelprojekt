@@ -4,22 +4,68 @@
 #include <random>
 #include <chrono>
 
-Clue::Clue(std::string path)
+Clue::Clue(std::string path, XMFLOAT3 position)
 {
 	Importer::LoadScene(path);
-	information = "I GOT SOME INFORMATION";
+	information = "Description of item and where it was found";
 
-	Mesh mesh = Importer::Data::GetMeshes(Importer::Data::scenes.size() - 1).front();
+	Mesh mesh = Importer::Data::GetMeshAt(Importer::Data::scenes.size() - 1, 0);
 	model = std::make_shared<Model>(mesh);
-	model->SetPosition({ -30,10,90 });
+	model->SetPosition(position);
 	model->Update(Graphics::GetDeviceContext());
+}
+
+Suspect::Suspect(std::string path, XMFLOAT3 position)
+{
+	Importer::LoadScene(path);
+	Mesh mesh = Importer::Data::GetMeshAt(Importer::Data::scenes.size() - 1, 0);
+	model = std::make_shared<Model>(mesh);
+	model->SetScale({2,2,2});
+	model->SetPosition(position);
+	model->Update(Graphics::GetDeviceContext());
+	model->boundingbox.Center.y += 10;
 }
 
 Scenario::Scenario(Scene& scene)
 {
-	Clue clue("Models/TestClue.mff");
+	Suspect testSuspect("Models/TestSuspect.mff", {50, 10, 50});
+	testSuspect.name = "A";
+	testSuspect.age = 55;
+	testSuspect.height = 180;
+	testSuspect.shoeSize = 45;
+	testSuspect.information.info = "I got some information about person B";
+	testSuspect.information.connections[0] = "B";
+	testSuspect.information.numConnections = 1;
+	testSuspect.information.rumours[0] = "According to A, B looked sketchy last night";
+	testSuspect.information.valueable = true;
+	testSuspect.characteristics[0] = "Likes cats.";
+	testSuspect.characteristics[1] = "monke";
+	testSuspect.characteristics[2] = "mmmmmmmm, monke";
+
+	scene.AddModel(testSuspect.model);
+	suspects.push_back(testSuspect);
+
+	Suspect testSuspect2("Models/TestSuspect.mff", { 50, 10, 40 });
+	testSuspect2.name = "B";
+	testSuspect2.age = 28;
+	testSuspect2.height = 167;
+	testSuspect2.shoeSize = 38;
+	testSuspect2.information.valueable = false;
+	testSuspect2.characteristics[0] = "Does not like A.";
+	testSuspect2.characteristics[1] = "monkeeeeh";
+	testSuspect2.characteristics[2] = "mmmmmmmmhHHHHHHHHH, monke XDDDDDDD";
+
+	scene.AddModel(testSuspect2.model);
+	suspects.push_back(testSuspect2);
+
+	Clue clue("Models/TestClue.mff", {20, 10, 40});
 	scene.AddModel(clue.model);
 	clues.push_back(clue);
+
+	Clue clue2("Models/TestClue.mff", { 50, 10, 40 });
+	scene.AddModel(clue2.model);
+	clues.push_back(clue2);
+
 	Importer::Initialize(Graphics::GetDevice());
 }
 
@@ -44,46 +90,79 @@ void Scenario::SetRandomizedLocations()
 	}
 }
 
-bool Scenario::TempLoadClues(std::string path)
-{
-	Clue clue("");
-	clue.model = std::make_shared<Model>();
-
-	//if (!clue.model->Initialize(Graphics::GetDevice(), path))
-	//{
-	//	Error("FAILED TO INITIALIZE CLUE");
-	//	return false;
-	//}
-
-	clues.push_back(clue);
-
-	return true;
-}
+//bool Scenario::TempLoadClues(std::string path)
+//{
+//	Clue clue("");
+//	clue.model = std::make_shared<Model>();
+//
+//	//if (!clue.model->Initialize(Graphics::GetDevice(), path))
+//	//{
+//	//	Error("FAILED TO INITIALIZE CLUE");
+//	//	return false;
+//	//}
+//
+//	clues.push_back(clue);
+//
+//	return true;
+//}
 
 void Scenario::Update(Scene& scene, InGameUI& ui, Camera& camera)
 {
+	CursorType cursor = CursorType::CROSS;
+
+	//CLUES
 	bool hoveringClue = false;
-
-	std::string names[] = { "Test 1", "Test 2", "Test 3", "Test 4", };
-
 	for (auto& clue : clues)
 	{
-		if (!clue.found && camera.CheckIntersection(clue.model->boundingbox))
+		if (!clue.isFound && camera.CheckIntersection(clue.model->boundingbox))
 		{
 			hoveringClue = true;
 
 			if (Event::GetCurrentEvent() == EventType::LEFTCLICK)
 			{
 				scene.models.erase(clue.model->GetName());
-				clue.found = true;
-				ui.ShowNotification();
+				clue.isFound = true;
 			}
 		}
 	}
 
 	if (hoveringClue)
-		ui.SetCursorType(CursorType::CLUE);
+		cursor = CursorType::CLUE;
 
-	else
-		ui.SetCursorType(CursorType::CROSS);
+	//SUSPECTS
+	bool hoveringSuspect = false;
+	for (auto& suspect : suspects)
+	{
+		if (camera.CheckIntersection(suspect.model->boundingbox))
+		{
+			hoveringSuspect = true;
+
+			if (Event::GetCurrentEvent() == EventType::LEFTCLICK)
+			{
+				if (!ui.journal.HasSuspect(suspect.name))
+				{
+					ui.journal.AddSuspect(identifiedSuspects, suspect.name, suspect.characteristics[0], suspect.characteristics[1], suspect.characteristics[2], suspect.age, suspect.height, suspect.shoeSize);
+					identifiedSuspects++;
+
+					if (suspect.information.numConnections > 0)
+					{
+						for (int i = 0; i < suspect.information.numConnections; ++i)
+						{
+							if (!ui.journal.HasSuspect(suspect.information.connections[i]))
+								ui.journal.AddSuspect(identifiedSuspects, suspect.information.connections[i]);
+
+							ui.journal.AddRumour(suspect.information.connections[i], suspect.information.rumours[i]);
+						}
+					}
+
+					ui.ShowNotification();
+				}
+			}
+		}
+	}
+
+	if (hoveringSuspect)
+		cursor = CursorType::CHAT;
+
+	ui.SetCursorType(cursor);
 }

@@ -36,7 +36,7 @@ struct Page
 
 		float fontSize = 35;
 		float leftBorder = winSize.x + 350;
-		float startHeight = 250;
+		float startHeight = 230;
 
 		img = Image(L"UI/Unknown.png", 1.3f, true, { winSize.x + 550, 350 });
 
@@ -46,7 +46,16 @@ struct Page
 		height.position = { leftBorder - height.GetSize() * fontSize, startHeight + 100 };
 		shoesize.position = { leftBorder - shoesize.GetSize() * fontSize , startHeight + 150};
 
-		characteristicsHeading = Text(L"Characteristics:", true, {leftBorder - characteristicsHeading.GetSize() * fontSize, startHeight + 250}, 500);
+		characteristicsHeading = Text(L"", true, {leftBorder - characteristicsHeading.GetSize() * fontSize, startHeight + 240}, 500);
+		characteristics[0].position = { leftBorder - characteristics[0].GetSize() * fontSize, startHeight + 280 };
+		characteristics[1].position = { leftBorder - characteristics[1].GetSize() * fontSize, startHeight + 310 };
+		characteristics[2].position = { leftBorder - characteristics[2].GetSize() * fontSize, startHeight + 340 };
+
+		rumorsHeading.position = { leftBorder - rumorsHeading.GetSize() * fontSize, startHeight + 430 };
+
+		rumors[0].position = { leftBorder - rumors[0].GetSize() * fontSize, startHeight + 470 };
+		rumors[1].position = { leftBorder - rumors[1].GetSize() * fontSize, startHeight + 500 };
+		rumors[2].position = { leftBorder - rumors[2].GetSize() * fontSize, startHeight + 530 };
 	};
 
 	void Move(float x, float y = 0)
@@ -59,6 +68,15 @@ struct Page
 		img.SetPosition(img.position.x + x, img.position.y);
 
 		characteristicsHeading.SetPosition(characteristicsHeading.position.x + x, characteristicsHeading.position.y);
+		characteristics[0].SetPosition(characteristics[0].position.x + x, characteristics[0].position.y);
+		characteristics[1].SetPosition(characteristics[1].position.x + x, characteristics[1].position.y);
+		characteristics[2].SetPosition(characteristics[2].position.x + x, characteristics[2].position.y);
+
+		rumorsHeading.SetPosition(rumorsHeading.position.x + x, rumorsHeading.position.y);
+
+		rumors[0].SetPosition(rumors[0].position.x + x, rumors[0].position.y);
+		rumors[1].SetPosition(rumors[1].position.x + x, rumors[1].position.y);
+		rumors[2].SetPosition(rumors[2].position.x + x, rumors[2].position.y);
 	}
 
 	void Draw(IDWriteTextFormat& format, ID2D1Brush& brush)
@@ -69,13 +87,20 @@ struct Page
 		height.Draw(format, brush);
 		shoesize.Draw(format, brush);
 		characteristicsHeading.Draw(format, brush);
+		characteristics[0].Draw(format, brush);
+		characteristics[1].Draw(format, brush);
+		characteristics[2].Draw(format, brush);
+		rumorsHeading.Draw(format, brush);
+		rumors[0].Draw(format, brush);
+		rumors[1].Draw(format, brush);
+		rumors[2].Draw(format, brush);
 	}
 };
 
 struct Slot
 {
 	D2D_VECTOR_2F position = {};
-	unsigned int ID;
+	unsigned int ID = -1;
 	Button button;
 	Image image;
 	Text name;
@@ -288,7 +313,7 @@ public:
 		}
 	}
 
-	void AddSuspect(unsigned int ID, std::string name, bool interacted, int age = 0, int height = 0, int shoeSize = 0)
+	void AddSuspect(unsigned int ID, std::string name, std::string characteristics1 = "", std::string characteristics2 = "", std::string characteristics3 = "", int age = 0, int height = 0, int shoeSize = 0)
 	{
 		std::wstring temp(name.begin(), name.end());
 
@@ -298,22 +323,75 @@ public:
 		pages[ID].ID = ID;
 		pages[ID].name = Text(L"Name: " + temp, true, pages[ID].name.position, 500);
 
-		if (interacted)
-		{
-
-		}
-
+		//AGE
+		if (age != 0)
+			pages[ID].age = Text(L"Age: " + std::to_wstring(age), true, pages[ID].age.position, 500);
 		else
-		{
 			pages[ID].age = Text(L"Age: XX", true, pages[ID].age.position, 500);
-			pages[ID].height = Text(L"Height: XXX", true, pages[ID].height.position, 500);
+
+		//HEIGHT
+		if (height != 0)
+			pages[ID].height = Text(L"Height: " + std::to_wstring(height) + L" cm", true, pages[ID].height.position, 500);
+		else
+			pages[ID].height = Text(L"Height: XXX cm", true, pages[ID].height.position, 500);
+
+		//SHOE SIZE
+		if (shoeSize != 0)
+			pages[ID].shoesize = Text(L"Shoesize: " + std::to_wstring(shoeSize), true, pages[ID].shoesize.position, 500);
+		else
 			pages[ID].shoesize = Text(L"Shoesize: XX", true, pages[ID].shoesize.position, 500);
-		}
+
+		//CHARACTERISTICS
+		if (characteristics1 != "" || characteristics2 != "" || characteristics3 != "")
+			pages[ID].characteristicsHeading = Text(L"Characteristics:", true, pages[ID].characteristicsHeading.position, 500);
+
+		std::wstring char1(characteristics1.begin(), characteristics1.end());
+		if (characteristics1 != "")
+			pages[ID].characteristics[0] = Text(char1, true, pages[ID].characteristics[0].position, 500);
+
+		std::wstring char2(characteristics2.begin(), characteristics2.end());
+		if (characteristics2 != "")
+			pages[ID].characteristics[1] = Text(char2, true, pages[ID].characteristics[1].position, 500);
+
+		std::wstring char3(characteristics3.begin(), characteristics3.end());
+		if (characteristics3 != "")
+			pages[ID].characteristics[2] = Text(char3, true, pages[ID].characteristics[2].position, 500);
+
+		//RUMOURS
 	}
 
-	void UpdateSuspect(unsigned int ID, int age = 0, int height = 0, int shoeSize = 0)
+	void AddRumour(std::string name, std::string rumour)
 	{
+		std::wstring newRumour(rumour.begin(), rumour.end());
+		std::wstring pageName(name.begin(), name.end());
+		pageName = L"Name: " + pageName;
 
+		for (auto& page : pages)
+		{
+			if (page.name.GetText() == pageName)
+			{
+				if (page.rumorsHeading.GetText() == L"")
+					page.rumorsHeading = Text(L"Rumours:", true, page.rumorsHeading.position, 500);
+
+				for (int i = 0; i < 3; ++i)
+					if (page.rumors[i].GetText() == L"")
+					{
+						page.rumors[i] = Text(newRumour, true, page.rumors[i].position, 500);
+						break;
+					}		
+			}	
+		}	
+	}
+
+	bool HasSuspect(std::string name)
+	{
+		std::wstring temp(name.begin(), name.end());
+
+		for (int i = 0; i < 9; ++i)
+			if (temp == slots[i].name.GetText())
+				return true;
+
+		return false;
 	}
 
 	void Slide()

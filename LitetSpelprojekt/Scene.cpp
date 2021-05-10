@@ -29,7 +29,7 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	AddGSParticleSystem(3000, 150, 200);
 	AddLight();
 
-	//scenario = Scenario(*this);
+	scenario = Scenario(*this);
 }
 
 //void Scene::AddParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size)
@@ -49,7 +49,24 @@ void Scene::AddGSParticleSystem(UINT maxParticles, float minVelocity, float maxV
 
 void Scene::AddModel(std::shared_ptr<Model> model)
 {
-	models.insert(std::make_pair(model->GetName(), model));
+	int dupes = 0;
+
+	for (auto& mod : models)
+	{
+		if (mod.first == model->GetName())
+		{
+			dupes++;
+		}
+	}
+
+	if (dupes == 0)
+		models.insert(std::make_pair(model->GetName(), model));
+
+	else
+	{
+		model->SetName(model->GetName() + std::to_string(dupes));
+		models.insert(std::make_pair(model->GetName(), model));
+	}
 }
 
 void Scene::AddLight()

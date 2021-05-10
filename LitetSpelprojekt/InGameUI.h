@@ -19,6 +19,7 @@ private:
 	
 	Image* crossCursor;
 	Image* clueCursor;
+	Image* chatCursor;
 	Image cursor;
 	CursorType currentCursorType;
 
@@ -84,6 +85,33 @@ private:
 		brushOpacity = 0.0f;
 		drawOverlay = false;
 	}
+
+	void DrawOverlay(float dt)
+	{
+		if (drawOverlay)
+		{
+			if (brushOpacity < 0.7f)
+				brushOpacity += 3.0f * dt;
+		}
+
+		else
+		{
+			if (brushOpacity > 0.0f)
+				brushOpacity -= 2.0f * dt;
+		}
+
+		opacityBrush->SetOpacity(brushOpacity);
+		Graphics::Get2DRenderTarget().FillRectangle(pauseOverlay, opacityBrush.Get());
+	}
+
+	void DrawNotification(float dt)
+	{
+		if (newInformationNotation->GetOpacity() <= 0)
+			newInformationNotation->SetVisibility(false);
+
+		else
+			newInformationNotation->ReduceOpacity(0.5f * dt);
+	}
 public:
 	Journal journal;
 public:
@@ -95,6 +123,7 @@ public:
 
 		delete crossCursor;
 		delete clueCursor;
+		delete chatCursor;
 	}
 
 	InGameUI()
@@ -120,10 +149,12 @@ public:
 
 		crossCursor = new Image(L"UI/CrossCursor.png", 1.0f, true, { winSize.width / 2, winSize.height / 2 });
 		clueCursor = new Image(L"UI/ClueCursor.png", 1.0f, false, { winSize.width / 2, winSize.height / 2 });
+		chatCursor = new Image(L"UI/ChatCursor.png", 1.0f, false, { winSize.width / 2, winSize.height / 2 });
 		cursor = Image(L"UI/RegularCursor.png", 1.0f, false, { winSize.width / 2, winSize.height / 2 });
 
 		images.push_back(crossCursor);
 		images.push_back(clueCursor);
+		images.push_back(chatCursor);
 
 		Reset();
 
@@ -165,26 +196,6 @@ public:
 		if (pauseMenu.Resume())
 			SwitchPauseState();
 
-		if (newInformationNotation->GetOpacity() <= 0)
-			newInformationNotation->SetVisibility(false);
-
-		else
-			newInformationNotation->ReduceOpacity(0.5f * dt);
-		
-		if (drawOverlay)
-		{
-			if (brushOpacity < 0.7f)
-			brushOpacity += 3.0f * dt;
-		}
-
-		else
-		{
-			if (brushOpacity > 0.0f)
-				brushOpacity -= 2.0f * dt;
-		}
-
-		opacityBrush->SetOpacity(brushOpacity);
-
 		//DRAWING
 		for (auto& image : images)
 		{
@@ -192,7 +203,8 @@ public:
 				image->Draw();
 		}
 
-		Graphics::Get2DRenderTarget().FillRectangle(pauseOverlay, opacityBrush.Get());
+		DrawNotification(dt);
+		DrawOverlay(dt);
 
 		journal.Draw(*textFormat.Get(), *brush.Get(), dt);
 
@@ -250,6 +262,7 @@ public:
 				currentCursorType = CursorType::CROSS;
 				crossCursor->SetVisibility(true);
 				clueCursor->SetVisibility(false);
+				chatCursor->SetVisibility(false);
 				cursor.SetVisibility(false);
 				break;
 
@@ -257,6 +270,7 @@ public:
 				currentCursorType = CursorType::CLUE;
 				clueCursor->SetVisibility(true);
 				crossCursor->SetVisibility(false);
+				chatCursor->SetVisibility(false);
 				cursor.SetVisibility(false);
 				break;
 
@@ -265,8 +279,15 @@ public:
 				cursor.SetVisibility(true);
 				crossCursor->SetVisibility(false);
 				clueCursor->SetVisibility(false);
+				chatCursor->SetVisibility(false);
 				break;
 
+			case CursorType::CHAT:
+				currentCursorType = CursorType::CHAT;
+				chatCursor->SetVisibility(true);
+				crossCursor->SetVisibility(false);
+				clueCursor->SetVisibility(false);
+				cursor.SetVisibility(false);
 			};
 		}
 	}

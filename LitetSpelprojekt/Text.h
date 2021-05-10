@@ -27,8 +27,6 @@ public:
 		Graphics::Get2DRenderTarget().DrawTextW(string.c_str(), (UINT32)string.size(), &format, bounds, &brush);
 	}
 
-	size_t GetSize() const
-	{
-		return string.size();
-	}
+	size_t GetSize() const			{ return string.size(); }
+	std::wstring GetText() const	{ return string; }
 };

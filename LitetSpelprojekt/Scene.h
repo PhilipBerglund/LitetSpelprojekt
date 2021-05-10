@@ -33,7 +33,7 @@ private:
 	RegularShader regularShader;
 
 	//void AddParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size);
-	void AddGSParticleSystem(UINT maxParticles, float velocity);
+	void AddGSParticleSystem(UINT maxParticles, float minVelocity, float maxVelocity);
 	void AddModel(std::shared_ptr<Model> model);
 	void AddLight();
 public:

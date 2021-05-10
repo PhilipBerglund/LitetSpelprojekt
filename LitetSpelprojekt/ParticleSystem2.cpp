@@ -14,14 +14,26 @@
 //	this->velocity = 0;
 //}
 
-ParticleSystem2::ParticleSystem2(UINT maxParticles, float velocity)
+ParticleSystem2::ParticleSystem2(UINT maxParticles, float minVelocity, float maxVelocity)
 {
-	this->velocity = velocity;
+	this->velocity = Random::Real(minVelocity, maxVelocity);
 	this->maxParticles = maxParticles;
 	particles = new Particle[maxParticles];
 	if (!particles)
 	{
 		return;
+	}
+
+	for (int i = 0; i < maxParticles; i++)
+	{
+		//Random position between -1 and 1
+		const float x = Random::Real(-100.0f, 100.0f);
+		const float z = Random::Real(-100.0f, 100.0f);
+		//Put particle above ground
+		const float y = Random::Real(0.0f, 150.0f);
+
+		particles[i].position = XMFLOAT4(x, y, z, 1);
+		particles[i].size = XMFLOAT2(2.0f, 2.0f);
 	}
 
 	D3D11_BUFFER_DESC vBDesc = {};
@@ -43,6 +55,8 @@ ParticleSystem2::ParticleSystem2(UINT maxParticles, float velocity)
 		Print("FAILED TO CREATE BUFFER");
 		return;
 	}
+
+	UpdateBuffer(particles);
 }
 
 ParticleSystem2::~ParticleSystem2()
@@ -70,37 +84,64 @@ void ParticleSystem2::Reset()
 	this->age = 0.0f;
 }
 
-void ParticleSystem2::Update(float dt, float gameTime)
+void ParticleSystem2::Update(float dt)
 {
-
-}
-
-bool ParticleSystem2::Draw()
-{
-	Particle* particle;
-	particles = new Particle[maxParticles];
-
 	for (int i = 0; i < maxParticles; i++)
 	{
-		//Random position between -1 and 1
-		const float x = Random::Real(-1.0f, 1.0f);
-		const float z = Random::Real(-1.0f, 1.0f);
-		//Put particle above ground somehow??
-		const float y = 1;/*(0.3f * (0.1f * z * sinf(0.1f * x) + 0.1f * x * cosf(0.1f * z))) + 5;*/
-
-		particles[i].position = XMFLOAT4(x, y, z, 1);
-		particles[i].size = XMFLOAT2(100.0f, 100.0f);
+		particles[i].position.y -= dt * velocity;
+		if (particles[i].position.y <= 0)
+		{
+			particles[i].position.y = 200;
+		}
 	}
+	UpdateBuffer(particles);
+	
+}
+
+bool ParticleSystem2::UpdateBuffer(Particle* particles)
+{
+	Particle* particle;
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource = {};
 	if (FAILED(Graphics::GetDeviceContext().Map(GSParticleVB.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
 	{
+		Error("FAILED TO UPDATE PARTICLE BUFFER");
 		return false;
 	}
 		
 	particle = (Particle*)mappedResource.pData;
 	memcpy(particle, (void*)particles, (sizeof(Particle) * maxParticles));
 	Graphics::GetDeviceContext().Unmap(GSParticleVB.Get(), 0);
+	
+	return true;
+}
+
+bool ParticleSystem2::Draw()
+{
+	//Particle* particle;
+	//particles = new Particle[maxParticles];
+
+	//for (int i = 0; i < maxParticles; i++)
+	//{
+	//	//Random position between -1 and 1
+	//	const float x = Random::Real(-100.0f, 100.0f);
+	//	const float z = Random::Real(-10.0f, 10.0f);
+	//	//Put particle above ground somehow??
+	//	const float y = 20;/*(0.3f * (0.1f * z * sinf(0.1f * x) + 0.1f * x * cosf(0.1f * z))) + 5;*/
+
+	//	particles[i].position = XMFLOAT4(x, y, z, 1);
+	//	particles[i].size = XMFLOAT2(2.0f, 2.0f);
+	//}
+
+	//D3D11_MAPPED_SUBRESOURCE mappedResource = {};
+	//if (FAILED(Graphics::GetDeviceContext().Map(GSParticleVB.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
+	//{
+	//	return false;
+	//}
+		
+	//particle = (Particle*)mappedResource.pData;
+	//memcpy(particle, (void*)particles, (sizeof(Particle) * maxParticles));
+	//Graphics::GetDeviceContext().Unmap(GSParticleVB.Get(), 0);
 
 	return true;
 }

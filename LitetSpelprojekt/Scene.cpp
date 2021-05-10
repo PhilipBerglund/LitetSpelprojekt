@@ -17,7 +17,7 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	}
 
 	//AddParticleSystem({ 50,50,50 }, { 60, 50,80 }, 50, 1, 100, 200, 0.2f);
-	AddGSParticleSystem(200, 10);
+	AddGSParticleSystem(50, 80, 100);
 	AddLight();
 
 	//scenario = Scenario(*this);
@@ -29,10 +29,13 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 //	particleSystems.push_back(particleSystem);
 //}
 
-void Scene::AddGSParticleSystem(UINT maxParticles, float velocity)
+void Scene::AddGSParticleSystem(UINT maxParticles, float minVelocity, float maxVelocity)
 {
-	auto particleSystem2 = std::make_shared<ParticleSystem2>(maxParticles, velocity);
+	auto particleSystem2 = std::make_shared<ParticleSystem2>(maxParticles, minVelocity, maxVelocity);
 	particleSystems2.push_back(particleSystem2);
+
+	//for (auto& particleSystem2 : particleSystems2)
+	//	particleSystem2->Draw();
 }
 
 void Scene::AddModel(std::shared_ptr<Model> model)
@@ -77,7 +80,7 @@ void Scene::Update(InGameUI& ui, float dt)
 		particleSystem->Update(dt, camera.GetPosition());*/
 
 	for (auto& particleSystem2 : particleSystems2)
-		particleSystem2->Draw();
+		particleSystem2->Update(dt);
 
 	scenario.Update(*this, ui, camera);
 	camera.Update(dt);
@@ -88,5 +91,5 @@ void Scene::Render()
 {
 	//particleShader.Render(shaderData, *this);
 	GSParticleShader.Render(shaderData, *this);
-	regularShader.Render(shaderData, *this);
+	//regularShader.Render(shaderData, *this);
 }

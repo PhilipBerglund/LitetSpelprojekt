@@ -17,6 +17,7 @@ struct PS_INPUT
 
 float4 main(PS_INPUT input) : SV_TARGET
 {
+    return float4(146.0f / 255.0f, 186.0f / 255.0f, 210.0f / 255.0f, 1.0f);
     input.normal = normalize(input.normal);
     
     float3 toEye = eyePos - input.position;
@@ -38,7 +39,7 @@ float4 main(PS_INPUT input) : SV_TARGET
     textureColor = particleTexture.Sample(wrapSampler, 1.0f);
     
     //Clip for transparency
-    clip(textureColor.a - 0.05f);
+    //clip(textureColor.a - 0.05f);
     
     //Combine to get final color
     float4 litColor = textureColor; /* * (ambient + diffuse) + specular*/

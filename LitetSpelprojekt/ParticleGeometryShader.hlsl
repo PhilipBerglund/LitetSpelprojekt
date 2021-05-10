@@ -43,7 +43,7 @@ void ParticleGeometryShader(point GS_INPUT input[1], uint primID : SV_PrimitiveI
     float3 look = eyePos - input[0].position.xyz;
     look.y = 0.0f;
     look = normalize(look);
-    float3 right = cross(up, look);
+    float3 right = cross(up, look) * -1;
     
     //Variables to use for corners
     float halfWidth = 0.5f * input[0].size.x;
@@ -51,10 +51,10 @@ void ParticleGeometryShader(point GS_INPUT input[1], uint primID : SV_PrimitiveI
     
     //Corners of quad
     float4 v[4];
-    v[0] = float4(input[0].position.xyz + halfWidth * right - halfHeight * up, 1.0f);
-    v[1] = float4(input[0].position.xyz + halfWidth * right + halfHeight * up, 1.0f);
-    v[2] = float4(input[0].position.xyz - halfWidth * right - halfHeight * up, 1.0f);
-    v[3] = float4(input[0].position.xyz - halfWidth * right + halfHeight * up, 1.0f);
+    v[0] = float4(input[0].position.xyz - halfWidth * right * 0.25 + halfHeight * up, 1.0f);
+    v[1] = float4(input[0].position.xyz + halfWidth * right * 0.25 + halfHeight * up, 1.0f);
+    v[2] = float4(input[0].position.xyz - halfWidth * right * 1/3 - halfHeight * up, 1.0f);
+    v[3] = float4(input[0].position.xyz + halfWidth * right * 1/3 - halfHeight * up, 1.0f);
     
     //Transform to world space and output as triangle strip
     GS_OUTPUT gout;

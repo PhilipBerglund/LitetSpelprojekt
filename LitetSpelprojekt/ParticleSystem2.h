@@ -33,7 +33,7 @@ private:
 	XMFLOAT3 emitDir;
 public:
 	ParticleSystem2() = default;
-	ParticleSystem2(UINT maxParticles, float velocity);
+	ParticleSystem2(UINT maxParticles, float minVelocity, float maxVelocity);
 	~ParticleSystem2();
 
 	float GetAge()const { return age; };
@@ -41,6 +41,7 @@ public:
 	void SetEmitPos(const XMFLOAT3& emitPos);
 	void SetEmitDir(const XMFLOAT3& emitDir);
 	void Reset();
-	void Update(float dt, float gameTime);
+	void Update(float dt);
+	bool UpdateBuffer(Particle* particle);
 	bool Draw();
 };

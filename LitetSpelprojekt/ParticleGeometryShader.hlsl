@@ -35,7 +35,7 @@ struct GS_OUTPUT
 };
 
 [maxvertexcount(4)]
-void ParticleGeometryShader(point GS_INPUT input[1], uint primID : SV_PrimitiveID,
+void main(point GS_INPUT input[1], uint primID : SV_PrimitiveID,
                 inout TriangleStream<GS_OUTPUT> outputStream)
 {
     //Local coordinates

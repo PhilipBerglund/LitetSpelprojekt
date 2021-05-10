@@ -3,8 +3,17 @@
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.001f, 40.0f, { 0, 20, 0 })
 {
-	Importer::LoadScene("Models/Dumpster.mff");
+	//Importer::LoadScene("Models/Dumpster.mff");
 	//Importer::LoadScene("Models/Office.mff");
+	Importer::LoadScene("Models/Bar.mff");
+	Importer::LoadScene("Models/Hotel.mff");
+	Importer::LoadScene("Models/Restaurant.mff");
+	Importer::LoadScene("Models/Park.mff");
+	Importer::LoadScene("Models/OutsideObjects.mff");
+	Importer::LoadScene("Models/Library.mff");
+	Importer::LoadScene("Models/StockHouses.mff");
+	Importer::LoadScene("Models/Streets.mff");
+
 	Importer::Initialize(Graphics::GetDevice());
 
 	for (int i = 0; i < Importer::Data::scenes.size(); ++i)
@@ -91,5 +100,5 @@ void Scene::Render()
 {
 	//particleShader.Render(shaderData, *this);
 	GSParticleShader.Render(shaderData, *this);
-	//regularShader.Render(shaderData, *this);
+	regularShader.Render(shaderData, *this);
 }

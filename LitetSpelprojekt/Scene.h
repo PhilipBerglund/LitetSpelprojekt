@@ -28,6 +28,7 @@ private:
 	//SHADERS
 	ShaderData shaderData;
 	ParticleShader GSRainShader;
+	ParticleShader GSSmokeShader;
 	RegularShader regularShader;
 
 	//void AddParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size);
@@ -45,5 +46,6 @@ public:
 	const std::vector<std::shared_ptr<Light>>& GetLights() const					{ return this->lights; }
 	const std::map<std::string, std::shared_ptr<Model>>& GetModels() const			{ return this->models; }
 	const std::vector<std::shared_ptr<RainSystem>>& GetRainSystem() const			{ return this->rainSystem; }
+	const std::vector<std::shared_ptr<SmokeSystem>>& GetSmokeSystem() const			{ return this->smokeSystem; }
 	const Camera& GetCamera() const													{ return this->camera; }
 };

@@ -96,6 +96,8 @@ void Scene::Update(InGameUI& ui, float dt)
 
 	for (auto& particleSystem : rainSystem)
 		particleSystem->Update(dt);
+	for (auto& particleSystem : smokeSystem)
+		particleSystem->Update(dt);
 
 	scenario.Update(*this, ui, camera);
 	camera.Update(dt);
@@ -104,6 +106,7 @@ void Scene::Update(InGameUI& ui, float dt)
 
 void Scene::Render()
 {
-	GSRainShader.Render(shaderData, *this);
+	GSRainShader.RenderRain(shaderData, *this);
+	GSSmokeShader.RenderSmoke(shaderData, *this);
 	regularShader.Render(shaderData, *this);
 }

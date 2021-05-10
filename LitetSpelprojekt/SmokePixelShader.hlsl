@@ -1,5 +1,5 @@
-Texture2D particleTexture : register(t0);
-SamplerState wrapSampler : register(s0);
+Texture2D particleTexture : register(t1);
+SamplerState wrapSampler : register(s2);
 
 cbuffer eyePos : register(b0)
 {
@@ -17,7 +17,7 @@ struct PS_INPUT
 
 float4 main(PS_INPUT input) : SV_TARGET
 {
-    return float4(146.0f / 255.0f, 186.0f / 255.0f, 210.0f / 255.0f, 1.0f);
+    return float4(1.0f,1.0f,1.0f,1.0f);
     input.normal = normalize(input.normal);
     
     float3 toEye = eyePos - input.position;

@@ -92,5 +92,18 @@ void SmokeSystem::Update(float dt)
 
 bool SmokeSystem::UpdateBuffer(Particle* particle)
 {
-	return false;
+	//Particle* particle;
+
+	D3D11_MAPPED_SUBRESOURCE mappedResource = {};
+	if (FAILED(Graphics::GetDeviceContext().Map(GSParticleVB.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
+	{
+		Error("FAILED TO UPDATE PARTICLE BUFFER");
+		return false;
+	}
+
+	particle = (Particle*)mappedResource.pData;
+	memcpy(particle, (void*)particles, (sizeof(Particle) * maxParticles));
+	Graphics::GetDeviceContext().Unmap(GSParticleVB.Get(), 0);
+
+	return true;
 }

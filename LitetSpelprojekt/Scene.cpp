@@ -26,7 +26,7 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	}
 
 	//AddParticleSystem({ 50,50,50 }, { 60, 50,80 }, 50, 1, 100, 200, 0.2f);
-	AddGSParticleSystem(50, 80, 100);
+	AddGSParticleSystem(3000, 150, 200);
 	AddLight();
 
 	//scenario = Scenario(*this);

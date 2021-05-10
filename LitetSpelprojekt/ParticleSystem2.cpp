@@ -27,13 +27,13 @@ ParticleSystem2::ParticleSystem2(UINT maxParticles, float minVelocity, float max
 	for (int i = 0; i < maxParticles; i++)
 	{
 		//Random position between -1 and 1
-		const float x = Random::Real(-100.0f, 100.0f);
-		const float z = Random::Real(-100.0f, 100.0f);
+		const float x = Random::Real(-500.0f, 500.0f);
+		const float z = Random::Real(-500.0f, 500.0f);
 		//Put particle above ground
-		const float y = Random::Real(0.0f, 150.0f);
+		const float y = Random::Real(0.0f, 200.0f);
 
 		particles[i].position = XMFLOAT4(x, y, z, 1);
-		particles[i].size = XMFLOAT2(2.0f, 2.0f);
+		particles[i].size = XMFLOAT2(1.0f, 1.0f);
 	}
 
 	D3D11_BUFFER_DESC vBDesc = {};

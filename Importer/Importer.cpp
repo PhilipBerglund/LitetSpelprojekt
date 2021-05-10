@@ -1,47 +1,7 @@
 #include "Importer.h"
 #include <iostream>
 #include <fstream>
-
-bool LoadTexture(Texture& texture, ID3D11Device& device)
-{
-	D3D11_TEXTURE2D_DESC textureDesc = {};
-	textureDesc.Width = texture.width;
-	textureDesc.Height = texture.height;
-	textureDesc.MipLevels = 1;
-	textureDesc.ArraySize = 1;
-	textureDesc.MiscFlags = 0;
-	textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	textureDesc.SampleDesc.Count = 1;
-	textureDesc.SampleDesc.Quality = 0;
-	textureDesc.Usage = D3D11_USAGE_IMMUTABLE;
-	textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-	textureDesc.CPUAccessFlags = 0;
-
-	D3D11_SUBRESOURCE_DATA data = {};
-	data.pSysMem = texture.data;
-	data.SysMemPitch = texture.width * 4;
-
-	if (texture.data)
-	{
-		ID3D11Texture2D* img;
-		if FAILED(device.CreateTexture2D(&textureDesc, &data, &img))
-		{
-			std::cout << "FAILED TO CREATE TEXTURE 2D" << std::endl;
-			return false;
-		}
-
-		if FAILED(device.CreateShaderResourceView(img, nullptr, texture.Get()))
-		{
-			std::cout << "FAILED TO CREATE SHADER RESOURCE VIEW" << std::endl;
-			return false;
-		}
-
-		img->Release();
-		img = nullptr;
-	}
-
-	return true;
-}
+#include "TempTimer.h"
 
 namespace Importer
 {
@@ -85,15 +45,30 @@ namespace Importer
 	public:
 		void ReadScene(std::string path)
 		{
+			TempTimer tempTimer;
+
 			file.open(path, std::ios::in | std::ios::binary);
 
 			if (!file.is_open())
 				std::cerr << "COULD NOT OPEN FILE" << std::endl;
 
+			tempTimer.Start();
+
+		/*	file.seekg(0, std::ios::end);
+			auto fileSize = file.tellg();
+			std::vector<char> buffer;
+			buffer.resize(fileSize);
+
+			file.seekg(0, std::ios::beg);
+			file.read(&buffer[0], fileSize);*/
+
 			buffer = std::vector<unsigned char>(std::istreambuf_iterator<char>(file), {});
+			std::cout << "LOAD FILE DATA: " << tempTimer.DeltaTime() << std::endl;
+
 			SceneData scene;
 
 			int header;
+			tempTimer.Start();
 			while (currentPosition < buffer.size())
 			{
 				std::memcpy(&header, buffer.data() + currentPosition, sizeof(int));
@@ -114,8 +89,9 @@ namespace Importer
 					break;
 				}
 			}
+			std::cout << "ACTUALLY READ DATA: " << tempTimer.DeltaTime() << std::endl;
 
-			Data::scenes.push_back(scene);
+			Data::scenes.emplace_back(scene);
 			file.close();
 		}
 
@@ -142,11 +118,11 @@ namespace Importer
 			{
 				int ID;
 				Read(ID);
-				mesh.materialIDs.push_back(ID);
+				mesh.materialIDs.emplace_back(ID);
 			}
 
 			mesh.sceneID = Data::scenes.size();
-			scene.meshes.push_back(mesh);
+			scene.meshes.emplace_back(mesh);
 		}
 
 		void ReadVertexBuffer(SceneData& scene)
@@ -168,11 +144,11 @@ namespace Importer
 				ReadVector(vertex.weights, 3);
 				ReadVector(vertex.boneIDs, 4);
 
-				vertexBuffer.vertices.push_back(vertex);
+				vertexBuffer.vertices.emplace_back(vertex);
 			}
 
 			vertexBuffer.sceneID = Data::scenes.size();
-			scene.vertexBuffers.push_back(vertexBuffer);
+			scene.vertexBuffers.emplace_back(vertexBuffer);
 		}
 
 		void ReadMaterial(SceneData& scene)
@@ -203,11 +179,11 @@ namespace Importer
 				texture.data = (char*)malloc(texture.fileSize);
 				ReadTextureFile(texture.data, texture.fileSize);
 
-				material.textures.push_back(texture);
+				material.textures.emplace_back(texture);
 			}
 
 			material.sceneID = Data::scenes.size();
-			scene.materials.push_back(material);
+			scene.materials.emplace_back(material);
 		}
 	};
 
@@ -219,6 +195,9 @@ namespace Importer
 
 	bool Initialize(ID3D11Device& device)
 	{
+		TempTimer temp;
+		temp.Start();
+
 		for (auto& scene : Data::scenes)
 		{
 			if (!scene.isInitialized)
@@ -227,7 +206,7 @@ namespace Importer
 				{
 					for (auto& texture : material.textures)
 					{
-						if (!LoadTexture(texture, device))
+						if (!texture.Load(device))
 							return false;
 					}
 				}
@@ -241,6 +220,8 @@ namespace Importer
 				scene.isInitialized = true;
 			}
 		}
+
+		std::cout << "INIT TIME: " << temp.DeltaTime() << std::endl;
 		
 		return true;
 	}

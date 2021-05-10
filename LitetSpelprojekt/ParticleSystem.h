@@ -36,9 +36,6 @@ private:
 
     float timeSinceLastSpawn;
 
-    ID3D11Texture1D* randomTex;
-    ID3D11ShaderResourceView* randomTexSRV;
-
     int vertexCount;
 
     ParticleVertex* vertices;

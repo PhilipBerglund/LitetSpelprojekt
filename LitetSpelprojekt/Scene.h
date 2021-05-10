@@ -29,9 +29,11 @@ private:
 	//SHADERS
 	ShaderData shaderData;
 	ParticleShader particleShader;
+	ParticleShader2 GSParticleShader;
 	RegularShader regularShader;
 
 	//void AddParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size);
+	void AddGSParticleSystem(UINT maxParticles, float velocity);
 	void AddModel(std::shared_ptr<Model> model);
 	void AddLight();
 public:
@@ -44,5 +46,6 @@ public:
 	const std::vector<std::shared_ptr<Light>>& GetLights() const					{ return this->lights; }
 	const std::map<std::string, std::shared_ptr<Model>>& GetModels() const			{ return this->models; }
 	const std::vector<std::shared_ptr<ParticleSystem>>& GetParticleSystems() const	{ return this->particleSystems; }
+	const std::vector<std::shared_ptr<ParticleSystem2>>& GetParticleSystems2() const	{ return this->particleSystems2; }
 	const Camera& GetCamera() const													{ return this->camera; }
 };

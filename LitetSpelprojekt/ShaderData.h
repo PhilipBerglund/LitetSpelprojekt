@@ -11,7 +11,6 @@ class ShaderData
 {
 	friend class ParticleShader;
 	friend class ParticleShader2;
-	friend class ParticleSystem2; //Går troligtvis att ta bort, createRandomTexture flyttad hit
 	friend class RegularShader;
 private:
 	//-----GENERAL-----
@@ -33,17 +32,6 @@ private:
 
 	//-----SECOND PARTICLE SYSTEM-----
 	//BUFFERS
-	ComPtr<ID3D11Buffer> streamOutVB;
-	ComPtr<ID3D11Buffer> initVB;
-	ComPtr<ID3D11Buffer> drawVB;
-	struct Particle2Vertex
-	{
-		XMFLOAT3 initPos;
-		XMFLOAT3 initVel;
-		XMFLOAT2 size;
-		float particleAge;
-		unsigned int type;
-	};
 
 	//SHADERS
 	ComPtr<ID3D11VertexShader> particle2VS;
@@ -52,11 +40,8 @@ private:
 
 	//MISC
 	ComPtr<ID3D11InputLayout> particle2Layout;
-	//For ability to randomize in shader
-	ComPtr<ID3D11ShaderResourceView> particle2RandomTexSRV;
-	ComPtr<ID3D11Texture1D> particle2RandomTexture;
 	//If textures wanted on particle
-	ComPtr<ID3D11ShaderResourceView> particle2TexArrSRV;
+	ComPtr<ID3D11ShaderResourceView> particle2TexSRV;
 
 	//-----REGULAR-----
 	//BUFFERS
@@ -98,8 +83,9 @@ private:
 
 	//MISC
 	ComPtr<ID3D11InputLayout> regularLayout;
+
+	bool LoadTexture(std::string fileName);
 public:
 	ShaderData();
 	void Update(const Camera& camera);
-	bool CreateRandomTexture();
 };

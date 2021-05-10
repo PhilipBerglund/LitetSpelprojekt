@@ -1,13 +1,13 @@
 struct VS_INPUT
 {
-    float3 position : POSITION;
-    float4 color : COLOR;
+    float4 position : POSITION;
+    float2 size : SIZE;
 };
 
 struct VS_OUTPUT
 {
     float4 position : SV_POSITION;
-    float4 color : COLOR;
+    float2 size : SIZE;
 };
 
 cbuffer MATRIXBUFFER : register(b2)
@@ -19,8 +19,8 @@ VS_OUTPUT main( VS_INPUT input)
 {
     VS_OUTPUT output;
     
-    output.position = mul(float4(input.position, 1.0f), viewProj);
-    output.color = input.color;
+    output.position = input.position;
+    output.size = input.size;
     
 	return output;
 }

@@ -5,6 +5,7 @@ void RegularShader::SetShader(ShaderData& data)
 {
 	Graphics::GetDeviceContext().IASetInputLayout(data.regularLayout.Get());
 	Graphics::GetDeviceContext().VSSetShader(data.regularVertexShader.Get(), nullptr, 0);
+	Graphics::GetDeviceContext().IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
 void RegularShader::UpdatePerMesh(ShaderData& data, Model& model)

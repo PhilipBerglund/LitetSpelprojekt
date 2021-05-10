@@ -4,7 +4,7 @@
 #include <DirectXCollision.h>
 #include "Graphics.h"
 
-enum class ColliderType {BOX, SPHERE};
+enum class ColliderType { BOX, SPHERE };
 
 class Model :public GameObject
 {
@@ -23,13 +23,13 @@ public:
 
 	Type type() const override { return Type::MODEL; };
 
-	ID3D11Buffer** GetVertexBuffer() const	{ return Importer::Data::GetVertexBufferAt(mesh.sceneID, mesh.vertexBufferID); };
-	std::string GetName() const				{ return this->name; };
-	XMMATRIX GetMatrix() const				{ return this->worldMatrix; };
-	int GetVertexCount() const				{ return Importer::Data::GetVertexCountAt(mesh.sceneID, mesh.vertexBufferID); };
-	
-	ID3D11ShaderResourceView** GetDiffuseTexture() 
-	{  
+	ID3D11Buffer** GetVertexBuffer() const { return Importer::Data::GetVertexBufferAt(mesh.sceneID, mesh.vertexBufferID); };
+	std::string GetName() const { return this->name; };
+	XMMATRIX GetMatrix() const { return this->worldMatrix; };
+	int GetVertexCount() const { return Importer::Data::GetVertexCountAt(mesh.sceneID, mesh.vertexBufferID); };
+
+	ID3D11ShaderResourceView** GetDiffuseTexture()
+	{
 		for (auto& ID : mesh.materialIDs)
 		{
 			for (auto& texture : Importer::Data::GetMaterialAt(mesh.sceneID, ID).textures)
@@ -38,10 +38,10 @@ public:
 					return texture.Get();
 			}
 		}
-		
+
 		Texture nulltexture;
 		return nulltexture.Get();
 	}
 
-	Material GetMaterial() const				{ return Importer::Data::GetMaterialAt(mesh.sceneID, mesh.materialIDs[0]); };
+	Material GetMaterial() const { return Importer::Data::GetMaterialAt(mesh.sceneID, mesh.materialIDs[0]); };
 };

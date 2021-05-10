@@ -20,7 +20,7 @@ Suspect::Suspect(std::string path, XMFLOAT3 position)
 	Importer::LoadScene(path);
 	Mesh mesh = Importer::Data::GetMeshAt(Importer::Data::scenes.size() - 1, 0);
 	model = std::make_shared<Model>(mesh);
-	model->SetScale({2,2,2});
+	model->SetScale({2.5f,2.5f,2.5f});
 	model->SetPosition(position);
 	model->Update(Graphics::GetDeviceContext());
 	model->boundingbox.Center.y += 10;
@@ -28,7 +28,7 @@ Suspect::Suspect(std::string path, XMFLOAT3 position)
 
 Scenario::Scenario(Scene& scene)
 {
-	Suspect testSuspect("Models/TestSuspect.mff", {50, 10, -30});
+	Suspect testSuspect("Models/TestSuspect.mff", {50, 0, -30});
 	testSuspect.name = "A";
 	testSuspect.age = 55;
 	testSuspect.height = 180;
@@ -45,7 +45,7 @@ Scenario::Scenario(Scene& scene)
 	scene.AddModel(testSuspect.model);
 	suspects.push_back(testSuspect);
 
-	Suspect testSuspect2("Models/TestSuspect.mff", { 50, 10, -20 });
+	Suspect testSuspect2("Models/TestSuspect.mff", { 50, 0, -20 });
 	testSuspect2.name = "B";
 	testSuspect2.age = 28;
 	testSuspect2.height = 167;

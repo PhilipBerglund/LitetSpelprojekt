@@ -356,8 +356,6 @@ public:
 		std::wstring char3(characteristics3.begin(), characteristics3.end());
 		if (characteristics3 != "")
 			pages[ID].characteristics[2] = Text(char3, true, pages[ID].characteristics[2].position, 500);
-
-		//RUMOURS
 	}
 
 	void AddRumour(std::string name, std::string rumour)

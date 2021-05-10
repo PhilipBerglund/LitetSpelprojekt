@@ -28,7 +28,7 @@ Suspect::Suspect(std::string path, XMFLOAT3 position)
 
 Scenario::Scenario(Scene& scene)
 {
-	Suspect testSuspect("Models/TestSuspect.mff", {50, 10, 50});
+	Suspect testSuspect("Models/TestSuspect.mff", {50, 10, -30});
 	testSuspect.name = "A";
 	testSuspect.age = 55;
 	testSuspect.height = 180;
@@ -45,7 +45,7 @@ Scenario::Scenario(Scene& scene)
 	scene.AddModel(testSuspect.model);
 	suspects.push_back(testSuspect);
 
-	Suspect testSuspect2("Models/TestSuspect.mff", { 50, 10, 40 });
+	Suspect testSuspect2("Models/TestSuspect.mff", { 50, 10, -20 });
 	testSuspect2.name = "B";
 	testSuspect2.age = 28;
 	testSuspect2.height = 167;
@@ -58,11 +58,11 @@ Scenario::Scenario(Scene& scene)
 	scene.AddModel(testSuspect2.model);
 	suspects.push_back(testSuspect2);
 
-	Clue clue("Models/TestClue.mff", {20, 10, 40});
+	Clue clue("Models/TestClue.mff", {-20, 10, 40});
 	scene.AddModel(clue.model);
 	clues.push_back(clue);
 
-	Clue clue2("Models/TestClue.mff", { 50, 10, 40 });
+	Clue clue2("Models/TestClue.mff", { -50, 10, -40 });
 	scene.AddModel(clue2.model);
 	clues.push_back(clue2);
 

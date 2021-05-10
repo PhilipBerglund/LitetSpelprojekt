@@ -3,6 +3,8 @@
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.001f, 40.0f, { 0, 20, 0 })
 {
+	//Importer::LoadScene("Models/Dumpster.mff");
+	//Importer::LoadScene("Models/Office.mff");
 	Importer::LoadScene("Models/Bar.mff");
 	Importer::LoadScene("Models/Hotel.mff");
 	Importer::LoadScene("Models/Restaurant.mff");
@@ -26,38 +28,19 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	AddGSParticleSystem(3000, 150, 200);
 	AddLight();
 
-	scenario = Scenario(*this);
+	//scenario = Scenario(*this);
 }
+
 
 void Scene::AddGSParticleSystem(UINT maxParticles, float minVelocity, float maxVelocity)
 {
-	auto particleSystem2 = std::make_shared<ParticleSystem2>(maxParticles, minVelocity, maxVelocity);
-	particleSystems2.push_back(particleSystem2);
-
-	//for (auto& particleSystem2 : particleSystems2)
-	//	particleSystem2->Draw();
+	auto particleSystem = std::make_shared<RainSystem>(maxParticles, minVelocity, maxVelocity);
+	rainSystem.push_back(particleSystem);
 }
 
 void Scene::AddModel(std::shared_ptr<Model> model)
 {
-	int dupes = 0;
-
-	for (auto& mod : models)
-	{
-		if (mod.first == model->GetName())
-		{
-			dupes++;
-		}
-	}
-
-	if (dupes == 0)
-		models.insert(std::make_pair(model->GetName(), model));
-
-	else
-	{
-		model->SetName(model->GetName() + std::to_string(dupes));
-		models.insert(std::make_pair(model->GetName(), model));
-	}
+	models.insert(std::make_pair(model->GetName(), model));
 }
 
 void Scene::AddLight()
@@ -93,8 +76,11 @@ void Scene::Update(InGameUI& ui, float dt)
 	//	}
 	//}
 
-	for (auto& particleSystem2 : particleSystems2)
-		particleSystem2->Update(dt);
+	/*for (auto& particleSystem : particleSystems)
+		particleSystem->Update(dt, camera.GetPosition());*/
+
+	for (auto& particleSystem : rainSystem)
+		particleSystem->Update(dt);
 
 	scenario.Update(*this, ui, camera);
 	camera.Update(dt);
@@ -103,6 +89,6 @@ void Scene::Update(InGameUI& ui, float dt)
 
 void Scene::Render()
 {
-	GSParticleShader.Render(shaderData, *this);
+	GSRainShader.Render(shaderData, *this);
 	regularShader.Render(shaderData, *this);
 }

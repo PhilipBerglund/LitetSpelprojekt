@@ -18,30 +18,6 @@ ShaderData::ShaderData()
 	//SAMPLERS
 	Graphics::GetDeviceContext().PSSetSamplers(0, 1, Graphics::GetWrapSampler());
 
-	//-----PARTICLE SYSTEM-----
-	//SHADERS
-	std::string vs_path = "../x64/Debug/ParticleVS.cso";
-	if (!LoadVertexShader(particleVertexShader, vs_path, byteCode))
-		return;
-
-	std::string ps_path = "../x64/Debug/ParticlePS.cso";
-	if (!LoadPixelShader(particlePixelShader, ps_path))
-		return;
-
-	//INPUT LAYOUT
-	const unsigned int particleNumElements = 2;
-	D3D11_INPUT_ELEMENT_DESC particleInputDesc[particleNumElements] =
-	{
-		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
-	};
-	
-	hr = Graphics::GetDevice().CreateInputLayout(particleInputDesc, particleNumElements, byteCode.c_str(), byteCode.length(), &particleLayout);
-	if FAILED(hr)
-	{
-		Error("FAILED TO CREATE INPUT LAYOUT");
-		return;
-	}
 	//BUFFER
 	bufferDesc.ByteWidth = sizeof(XMFLOAT4X4);
 	hr = Graphics::GetDevice().CreateBuffer(&bufferDesc, nullptr, &viewProjBuffer);
@@ -51,30 +27,64 @@ ShaderData::ShaderData()
 		return;
 	}
 
-	//-----SECOND PARTICLE SYSTEM-----
+	//-----RAIN PARTICLE SYSTEM-----
 	//SHADERS
-	vs_path = "../x64/Debug/Particle2VertexShader.cso";
-	if (!LoadVertexShader(particle2VS, vs_path, byteCode))
+	std::string vs_path = "../x64/Debug/RainVertexShader.cso";
+	if (!LoadVertexShader(rainVS, vs_path, byteCode))
 		return;
 
-	ps_path = "../x64/Debug/Particle2PixelShader.cso";
-	if (!LoadPixelShader(particle2PS, ps_path))
+	std::string ps_path = "../x64/Debug/RainPixelShader.cso";
+	if (!LoadPixelShader(rainPS, ps_path))
 		return;
 
-	std::string gs_path = "../x64/Debug/ParticleGeometryShader.cso";
-	if (!LoadGeometryShader(particle2GS, gs_path))
+	std::string gs_path = "../x64/Debug/RainGeometryShader.cso";
+	if (!LoadGeometryShader(rainGS, gs_path))
 		return;
 
 	//INPUT LAYOUT
+	const unsigned int particleNumElements = 2;
 	D3D11_INPUT_ELEMENT_DESC particle2InputDesc[particleNumElements] =
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},  
 		{ "SIZE", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
-	hr = Graphics::GetDevice().CreateInputLayout(particle2InputDesc, particleNumElements, byteCode.c_str(), byteCode.length(), &particle2Layout);
+	hr = Graphics::GetDevice().CreateInputLayout(particle2InputDesc, particleNumElements, byteCode.c_str(), byteCode.length(), &rainLayout);
 
 	//LOAD TEXTURE
 	LoadTexture("RainParticle.png");
+	//---------------------------------------//
+
+	//-----SMOkKE PARTICLE SYSTEM-----
+	//SHADERS
+	//std::string vs_path = "../x64/Debug/Particle2VertexShader.cso";
+	//if (!LoadVertexShader(particle2VS, vs_path, byteCode))
+	//	return;
+
+	//std::string ps_path = "../x64/Debug/Particle2PixelShader.cso";
+	//if (!LoadPixelShader(particle2PS, ps_path))
+	//	return;
+
+	//std::string gs_path = "../x64/Debug/ParticleGeometryShader.cso";
+	//if (!LoadGeometryShader(particle2GS, gs_path))
+	//	return;
+
+	////INPUT LAYOUT
+	//const unsigned int particleNumElements = 2;
+	//D3D11_INPUT_ELEMENT_DESC particle2InputDesc[particleNumElements] =
+	//{
+	//	{"POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+	//	{ "SIZE", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+	//};
+	//hr = Graphics::GetDevice().CreateInputLayout(particle2InputDesc, particleNumElements, byteCode.c_str(), byteCode.length(), &particle2Layout);
+
+	////LOAD TEXTURE
+	//LoadTexture("RainParticle.png");
+	//// -------------------------------- //
+
+
+
+
+
 
 	//-----REGULAR-----
 	//SHADERS
@@ -177,7 +187,7 @@ void ShaderData::Update(const Camera& camera)
 	//-----SECOND_PARTICLE_SYSTEM-----
 	Graphics::GetDeviceContext().GSSetConstantBuffers(0, 1, viewProjBuffer.GetAddressOf());
 	Graphics::GetDeviceContext().GSSetConstantBuffers(1, 1, regularCameraBuffer.GetAddressOf());
-	Graphics::GetDeviceContext().PSSetShaderResources(0, 1, particle2TexSRV.GetAddressOf());
+	Graphics::GetDeviceContext().PSSetShaderResources(0, 1, rainTexSRV.GetAddressOf());
 
 	//-----REGULAR-----
 	//CAMERA BUFFER
@@ -249,7 +259,7 @@ bool ShaderData::LoadTexture(std::string fileName)
 		return false;
 	}
 
-	hr = Graphics::GetDevice().CreateShaderResourceView(texture, nullptr, particle2TexSRV.GetAddressOf());
+	hr = Graphics::GetDevice().CreateShaderResourceView(texture, nullptr, rainTexSRV.GetAddressOf());
 	if (FAILED (hr))
 	{
 		Error("FAILED TO CREATE TEXTURE SRV!!!!wtf :O");

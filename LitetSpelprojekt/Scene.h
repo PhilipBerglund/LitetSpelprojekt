@@ -5,10 +5,8 @@
 #include "Model.h"
 #include "Light.h"
 #include "Scenario.h"
-#include "ParticleSystem.h"
+#include "rainSystem.h"
 #include "ParticleShader.h"
-#include "ParticleSystem2.h"
-#include "ParticleShader2.h"
 #include "RegularShader.h"
 
 class Scene
@@ -23,13 +21,11 @@ private:
 	std::vector<std::shared_ptr<Light>> lights;
 	//std::vector<std::shared_ptr<Model>> models;
 	std::vector<std::shared_ptr<GameObject>> gameObjects;
-	std::vector<std::shared_ptr<ParticleSystem>> particleSystems;
-	std::vector<std::shared_ptr<ParticleSystem2>> particleSystems2;
+	std::vector<std::shared_ptr<RainSystem>> rainSystem;
 
 	//SHADERS
 	ShaderData shaderData;
-	ParticleShader particleShader;
-	ParticleShader2 GSParticleShader;
+	ParticleShader GSRainShader;
 	RegularShader regularShader;
 
 	//void AddParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size);
@@ -45,7 +41,6 @@ public:
 
 	const std::vector<std::shared_ptr<Light>>& GetLights() const					{ return this->lights; }
 	const std::map<std::string, std::shared_ptr<Model>>& GetModels() const			{ return this->models; }
-	const std::vector<std::shared_ptr<ParticleSystem>>& GetParticleSystems() const	{ return this->particleSystems; }
-	const std::vector<std::shared_ptr<ParticleSystem2>>& GetParticleSystems2() const	{ return this->particleSystems2; }
+	const std::vector<std::shared_ptr<RainSystem>>& GetRainSystem() const			{ return this->rainSystem; }
 	const Camera& GetCamera() const													{ return this->camera; }
 };

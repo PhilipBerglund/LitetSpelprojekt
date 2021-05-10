@@ -8,9 +8,9 @@
 
 using namespace DirectX;
 
-class ParticleSystem2
+class RainSystem
 {
-	friend class ParticleShader2;
+	friend class ParticleShader;
 private:
 	struct Particle
 	{
@@ -32,9 +32,9 @@ private:
 	XMFLOAT3 emitPos;
 	XMFLOAT3 emitDir;
 public:
-	ParticleSystem2() = default;
-	ParticleSystem2(UINT maxParticles, float minVelocity, float maxVelocity);
-	~ParticleSystem2();
+	RainSystem() = default;
+	RainSystem(UINT maxParticles, float minVelocity, float maxVelocity);
+	~RainSystem();
 
 	float GetAge()const { return age; };
 	void SetEyePos(const XMFLOAT3& eyePos);
@@ -43,5 +43,4 @@ public:
 	void Reset();
 	void Update(float dt);
 	bool UpdateBuffer(Particle* particle);
-	bool Draw();
 };

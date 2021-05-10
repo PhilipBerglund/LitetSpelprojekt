@@ -10,7 +10,6 @@ using namespace DirectX;
 class ShaderData
 {
 	friend class ParticleShader;
-	friend class ParticleShader2;
 	friend class RegularShader;
 private:
 	//-----GENERAL-----
@@ -34,14 +33,14 @@ private:
 	//BUFFERS
 
 	//SHADERS
-	ComPtr<ID3D11VertexShader> particle2VS;
-	ComPtr<ID3D11GeometryShader> particle2GS;
-	ComPtr<ID3D11PixelShader> particle2PS;
+	ComPtr<ID3D11VertexShader> rainVS;
+	ComPtr<ID3D11GeometryShader> rainGS;
+	ComPtr<ID3D11PixelShader> rainPS;
 
 	//MISC
-	ComPtr<ID3D11InputLayout> particle2Layout;
+	ComPtr<ID3D11InputLayout> rainLayout;
 	//If textures wanted on particle
-	ComPtr<ID3D11ShaderResourceView> particle2TexSRV;
+	ComPtr<ID3D11ShaderResourceView> rainTexSRV;
 
 	//-----REGULAR-----
 	//BUFFERS

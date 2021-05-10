@@ -25,6 +25,7 @@ public:
 
 	ID3D11Buffer** GetVertexBuffer() const	{ return Importer::Data::GetVertexBufferAt(mesh.sceneID, mesh.vertexBufferID); };
 	std::string GetName() const				{ return this->name; };
+	void SetName(std::string name)			{ this->name = name; }
 	XMMATRIX GetMatrix() const				{ return this->worldMatrix; };
 	int GetVertexCount() const				{ return Importer::Data::GetVertexCountAt(mesh.sceneID, mesh.vertexBufferID); };
 	

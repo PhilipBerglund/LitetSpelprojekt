@@ -9,24 +9,33 @@ class Scene;
 
 struct Information
 {
-	bool valueable;
-	std::string connections[5];
-	std::string info;
+	bool valueable = false;
+	int numConnections = 0;
+	std::string connections[2] = { "" };
+	std::string rumours[3] = { "" };
+	std::string info = "";
 };
 
 struct Suspect
 {
 	std::shared_ptr<Model> model;
 
-	std::string name = "UNKNOWN";
-	int age;
+	std::string name = "";
+	int age = 0;
+	float height = 0;
+	float shoeSize = 0;
 	Information information;
+	std::string characteristics[3] = {""};
+
+	Suspect(std::string path, XMFLOAT3 position);
 };
 
 struct Victim
 {
-	std::string name = "UNKNOWN";
-	int age;
+	std::string name = "";
+	int age = 0;
+	float height = 0;
+	float shoeSize = 0;
 	Information information;
 };
 
@@ -34,9 +43,9 @@ struct Clue
 {
 	std::shared_ptr<Model> model;
 	std::string information;
-	bool found = false;
+	bool isFound = false;
 
-	Clue(std::string path);
+	Clue(std::string path, XMFLOAT3 position);
 };
 
 class Scenario

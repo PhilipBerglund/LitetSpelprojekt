@@ -1,7 +1,7 @@
 #include "Scene.h"
 
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
-	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.001f, 40.0f, { 0, 20, 0 })
+	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.001f, 50.0f, { 0, 15, 0 })
 {
 	//Importer::LoadScene("Models/Dumpster.mff");
 	//Importer::LoadScene("Models/Office.mff");
@@ -29,7 +29,7 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	AddSmokeParticleSystem(50, 10, 20);
 	AddLight();
 
-	//scenario = Scenario(*this);
+	scenario = Scenario(*this);
 }
 
 
@@ -47,6 +47,17 @@ void Scene::AddSmokeParticleSystem(UINT maxParticles, float minVelocity, float m
 
 void Scene::AddModel(std::shared_ptr<Model> model)
 {
+	int dupes = 0;
+
+	for (auto& mod : models)
+	{
+		if (mod.first == model->GetName())
+			dupes++;
+	}
+
+	if (dupes != 0)
+		model->SetName(model->GetName() + std::to_string(dupes));
+
 	models.insert(std::make_pair(model->GetName(), model));
 }
 
@@ -82,9 +93,6 @@ void Scene::Update(InGameUI& ui, float dt)
 	//		camera.PushBack(direction, dt);
 	//	}
 	//}
-
-	/*for (auto& particleSystem : particleSystems)
-		particleSystem->Update(dt, camera.GetPosition());*/
 
 	for (auto& particleSystem : rainSystem)
 		particleSystem->Update(dt);

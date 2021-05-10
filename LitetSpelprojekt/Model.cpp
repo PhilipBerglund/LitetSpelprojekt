@@ -4,7 +4,7 @@ void Model::Update(ID3D11DeviceContext& context)
 {
     XMMATRIX translation = XMMatrixTranslationFromVector(XMLoadFloat3(&transform.position));
     XMMATRIX rotation = XMMatrixRotationRollPitchYawFromVector(XMLoadFloat3(&transform.rotation));
-    XMMATRIX scale = XMMatrixScalingFromVector({1,1,1});
+    XMMATRIX scale = XMMatrixScalingFromVector(XMLoadFloat3(&transform.scale));
 
     worldMatrix = scale * translation * rotation;
 

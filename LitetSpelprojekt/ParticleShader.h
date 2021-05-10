@@ -2,7 +2,7 @@
 #include "ShaderData.h"
 
 class Scene;
-	
+
 class ParticleShader
 {
 private:

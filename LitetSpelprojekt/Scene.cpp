@@ -3,8 +3,17 @@
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.001f, 40.0f, { 0, 20, 0 })
 {
-	Importer::LoadScene("Models/Dumpster.mff");
+	//Importer::LoadScene("Models/Dumpster.mff");
 	//Importer::LoadScene("Models/Office.mff");
+	Importer::LoadScene("Models/Bar.mff");
+	Importer::LoadScene("Models/Hotel.mff");
+	Importer::LoadScene("Models/Restaurant.mff");
+	Importer::LoadScene("Models/Park.mff");
+	Importer::LoadScene("Models/OutsideObjects.mff");
+	Importer::LoadScene("Models/Library.mff");
+	Importer::LoadScene("Models/StockHouses.mff");
+	Importer::LoadScene("Models/Streets.mff");
+
 	Importer::Initialize(Graphics::GetDevice());
 
 	for (int i = 0; i < Importer::Data::scenes.size(); ++i)
@@ -17,6 +26,7 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	}
 
 	//AddParticleSystem({ 50,50,50 }, { 60, 50,80 }, 50, 1, 100, 200, 0.2f);
+	AddGSParticleSystem(50, 80, 100);
 	AddLight();
 
 	//scenario = Scenario(*this);
@@ -27,6 +37,15 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 //	auto particleSystem = std::make_shared<ParticleSystem>(bounds, center, velocity, velocityVariation, particlesPerSecond, maxParticles, size);
 //	particleSystems.push_back(particleSystem);
 //}
+
+void Scene::AddGSParticleSystem(UINT maxParticles, float minVelocity, float maxVelocity)
+{
+	auto particleSystem2 = std::make_shared<ParticleSystem2>(maxParticles, minVelocity, maxVelocity);
+	particleSystems2.push_back(particleSystem2);
+
+	//for (auto& particleSystem2 : particleSystems2)
+	//	particleSystem2->Draw();
+}
 
 void Scene::AddModel(std::shared_ptr<Model> model)
 {
@@ -66,8 +85,11 @@ void Scene::Update(InGameUI& ui, float dt)
 	//	}
 	//}
 
-	for (auto& particleSystem : particleSystems)
-		particleSystem->Update(dt, camera.GetPosition());
+	/*for (auto& particleSystem : particleSystems)
+		particleSystem->Update(dt, camera.GetPosition());*/
+
+	for (auto& particleSystem2 : particleSystems2)
+		particleSystem2->Update(dt);
 
 	scenario.Update(*this, ui, camera);
 	camera.Update(dt);
@@ -76,6 +98,7 @@ void Scene::Update(InGameUI& ui, float dt)
 
 void Scene::Render()
 {
-	particleShader.Render(shaderData, *this);
+	//particleShader.Render(shaderData, *this);
+	GSParticleShader.Render(shaderData, *this);
 	regularShader.Render(shaderData, *this);
 }

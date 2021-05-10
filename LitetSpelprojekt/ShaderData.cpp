@@ -1,5 +1,7 @@
 #include "ShaderData.h"
 #include "ShaderLoader.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 ShaderData::ShaderData()
 {
@@ -12,13 +14,6 @@ ShaderData::ShaderData()
 	bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	bufferDesc.MiscFlags = 0;
 	bufferDesc.StructureByteStride = 0;
-
-	D3D11_BUFFER_DESC SOBufferDesc = {};
-	SOBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	SOBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER | D3D11_BIND_STREAM_OUTPUT;
-	SOBufferDesc.CPUAccessFlags = 0;
-	SOBufferDesc.MiscFlags = 0;
-	SOBufferDesc.ByteWidth = sizeof(Particle2Vertex); //* maxParticles; Max particles ska in här, sid 551
 
 	//SAMPLERS
 	Graphics::GetDeviceContext().PSSetSamplers(0, 1, Graphics::GetWrapSampler());
@@ -58,42 +53,28 @@ ShaderData::ShaderData()
 
 	//-----SECOND PARTICLE SYSTEM-----
 	//SHADERS
-	//vs_path = "../x64/Debug/Particle2VertexShader.cso";
-	//if (!LoadVertexShader(particle2VS, vs_path, byteCode))
-	//	return;
+	vs_path = "../x64/Debug/Particle2VertexShader.cso";
+	if (!LoadVertexShader(particle2VS, vs_path, byteCode))
+		return;
 
-	//ps_path = "../x64/Debug/Particle2PixelShader.cso";
-	//if (!LoadPixelShader(particle2PS, ps_path))
-	//	return;
+	ps_path = "../x64/Debug/Particle2PixelShader.cso";
+	if (!LoadPixelShader(particle2PS, ps_path))
+		return;
 
-	//std::string gs_path = "../x64/Debug/ParticleGeometryShader.cso";
-	//if (!LoadGeometryShader(particle2GS, ps_path))
-	//	return;
+	std::string gs_path = "../x64/Debug/ParticleGeometryShader.cso";
+	if (!LoadGeometryShader(particle2GS, gs_path))
+		return;
 
-	////Buffer
-	//hr = Graphics::GetDevice().CreateBuffer(&SOBufferDesc, nullptr, &streamOutVB);
-	//if FAILED(hr)
-	//{
-	//	Error("FAILED TO CREATE BUFFER");
-	//	return;
-	//}
+	//INPUT LAYOUT
+	D3D11_INPUT_ELEMENT_DESC particle2InputDesc[particleNumElements] =
+	{
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},  
+		{ "SIZE", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+	};
+	hr = Graphics::GetDevice().CreateInputLayout(particle2InputDesc, particleNumElements, byteCode.c_str(), byteCode.length(), &particle2Layout);
 
-	//hr = Graphics::GetDevice().CreateBuffer(&bufferDesc, nullptr, &initVB);
-	//if FAILED(hr)
-	//{
-	//	Error("FAILED TO CREATE BUFFER");
-	//	return;
-	//}
-
-	//hr = Graphics::GetDevice().CreateBuffer(&bufferDesc, nullptr, &drawVB);
-	//if FAILED(hr)
-	//{
-	//	Error("FAILED TO CREATE BUFFER");
-	//	return;
-	//}
-
-	////RANDOM TEXTURE
-	//CreateRandomTexture();
+	//LOAD TEXTURE
+	LoadTexture("RainParticle.png");
 
 	//-----REGULAR-----
 	//SHADERS
@@ -193,6 +174,11 @@ void ShaderData::Update(const Camera& camera)
 	Graphics::GetDeviceContext().Unmap(viewProjBuffer.Get(), 0);
 	Graphics::GetDeviceContext().VSSetConstantBuffers(2, 1, viewProjBuffer.GetAddressOf());
 
+	//-----SECOND_PARTICLE_SYSTEM-----
+	Graphics::GetDeviceContext().GSSetConstantBuffers(0, 1, viewProjBuffer.GetAddressOf());
+	Graphics::GetDeviceContext().GSSetConstantBuffers(1, 1, regularCameraBuffer.GetAddressOf());
+	Graphics::GetDeviceContext().PSSetShaderResources(0, 1, particle2TexSRV.GetAddressOf());
+
 	//-----REGULAR-----
 	//CAMERA BUFFER
 	hr = Graphics::GetDeviceContext().Map(regularCameraBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
@@ -207,47 +193,68 @@ void ShaderData::Update(const Camera& camera)
 	Graphics::GetDeviceContext().PSSetConstantBuffers(0, 1, regularCameraBuffer.GetAddressOf());
 }
 
-bool ShaderData::CreateRandomTexture()
+bool ShaderData::LoadTexture(std::string fileName)
 {
-	XMFLOAT4 randomValues[1024];
+	ID3D11Texture2D* texture;
 
-	for (int i = 0; i < 1024; i++)
+	//Width, Height and channel values
+	int textureWidth = 100;
+	int textureHeight = 100;
+	int channels = 4; //RGBA
+
+	//Loads the image from the Debug folder
+	unsigned char* imageData = stbi_load(fileName.c_str(), &textureWidth, &textureHeight, &channels, 4);
+
+	std::vector<unsigned char> textureData;
+	textureData.resize(textureWidth * textureHeight * 4);
+
+	//Loops for each pixel and assigns the colour depending on the image loaded into imageData
+	for (int h = 0; h < textureHeight; ++h)
 	{
-		randomValues[i].x = Random::Real(-1.0f, 1.0f);
-		randomValues[i].y = Random::Real(-1.0f, 1.0f);
-		randomValues[i].z = Random::Real(-1.0f, 1.0f);
-		randomValues[i].w = Random::Real(-1.0f, 1.0f);
+		for (int w = 0; w < textureWidth; ++w)
+		{
+			unsigned int pos0 = w * 4 + textureWidth * 4 * h;
+			textureData[pos0 + 0] = imageData[pos0 + 0];
+			textureData[pos0 + 1] = imageData[pos0 + 1];
+			textureData[pos0 + 2] = imageData[pos0 + 2];
+			textureData[pos0 + 3] = imageData[pos0 + 3];
+		}
 	}
 
-	D3D11_SUBRESOURCE_DATA data;
-	data.pSysMem = randomValues;
-	data.SysMemPitch = 1024 * sizeof(XMFLOAT4);
-	data.SysMemSlicePitch = 0;
+	//Description of the Texture
+	D3D11_TEXTURE2D_DESC desc;
+	desc.Width = textureWidth; //Width
+	desc.Height = textureHeight; //Height
+	desc.MipLevels = 1; //Miplevels are used for optimizing images ,speeding up rendering times. Dont need more than 1
+	desc.ArraySize = 1; //Amount of textures
+	desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; //RGBA
+	desc.SampleDesc.Count = 1;
+	desc.SampleDesc.Quality = 0; //Lowest quality, no need for more
+	desc.Usage = D3D11_USAGE_IMMUTABLE;  //No CPU access
+	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE; //Binds as Shader
+	desc.CPUAccessFlags = 0; //No CPU access
+	desc.MiscFlags = 0; //No additional flags
 
-	//Creating Texture
-	D3D11_TEXTURE1D_DESC texDesc;
-	texDesc.Width = 1024;
-	texDesc.MipLevels = 1;
-	texDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	texDesc.Usage = D3D11_USAGE_IMMUTABLE;
-	texDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-	texDesc.CPUAccessFlags = 0;
-	texDesc.MiscFlags = 0;
+	//The subresource data 
+	D3D11_SUBRESOURCE_DATA  data; //Pointer to the initialization data
+	data.pSysMem = &textureData[0];
+	data.SysMemPitch = textureWidth * 4; //Distance (bytes) between beginning of a row in a texture to the next one 
+	data.SysMemSlicePitch = 0; // --Only used for 3D texture data-- Distance (bytes) from the beginning of depth level to the next
+	
+	HRESULT hr = Graphics::GetDevice().CreateTexture2D(&desc, &data, &texture);
 
-	Graphics::GetDevice().CreateTexture1D(&texDesc, &data, &particle2RandomTexture);
-
-	//Creating SRV
-	D3D11_SHADER_RESOURCE_VIEW_DESC SRVdesc;
-	SRVdesc.Format = texDesc.Format;
-	SRVdesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE1D;
-	SRVdesc.Texture1D.MipLevels = texDesc.MipLevels;
-	SRVdesc.Texture1D.MostDetailedMip = 0;
-
-	HRESULT hr = Graphics::GetDevice().CreateShaderResourceView(particle2RandomTexture.Get(), &SRVdesc, &particle2RandomTexSRV);
 	if (FAILED(hr))
 	{
-		Error("FAILED TO CREATE RANDOM TEXTURE!");
+		ERROR("FAILED TO CREATE TEXTURE");
+		return false;
 	}
 
-	return true;
+	hr = Graphics::GetDevice().CreateShaderResourceView(texture, nullptr, particle2TexSRV.GetAddressOf());
+	if (FAILED (hr))
+	{
+		Error("FAILED TO CREATE TEXTURE SRV!!!!wtf :O");
+		return false;
+	}
+
+	return false;
 }

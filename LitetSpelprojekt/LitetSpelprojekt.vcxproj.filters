@@ -22,6 +22,15 @@
     <FxCompile Include="RainGeometryShader.hlsl">
       <Filter>Header Files\ParticleSystem2\Rain</Filter>
     </FxCompile>
+    <FxCompile Include="SmokeVertexShader.hlsl">
+      <Filter>Header Files\ParticleSystem2\Smoke</Filter>
+    </FxCompile>
+    <FxCompile Include="SmokePixelShader.hlsl">
+      <Filter>Header Files\ParticleSystem2\Smoke</Filter>
+    </FxCompile>
+    <FxCompile Include="SmokeGeometryShader.hlsl">
+      <Filter>Header Files\ParticleSystem2\Smoke</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -74,6 +83,9 @@
     </ClCompile>
     <ClCompile Include="ParticleShader.cpp">
       <Filter>Source Files\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="SmokeSystem.cpp">
+      <Filter>Header Files\ParticleSystem2\Smoke</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +184,9 @@
     </ClInclude>
     <ClInclude Include="ParticleShader.h">
       <Filter>Header Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="SmokeSystem.h">
+      <Filter>Header Files\ParticleSystem2\Smoke</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

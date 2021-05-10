@@ -25,17 +25,24 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 		}
 	}
 
-	AddGSParticleSystem(3000, 150, 200);
+	AddRainParticleSystem(3000, 150, 200);
+	AddSmokeParticleSystem(50, 10, 20);
 	AddLight();
 
 	//scenario = Scenario(*this);
 }
 
 
-void Scene::AddGSParticleSystem(UINT maxParticles, float minVelocity, float maxVelocity)
+void Scene::AddRainParticleSystem(UINT maxParticles, float minVelocity, float maxVelocity)
 {
 	auto particleSystem = std::make_shared<RainSystem>(maxParticles, minVelocity, maxVelocity);
 	rainSystem.push_back(particleSystem);
+}
+
+void Scene::AddSmokeParticleSystem(UINT maxParticles, float minVelocity, float maxVelocity)
+{
+	auto particleSystem = std::make_shared<SmokeSystem>(maxParticles, minVelocity, maxVelocity);
+	smokeSystem.push_back(particleSystem);
 }
 
 void Scene::AddModel(std::shared_ptr<Model> model)

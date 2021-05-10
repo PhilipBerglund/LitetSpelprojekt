@@ -18,18 +18,21 @@ private:
 	XMMATRIX viewMatrix = {};
 	XMMATRIX projectionMatrix = {};
 
-	//-----PARTICLE SYSTEM-----
+	//-----SMOKE PARTICLE SYSTEM----
+	ComPtr<ID3D11VertexShader> smokeVS;
+	ComPtr<ID3D11GeometryShader> smokeGS;
+	ComPtr<ID3D11PixelShader> smokePS;
+
+	ComPtr<ID3D11InputLayout> smokeLayout;
+	//If textures wanted on particle
+	ComPtr<ID3D11ShaderResourceView> smokeTexSRV;
+
+	//-----RAIN PARTICLE SYSTEM-----
 	//BUFFERS
 	ComPtr<ID3D11Buffer> viewProjBuffer;
 
-	//SHADERS
-	ComPtr<ID3D11VertexShader> particleVertexShader;
-	ComPtr<ID3D11PixelShader> particlePixelShader;
 
-	//MISC
-	ComPtr<ID3D11InputLayout> particleLayout;
-
-	//-----SECOND PARTICLE SYSTEM-----
+	//-----RAIN PARTICLE SYSTEM-----
 	//BUFFERS
 
 	//SHADERS

@@ -5,7 +5,8 @@
 #include "Model.h"
 #include "Light.h"
 #include "Scenario.h"
-#include "rainSystem.h"
+#include "RainSystem.h"
+#include "SmokeSystem.h"
 #include "ParticleShader.h"
 #include "RegularShader.h"
 
@@ -22,6 +23,7 @@ private:
 	//std::vector<std::shared_ptr<Model>> models;
 	std::vector<std::shared_ptr<GameObject>> gameObjects;
 	std::vector<std::shared_ptr<RainSystem>> rainSystem;
+	std::vector<std::shared_ptr<SmokeSystem>> smokeSystem;
 
 	//SHADERS
 	ShaderData shaderData;
@@ -29,7 +31,8 @@ private:
 	RegularShader regularShader;
 
 	//void AddParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size);
-	void AddGSParticleSystem(UINT maxParticles, float minVelocity, float maxVelocity);
+	void AddRainParticleSystem(UINT maxParticles, float minVelocity, float maxVelocity);
+	void AddSmokeParticleSystem(UINT maxParticles, float minVelocity, float maxVelocity);
 	void AddModel(std::shared_ptr<Model> model);
 	void AddLight();
 public:

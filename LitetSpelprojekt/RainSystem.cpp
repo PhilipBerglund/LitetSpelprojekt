@@ -1,4 +1,4 @@
-#include "ParticleSystem2.h"
+#include "RainSystem.h"
 //
 //ParticleSystem2::ParticleSystem2()
 //{
@@ -14,7 +14,7 @@
 //	this->velocity = 0;
 //}
 
-ParticleSystem2::ParticleSystem2(UINT maxParticles, float minVelocity, float maxVelocity)
+RainSystem::RainSystem(UINT maxParticles, float minVelocity, float maxVelocity)
 {
 	this->velocity = Random::Real(minVelocity, maxVelocity);
 	this->maxParticles = maxParticles;
@@ -59,32 +59,32 @@ ParticleSystem2::ParticleSystem2(UINT maxParticles, float minVelocity, float max
 	UpdateBuffer(particles);
 }
 
-ParticleSystem2::~ParticleSystem2()
+RainSystem::~RainSystem()
 {
 }
 
-void ParticleSystem2::SetEyePos(const XMFLOAT3& eyePos)
+void RainSystem::SetEyePos(const XMFLOAT3& eyePos)
 {
 	this->eyePos = eyePos;
 }
 
-void ParticleSystem2::SetEmitPos(const XMFLOAT3& emitPos)
+void RainSystem::SetEmitPos(const XMFLOAT3& emitPos)
 {
 	this->emitPos = emitPos;
 }
 
-void ParticleSystem2::SetEmitDir(const XMFLOAT3& emitDir)
+void RainSystem::SetEmitDir(const XMFLOAT3& emitDir)
 {
 	this->emitDir = emitDir;
 }
 
-void ParticleSystem2::Reset()
+void RainSystem::Reset()
 {
 	this->isFirstRun = true;
 	this->age = 0.0f;
 }
 
-void ParticleSystem2::Update(float dt)
+void RainSystem::Update(float dt)
 {
 	for (int i = 0; i < maxParticles; i++)
 	{
@@ -98,7 +98,7 @@ void ParticleSystem2::Update(float dt)
 	
 }
 
-bool ParticleSystem2::UpdateBuffer(Particle* particles)
+bool RainSystem::UpdateBuffer(Particle* particles)
 {
 	Particle* particle;
 
@@ -113,35 +113,5 @@ bool ParticleSystem2::UpdateBuffer(Particle* particles)
 	memcpy(particle, (void*)particles, (sizeof(Particle) * maxParticles));
 	Graphics::GetDeviceContext().Unmap(GSParticleVB.Get(), 0);
 	
-	return true;
-}
-
-bool ParticleSystem2::Draw()
-{
-	//Particle* particle;
-	//particles = new Particle[maxParticles];
-
-	//for (int i = 0; i < maxParticles; i++)
-	//{
-	//	//Random position between -1 and 1
-	//	const float x = Random::Real(-100.0f, 100.0f);
-	//	const float z = Random::Real(-10.0f, 10.0f);
-	//	//Put particle above ground somehow??
-	//	const float y = 20;/*(0.3f * (0.1f * z * sinf(0.1f * x) + 0.1f * x * cosf(0.1f * z))) + 5;*/
-
-	//	particles[i].position = XMFLOAT4(x, y, z, 1);
-	//	particles[i].size = XMFLOAT2(2.0f, 2.0f);
-	//}
-
-	//D3D11_MAPPED_SUBRESOURCE mappedResource = {};
-	//if (FAILED(Graphics::GetDeviceContext().Map(GSParticleVB.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
-	//{
-	//	return false;
-	//}
-		
-	//particle = (Particle*)mappedResource.pData;
-	//memcpy(particle, (void*)particles, (sizeof(Particle) * maxParticles));
-	//Graphics::GetDeviceContext().Unmap(GSParticleVB.Get(), 0);
-
 	return true;
 }

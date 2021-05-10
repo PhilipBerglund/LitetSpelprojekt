@@ -1,12 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <FxCompile Include="ParticleVS.hlsl">
-      <Filter>ParticleSystem</Filter>
-    </FxCompile>
-    <FxCompile Include="ParticlePS.hlsl">
-      <Filter>ParticleSystem</Filter>
-    </FxCompile>
     <FxCompile Include="ColorPixelShader.hlsl">
       <Filter>Resource Files</Filter>
     </FxCompile>
@@ -19,23 +13,17 @@
     <FxCompile Include="VertexShader.hlsl">
       <Filter>Resource Files</Filter>
     </FxCompile>
-    <FxCompile Include="ParticleGeometryShader.hlsl">
-      <Filter>Header Files\ParticleSystem2</Filter>
+    <FxCompile Include="RainPixelShader.hlsl">
+      <Filter>Header Files\ParticleSystem2\Rain</Filter>
     </FxCompile>
-    <FxCompile Include="Particle2PixelShader.hlsl">
-      <Filter>Header Files\ParticleSystem2</Filter>
+    <FxCompile Include="RainVertexShader.hlsl">
+      <Filter>Header Files\ParticleSystem2\Rain</Filter>
     </FxCompile>
-    <FxCompile Include="Particle2VertexShader.hlsl">
-      <Filter>Header Files\ParticleSystem2</Filter>
-    </FxCompile>
-    <FxCompile Include="Particle2ComputeShader.hlsl">
-      <Filter>Header Files\ParticleSystem2</Filter>
+    <FxCompile Include="RainGeometryShader.hlsl">
+      <Filter>Header Files\ParticleSystem2\Rain</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ParticleSystem.cpp">
-      <Filter>ParticleSystem</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -78,23 +66,17 @@
     <ClCompile Include="RegularShader.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleShader.cpp">
-      <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
     <ClCompile Include="ShaderData.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleSystem2.cpp">
-      <Filter>Header Files\ParticleSystem2</Filter>
+    <ClCompile Include="RainSystem.cpp">
+      <Filter>Header Files\ParticleSystem2\Rain</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleShader2.cpp">
+    <ClCompile Include="ParticleShader.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ParticleSystem.h">
-      <Filter>ParticleSystem</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -173,19 +155,10 @@
     <ClInclude Include="Timer.h">
       <Filter>Header Files\Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleShader.h">
-      <Filter>Header Files\Shaders</Filter>
-    </ClInclude>
     <ClInclude Include="Event.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ShaderData.h">
-      <Filter>Header Files\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleSystem2.h">
-      <Filter>Header Files\ParticleSystem2</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleShader2.h">
       <Filter>Header Files\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="Model.h">
@@ -193,6 +166,12 @@
     </ClInclude>
     <ClInclude Include="stb_image.h">
       <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="RainSystem.h">
+      <Filter>Header Files\ParticleSystem2\Rain</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleShader.h">
+      <Filter>Header Files\Shaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -223,11 +202,14 @@
     <Filter Include="Source Files\Audio">
       <UniqueIdentifier>{f7ca2af8-fd24-4c0b-8676-baadc6cdb863}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ParticleSystem">
-      <UniqueIdentifier>{637396cf-a880-429c-b01c-7fe767a5e5bc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\ParticleSystem2">
       <UniqueIdentifier>{bef46962-4d6b-4310-bcb1-4bd8294035c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ParticleSystem2\Rain">
+      <UniqueIdentifier>{b1e2dcaf-91f7-45fc-b509-112d1ef12f2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ParticleSystem2\Smoke">
+      <UniqueIdentifier>{107f514e-d1df-463b-916a-071e689602a2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

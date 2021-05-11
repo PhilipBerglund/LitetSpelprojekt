@@ -1,8 +1,9 @@
 #include "ParticleShader.h"
 #include "Scene.h"
 
-void ParticleShader::SetShader(ShaderData&data)
+void ParticleShader::SetRainShader(ShaderData&data)
 {
+	//----Rain----
 	Graphics::GetDeviceContext().IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 	Graphics::GetDeviceContext().IASetInputLayout(data.rainLayout.Get());
 	Graphics::GetDeviceContext().VSSetShader(data.rainVS.Get(), nullptr, 0);
@@ -10,20 +11,48 @@ void ParticleShader::SetShader(ShaderData&data)
 	Graphics::GetDeviceContext().GSSetShader(data.rainGS.Get(), nullptr, 0);
 }
 
-void ParticleShader::Render(ShaderData& data, Scene& scene)
+void ParticleShader::SetSmokeShader(ShaderData& data)
 {
-	SetShader(data);
+	//----Smoke----
+	Graphics::GetDeviceContext().IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+	Graphics::GetDeviceContext().IASetInputLayout(data.smokeLayout.Get());
+	Graphics::GetDeviceContext().VSSetShader(data.smokeVS.Get(), nullptr, 0);
+	Graphics::GetDeviceContext().PSSetShader(data.smokePS.Get(), nullptr, 0);
+	Graphics::GetDeviceContext().GSSetShader(data.smokeGS.Get(), nullptr, 0);
+}
+
+void ParticleShader::RenderRain(ShaderData& data, Scene& scene)
+{
+	SetRainShader(data);
 
 	unsigned int stride = sizeof(RainSystem::Particle);
 	unsigned int offset = 0;
 
-	const auto& particleSystem2 = scene.GetRainSystem();
+	const auto& rainSystem = scene.GetRainSystem();
 
-	for (const auto& particleSystem2 : particleSystem2)
+	for (const auto& rainSystem : rainSystem)
 	{
-		Graphics::GetDeviceContext().IASetVertexBuffers(0, 1, particleSystem2->GSParticleVB.GetAddressOf() , &stride, &offset);
+		Graphics::GetDeviceContext().IASetVertexBuffers(0, 1, rainSystem->GSParticleVB.GetAddressOf() , &stride, &offset);
 		Graphics::GetDeviceContext().PSSetShaderResources(0, 1, data.rainTexSRV.GetAddressOf());
-		Graphics::GetDeviceContext().Draw(particleSystem2->maxParticles, 0);
+		Graphics::GetDeviceContext().Draw(rainSystem->maxParticles, 0);
+	}
+	Graphics::GetDeviceContext().GSSetShader(nullptr, nullptr, 0);
+}
+
+void ParticleShader::RenderSmoke(ShaderData& data, Scene& scene)
+{
+	SetSmokeShader(data);
+
+	unsigned int stride = sizeof(SmokeSystem::Particle);
+	unsigned int offset = 0;
+
+	const auto& smokeSystem = scene.GetSmokeSystem();
+
+	for (const auto& smokeSystem : smokeSystem)
+	{
+		Graphics::GetDeviceContext().IASetVertexBuffers(0, 1, smokeSystem->GSParticleVB.GetAddressOf(), &stride, &offset);
+		Graphics::GetDeviceContext().PSSetShaderResources(0, 1, data.smokeTexSRV.GetAddressOf());
+		Graphics::GetDeviceContext().Draw(smokeSystem->maxParticles, 0);
 	}
 	Graphics::GetDeviceContext().GSSetShader(nullptr, nullptr, 0);
 }

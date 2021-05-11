@@ -17,7 +17,8 @@ struct PS_INPUT
 
 float4 main(PS_INPUT input) : SV_TARGET
 {
-    return float4(1.0f,1.0f,1.0f,1.0f);
+    //float opacity = 1.0f - smoothstep(0.0f, 0.0f, age)
+    return float4(113.0f / 255.0f, 112.0f / 255.0f, 110.0f / 255.0f, 1.0f);
     input.normal = normalize(input.normal);
     
     float3 toEye = eyePos - input.position;
@@ -27,7 +28,7 @@ float4 main(PS_INPUT input) : SV_TARGET
     toEye /= distanceToEye;
     
     //Default variables
-    float4 textureColor = float4(1.0f, 1.0f, 1.0f, 1.0f);
+    float4 textureColor = float4(58.0f / 255, 64.0f / 255, 59 / 255, 1.0f);
     //float4 ambient = float4(0.0f, 0.0f, 0.0f, 0.0f);
     //float diffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
     //float4 specular = float4(0.0f, 0.0f, 0.0f, 0.0f);
@@ -36,7 +37,7 @@ float4 main(PS_INPUT input) : SV_TARGET
     float3 uvw = float3(input.tex, input.primitiveID);
     
     //TextureColor gets particle texture
-    textureColor = particleTexture.Sample(wrapSampler, 1.0f);
+   //textureColor = particleTexture.Sample(wrapSampler, 1.0f);
     
     //Clip for transparency
     //clip(textureColor.a - 0.05f);

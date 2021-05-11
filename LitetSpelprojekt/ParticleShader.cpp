@@ -14,7 +14,7 @@ void ParticleShader::SetRainShader(ShaderData&data)
 void ParticleShader::SetSmokeShader(ShaderData& data)
 {
 	//----Smoke----
-	//Graphics::GetDeviceContext().IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+	Graphics::GetDeviceContext().IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 	Graphics::GetDeviceContext().IASetInputLayout(data.smokeLayout.Get());
 	Graphics::GetDeviceContext().VSSetShader(data.smokeVS.Get(), nullptr, 0);
 	Graphics::GetDeviceContext().PSSetShader(data.smokePS.Get(), nullptr, 0);

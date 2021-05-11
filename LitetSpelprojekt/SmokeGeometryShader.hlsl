@@ -51,10 +51,10 @@ void main(point GS_INPUT input[1], uint primID : SV_PrimitiveID,
     
     //Corners of quad
     float4 v[4];
-    v[0] = float4(input[0].position.xyz - halfWidth * right * + halfHeight * up, 1.0f);
-    v[1] = float4(input[0].position.xyz + halfWidth * right * + halfHeight * up, 1.0f);
-    v[2] = float4(input[0].position.xyz - halfWidth * right * - halfHeight * up, 1.0f);
-    v[3] = float4(input[0].position.xyz + halfWidth * right * - halfHeight * up, 1.0f);
+    v[0] = float4(input[0].position.xyz - halfWidth * right + halfHeight * up, 1.0f);
+    v[1] = float4(input[0].position.xyz + halfWidth * right + halfHeight * up, 1.0f);
+    v[2] = float4(input[0].position.xyz - halfWidth * right - halfHeight * up, 1.0f);
+    v[3] = float4(input[0].position.xyz + halfWidth * right - halfHeight * up, 1.0f);
     
     //Transform to world space and output as triangle strip
     GS_OUTPUT gout;

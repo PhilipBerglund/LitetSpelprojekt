@@ -1,32 +1,38 @@
 #include "SmokeSystem.h"
 
-SmokeSystem::SmokeSystem(UINT maxParticles, float minVelocity, float maxVelocity)
+SmokeSystem::SmokeSystem(UINT maxParticles, float minVelocity, float maxVelocity, XMFLOAT4 startPosition, float maxParticleRange)	
+	:origin(startPosition), maxParticleRange(maxParticleRange)
 {
 	this->velocity = Random::Real(minVelocity, maxVelocity);
 	this->maxParticles = maxParticles;
 	particles = new Particle[maxParticles];
+	
+
 	if (!particles)
 	{
 		return;
 	}
 
-	this->dirY = 1.0f;
-
 	for (int i = 0; i < maxParticles; i++)
 	{
 		//dir = (Random::Real(-1.0f, 1.0f), Random::Real(-1.0f, 1.0f), 0.0f);
-		
-		this->angle = Random::Real(-1.0f, 1.0f);
-		this->length = Random::Real(-1.0f, 1.0f);
+		float x, z;
+		this->angle = Random::Real(-0.7f, 0.7f);
+		this->length = Random::Real(-0.7f, 0.7f);
+		x = angle * length;
+		this->angle = Random::Real(-0.7f, 0.7f);
+		this->length = Random::Real(-0.7f, 0.7f);
+		z = angle * length;
+		XMVECTOR dir = { x, 1, z };
+		XMVector3Normalize(dir);
+		XMStoreFloat3(&particles[i].direction, dir);
 
+		const float startX = 5.0f;
+		const float startY = Random::Real(origin.y,maxParticleRange);
+		const float startZ = 5.0f;
 
-
-		const float x = 5.0f;
-		const float z = 5.0f;
-		const float y = 5.0f;
-
-		particles[i].position = XMFLOAT4(x, y, z, 1);
-		particles[i].size = XMFLOAT2(1.0f, 1.0f);
+		particles[i].position = { startPosition.x, startY, startPosition.z, 1.0f };
+		particles[i].size = XMFLOAT2(0.8, 0.8);
 	}
 
 	D3D11_BUFFER_DESC vBDesc = {};
@@ -74,17 +80,21 @@ void SmokeSystem::SetEmitDir(const XMFLOAT3& emitDir)
 void SmokeSystem::Reset()
 {
 	this->isFirstRun = true;
-	this->age = 0.0f;
+	//this->age = 0.0f;
 }
 
 void SmokeSystem::Update(float dt)
 {
 	for (int i = 0; i < maxParticles; i++)
 	{
-		particles[i].position.y += dt * velocity;
-		if (particles[i].position.y >= 30.0f)
+		
+		particles[i].position.x += dt * velocity * particles[i].direction.x;
+		particles[i].position.y += dt * velocity * particles[i].direction.y;
+		particles[i].position.z += dt * velocity * particles[i].direction.z;
+		if (particles[i].position.y >= maxParticleRange)
 		{
-			particles[i].position.y = 10.0f;
+			particles[i].position = origin;
+			
 		}
 	}
 	UpdateBuffer(particles);

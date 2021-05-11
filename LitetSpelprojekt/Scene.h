@@ -33,7 +33,7 @@ private:
 
 	//void AddParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size);
 	void AddRainParticleSystem(UINT maxParticles, float minVelocity, float maxVelocity);
-	void AddSmokeParticleSystem(UINT maxParticles, float minVelocity, float maxVelocity);
+	void AddSmokeParticleSystem(UINT maxParticles, float minVelocity, float maxVelocity, XMFLOAT4 starPos, float maxParticleRange);
 	void AddModel(std::shared_ptr<Model> model);
 	void AddLight();
 public:

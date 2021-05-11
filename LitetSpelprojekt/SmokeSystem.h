@@ -16,6 +16,8 @@ private:
 	{
 		XMFLOAT4 position;
 		XMFLOAT2 size;
+		XMFLOAT3 direction;
+		float age;
 	};
 
 	UINT maxParticles;
@@ -23,13 +25,13 @@ private:
 	bool isFirstRun;
 	float gameTime;
 	float timeStep;
-	float age;
+	//float age;
 
-	XMFLOAT3 dir;
-
+	float maxParticleRange;
 	float angle;
 	float length;
-	float dirY;
+	XMFLOAT4 origin;
+
 
 	Particle* particles;
 	ComPtr<ID3D11Buffer> GSParticleVB;
@@ -38,10 +40,10 @@ private:
 	XMFLOAT3 emitDir;
 public:
 	SmokeSystem() = default;
-	SmokeSystem(UINT maxParticles, float minVelocity, float maxVelocity);
+	SmokeSystem(UINT maxParticles, float minVelocity, float maxVelocity, XMFLOAT4 startPosition, float maxParticleRange);
 	~SmokeSystem();
 
-	float GetAge()const { return age; }
+	//float GetAge()const { return age; }
 	void SetEyePos(const XMFLOAT3& eyePos);
 	void SetEmitPos(const XMFLOAT3& emitPos);
 	void SetEmitDir(const XMFLOAT3& emitDir);

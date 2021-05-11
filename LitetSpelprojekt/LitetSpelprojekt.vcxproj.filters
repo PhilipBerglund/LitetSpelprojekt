@@ -14,22 +14,22 @@
       <Filter>Resource Files</Filter>
     </FxCompile>
     <FxCompile Include="RainPixelShader.hlsl">
-      <Filter>Header Files\ParticleSystem2\Rain</Filter>
+      <Filter>Header Files\ParticleSystems\Rain</Filter>
     </FxCompile>
     <FxCompile Include="RainVertexShader.hlsl">
-      <Filter>Header Files\ParticleSystem2\Rain</Filter>
+      <Filter>Header Files\ParticleSystems\Rain</Filter>
     </FxCompile>
     <FxCompile Include="RainGeometryShader.hlsl">
-      <Filter>Header Files\ParticleSystem2\Rain</Filter>
+      <Filter>Header Files\ParticleSystems\Rain</Filter>
     </FxCompile>
     <FxCompile Include="SmokeVertexShader.hlsl">
-      <Filter>Header Files\ParticleSystem2\Smoke</Filter>
+      <Filter>Header Files\ParticleSystems\Smoke</Filter>
     </FxCompile>
     <FxCompile Include="SmokePixelShader.hlsl">
-      <Filter>Header Files\ParticleSystem2\Smoke</Filter>
+      <Filter>Header Files\ParticleSystems\Smoke</Filter>
     </FxCompile>
     <FxCompile Include="SmokeGeometryShader.hlsl">
-      <Filter>Header Files\ParticleSystem2\Smoke</Filter>
+      <Filter>Header Files\ParticleSystems\Smoke</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
@@ -79,13 +79,13 @@
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="RainSystem.cpp">
-      <Filter>Header Files\ParticleSystem2\Rain</Filter>
+      <Filter>Header Files\ParticleSystems\Rain</Filter>
     </ClCompile>
     <ClCompile Include="ParticleShader.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="SmokeSystem.cpp">
-      <Filter>Header Files\ParticleSystem2\Smoke</Filter>
+      <Filter>Header Files\ParticleSystems\Smoke</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -180,13 +180,13 @@
       <Filter>Header Files\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="RainSystem.h">
-      <Filter>Header Files\ParticleSystem2\Rain</Filter>
+      <Filter>Header Files\ParticleSystems\Rain</Filter>
     </ClInclude>
     <ClInclude Include="ParticleShader.h">
       <Filter>Header Files\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="SmokeSystem.h">
-      <Filter>Header Files\ParticleSystem2\Smoke</Filter>
+      <Filter>Header Files\ParticleSystems\Smoke</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -217,13 +217,13 @@
     <Filter Include="Source Files\Audio">
       <UniqueIdentifier>{f7ca2af8-fd24-4c0b-8676-baadc6cdb863}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\ParticleSystem2">
+    <Filter Include="Header Files\ParticleSystems">
       <UniqueIdentifier>{bef46962-4d6b-4310-bcb1-4bd8294035c8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\ParticleSystem2\Rain">
+    <Filter Include="Header Files\ParticleSystems\Rain">
       <UniqueIdentifier>{b1e2dcaf-91f7-45fc-b509-112d1ef12f2b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\ParticleSystem2\Smoke">
+    <Filter Include="Header Files\ParticleSystems\Smoke">
       <UniqueIdentifier>{107f514e-d1df-463b-916a-071e689602a2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

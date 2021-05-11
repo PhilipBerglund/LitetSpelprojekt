@@ -6,7 +6,9 @@ class Scene;
 class ParticleShader
 {
 private:
-	void SetShader(ShaderData& data);
+	void SetRainShader(ShaderData& data);
+	void SetSmokeShader(ShaderData& data);
 public:
-	void Render(ShaderData& data, Scene& scene);
+	void RenderRain(ShaderData& data, Scene& scene);
+	void RenderSmoke(ShaderData& data, Scene& scene);
 };

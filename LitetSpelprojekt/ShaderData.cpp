@@ -54,32 +54,28 @@ ShaderData::ShaderData()
 	LoadTexture("RainParticle.png");
 	//---------------------------------------//
 
-	//-----SMOkKE PARTICLE SYSTEM-----
+	//-----Smoke PARTICLE SYSTEM-----
 	//SHADERS
-	//std::string vs_path = "../x64/Debug/Particle2VertexShader.cso";
-	//if (!LoadVertexShader(particle2VS, vs_path, byteCode))
-	//	return;
+	vs_path = "../x64/Debug/SmokeVertexShader.cso";
+	if (!LoadVertexShader(smokeVS, vs_path, byteCode))
+		return;
 
-	//std::string ps_path = "../x64/Debug/Particle2PixelShader.cso";
-	//if (!LoadPixelShader(particle2PS, ps_path))
-	//	return;
+	ps_path = "../x64/Debug/SmokePixelShader.cso";
+	if (!LoadPixelShader(smokePS, ps_path))
+		return;
 
-	//std::string gs_path = "../x64/Debug/ParticleGeometryShader.cso";
-	//if (!LoadGeometryShader(particle2GS, gs_path))
-	//	return;
+	gs_path = "../x64/Debug/SmokeGeometryShader.cso";
+	if (!LoadGeometryShader(smokeGS, gs_path))
+		return;
 
-	////INPUT LAYOUT
-	//const unsigned int particleNumElements = 2;
-	//D3D11_INPUT_ELEMENT_DESC particle2InputDesc[particleNumElements] =
-	//{
-	//	{"POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-	//	{ "SIZE", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
-	//};
-	//hr = Graphics::GetDevice().CreateInputLayout(particle2InputDesc, particleNumElements, byteCode.c_str(), byteCode.length(), &particle2Layout);
+	//INPUT LAYOUT
+	D3D11_INPUT_ELEMENT_DESC smokeInputDesc[particleNumElements] =
+	{
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{ "SIZE", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+	};
+	hr = Graphics::GetDevice().CreateInputLayout(smokeInputDesc, particleNumElements, byteCode.c_str(), byteCode.length(), &smokeLayout);
 
-	////LOAD TEXTURE
-	//LoadTexture("RainParticle.png");
-	//// -------------------------------- //
 
 
 

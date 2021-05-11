@@ -55,7 +55,7 @@ inline bool LoadPixelShader(ComPtr<ID3D11PixelShader>& pixelShader, std::string 
 	HRESULT hr = Graphics::GetDevice().CreatePixelShader(shaderData.c_str(), shaderData.length(), nullptr, &pixelShader);
 	if FAILED(hr)
 	{
-		Error("FAILED TO CREATE PIXEL SHADER");
+		Error("FAILED TO CREATE PIXEL SHADER" + path);
 		return false;
 	}
 

@@ -11,6 +11,7 @@ class ShaderData
 {
 	friend class ParticleShader;
 	friend class RegularShader;
+	friend class ShadowMapShader;
 private:
 	//-----GENERAL-----
 	//CAMERA
@@ -44,6 +45,10 @@ private:
 	ComPtr<ID3D11InputLayout> rainLayout;
 	//If textures wanted on particle
 	ComPtr<ID3D11ShaderResourceView> rainTexSRV;
+
+	//-----SHADOW MAP-----
+	//BUFFERS
+	ComPtr<ID3D11VertexShader> shadowMapVS;
 
 	//-----REGULAR-----
 	//BUFFERS

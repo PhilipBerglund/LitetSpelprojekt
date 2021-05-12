@@ -54,7 +54,7 @@ ShaderData::ShaderData()
 	LoadTexture("RainParticle.png");
 	//---------------------------------------//
 
-	//-----Smoke PARTICLE SYSTEM-----
+	//-----SMOKE PARTICLE SYSTEM-----
 	//SHADERS
 	vs_path = "../x64/Debug/SmokeVertexShader.cso";
 	if (!LoadVertexShader(smokeVS, vs_path, byteCode))
@@ -75,13 +75,22 @@ ShaderData::ShaderData()
 		{ "SIZE", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 	hr = Graphics::GetDevice().CreateInputLayout(smokeInputDesc, particleNumElements, byteCode.c_str(), byteCode.length(), &smokeLayout);
+	//---------------------------------------//
+	
+	//-----SHADOW MAP-----
+	//SHADERS
+	vs_path = "../x64/Debug/ShadowMapVertexShader.cso";
+	if (!LoadVertexShader(shadowMapVS, vs_path, byteCode))
+		return;
 
-
-
-
-
-
-
+	//INPUT LAYOUT
+	D3D11_INPUT_ELEMENT_DESC shadowMapInputDesc[particleNumElements] =
+	{
+		{"POSITION" , 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{ "UV", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+	};
+	//---------------------------------------//
+	
 	//-----REGULAR-----
 	//SHADERS
 	vs_path = "../x64/Debug/VertexShader.cso";

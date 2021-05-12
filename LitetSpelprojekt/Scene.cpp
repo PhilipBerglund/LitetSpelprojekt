@@ -105,6 +105,7 @@ void Scene::Update(InGameUI& ui, float dt)
 
 void Scene::Render()
 {
+	ShadowMapShader.RenderShadowMap(shaderData, *this);
 	GSRainShader.RenderRain(shaderData, *this);
 	GSSmokeShader.RenderSmoke(shaderData, *this);
 	regularShader.Render(shaderData, *this);

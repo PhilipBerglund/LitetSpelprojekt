@@ -196,6 +196,7 @@
     <ClInclude Include="Random.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShaderLoader.h" />
+    <ClInclude Include="ShadowMap.h" />
     <ClInclude Include="SmokeSystem.h" />
     <ClInclude Include="SoundHandler.h" />
     <ClInclude Include="Event.h" />

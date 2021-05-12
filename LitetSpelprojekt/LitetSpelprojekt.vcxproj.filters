@@ -188,6 +188,9 @@
     <ClInclude Include="SmokeSystem.h">
       <Filter>Header Files\ParticleSystems\Smoke</Filter>
     </ClInclude>
+    <ClInclude Include="ShadowMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">

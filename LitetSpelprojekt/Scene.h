@@ -9,13 +9,14 @@
 #include "SmokeSystem.h"
 #include "ParticleShader.h"
 #include "RegularShader.h"
+#include "Bounds.h"
 
 class Scene
 {
 	friend class Scenario;
 private:
 	Scenario scenario;
-
+	Bounds bounds;
 	Camera camera;
 
 	std::map<std::string, std::shared_ptr<Model>> models;

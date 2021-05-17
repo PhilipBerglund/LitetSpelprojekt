@@ -12,6 +12,17 @@ QuadTree::QuadTree(QTSquare bounds, int cap)
 
 void QuadTree::InsertModel(std::shared_ptr<Model> model)
 {
+
+	QTPoint centerPoint;
+	centerPoint.x = model->GetPosition().x;
+	centerPoint.z = model->GetPosition().z;
+
+
+	if (!this->boundary.contains(centerPoint))
+	{
+		return;
+	}
+
 	if (models.size() < this->capacity)
 	{
 		this->models.push_back(model);
@@ -19,6 +30,11 @@ void QuadTree::InsertModel(std::shared_ptr<Model> model)
 	else
 	{
 		this->Divide();
+
+		this->TopR->InsertModel(model);
+		this->TopL->InsertModel(model);
+		this->BotR->InsertModel(model);
+		this->BotL->InsertModel(model);
 	}
 	
 }
@@ -49,11 +65,12 @@ void QuadTree::Divide()
 	BL.w = this->boundary.w / 2;
 	BL.h = this->boundary.h / 2;
 
-	this->TopR = new QuadTree(TR, 10);
-	this->TopL = new QuadTree(TL, 10);
-	this->BotR = new QuadTree(BR, 10);
-	this->BotL = new QuadTree(BL, 10);
+	this->TopR = new QuadTree(TR, this->capacity);
+	this->TopL = new QuadTree(TL, this->capacity);
+	this->BotR = new QuadTree(BR, this->capacity);
+	this->BotL = new QuadTree(BL, this->capacity);
 
+	this->divided = true;
 }
 
 

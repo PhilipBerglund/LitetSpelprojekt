@@ -16,6 +16,14 @@ struct QTSquare
 	float w;
 	float h;
 
+	bool contains(QTPoint p)
+	{
+		return(p.x <= this->xPos + this->w &&
+				p.x >= this->xPos - this->w &&
+				p.z <= this->zPos + this->h &&
+				p.z >= this->zPos - this->h);
+	};
+
 };
 
 class QuadTree
@@ -27,10 +35,13 @@ private:
 	int capacity;
 	std::vector<std::shared_ptr<Model>> models;
 
+	bool divided = false;
+
 	QuadTree* TopR = nullptr;
 	QuadTree* TopL = nullptr;
 	QuadTree* BotR = nullptr;
 	QuadTree* BotL = nullptr;
+
 
 public:
 	QuadTree();

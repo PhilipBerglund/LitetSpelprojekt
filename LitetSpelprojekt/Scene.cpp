@@ -3,13 +3,16 @@
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.001f, 50.0f, { 0, 15, 0 })
 {
-	Importer::LoadScene("Models/Office.mff");
-	Importer::LoadScene("Models/Bar.mff");
-	Importer::LoadScene("Models/Hotel.mff");
-	Importer::LoadScene("Models/Restaurant.mff");
-	Importer::LoadScene("Models/Park.mff");
-	Importer::LoadScene("Models/Objects.mff");
-	Importer::LoadScene("Models/Houses.mff");
+	//Längst upp om man ska rita ut skitn (som alla andra modeller)
+	bounds = Bounds("Models/BBoxes.mff");
+
+	//Importer::LoadScene("Models/Office.mff");
+	//Importer::LoadScene("Models/Bar.mff");
+	//Importer::LoadScene("Models/Hotel.mff");
+	//Importer::LoadScene("Models/Restaurant.mff");
+	//Importer::LoadScene("Models/Park.mff");
+	//Importer::LoadScene("Models/Objects.mff");
+	//Importer::LoadScene("Models/Houses.mff");
 	Importer::LoadScene("Models/Streets.mff");
 
 	Importer::Initialize(Graphics::GetDevice());
@@ -70,36 +73,30 @@ void Scene::AddLight()
 void Scene::Update(InGameUI& ui, float dt)
 {
 	XMFLOAT3 lastPosition = camera.GetPosition();
+	camera.Update(dt);
 
-	//for (auto& model : models)
-	//{
-	//	bool hit = false;
-
-	//	switch (model->collidertype)
-	//	{
-	//	case ColliderType::BOX:
-	//		hit = camera.CheckCollision(model->boundingbox);
-	//		break;
-	//	case ColliderType::SPHERE:
-	//		break;
-	//	}
-
-	//	if (hit)
-	//	{
-	//		camera.SetPosition(lastPosition);
-	//		XMFLOAT3 direction = { camera.GetPosition().x - model->GetPosition().x, 0.0f,
-	//								camera.GetPosition().z - model->GetPosition().z };
-	//		camera.PushBack(direction, dt);
-	//	}
-	//}
+	for (auto& box : bounds.boxes)
+	{
+		if (box.Intersects(camera.boundingsphere))
+		{
+			camera.SetPosition(lastPosition);
+			/*XMVECTOR direction = { camera.GetPosition().x - box.Center.x, 0.0f,
+									camera.GetPosition().z - box.Center.z };
+			direction = XMVector3Normalize(direction);
+			XMFLOAT3 dir;
+			XMStoreFloat3(&dir, direction);
+			camera.PushBack(dir, dt);*/
+			break;
+		}
+	}
 
 	for (auto& particleSystem : rainSystem)
 		particleSystem->Update(dt);
+
 	for (auto& particleSystem : smokeSystem)
 		particleSystem->Update(dt);
 
 	scenario.Update(*this, ui, camera);
-	camera.Update(dt);
 	shaderData.Update(camera);
 }
 

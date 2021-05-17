@@ -174,6 +174,19 @@ private:
 		slideOut = true;
 		slideIn = false;
 	}
+
+	int GetIDFromName(std::string name)
+	{
+		std::wstring wName(name.begin(), name.end());
+
+		for (auto& page : pages)
+		{
+			if (page.name.GetText() == wName)
+				return page.ID;
+		}
+
+		return -1;
+	}
 public:
 	Journal()
 	{
@@ -379,6 +392,35 @@ public:
 					}		
 			}	
 		}	
+	}
+
+	void UpdateSuspect(std::string name, std::string characteristics1, std::string characteristics2, std::string characteristics3, int age, int height, int shoeSize)
+	{
+		std::wstring temp(name.begin(), name.end());
+		int ID = GetIDFromName("Name: " + name);
+		if (ID < 0)
+			return;
+
+		//AGE
+		pages[ID].age = Text(L"Age: " + std::to_wstring(age), true, pages[ID].age.position, 500);
+
+		//HEIGHT
+		pages[ID].height = Text(L"Height: " + std::to_wstring(height) + L" cm", true, pages[ID].height.position, 500);
+
+		//SHOE SIZE
+		pages[ID].shoesize = Text(L"Shoesize: " + std::to_wstring(shoeSize), true, pages[ID].shoesize.position, 500);
+
+		//CHARACTERISTICS
+		pages[ID].characteristicsHeading = Text(L"Characteristics:", true, pages[ID].characteristicsHeading.position, 500);
+
+		std::wstring char1(characteristics1.begin(), characteristics1.end());
+		pages[ID].characteristics[0] = Text(char1, true, pages[ID].characteristics[0].position, 500);
+
+		std::wstring char2(characteristics2.begin(), characteristics2.end());
+		pages[ID].characteristics[1] = Text(char2, true, pages[ID].characteristics[1].position, 500);
+
+		std::wstring char3(characteristics3.begin(), characteristics3.end());
+		pages[ID].characteristics[2] = Text(char3, true, pages[ID].characteristics[2].position, 500);
 	}
 
 	bool HasSuspect(std::string name)

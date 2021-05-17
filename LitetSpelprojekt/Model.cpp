@@ -34,5 +34,4 @@ Model::Model(const Mesh& mesh)
 
 Model::Model()
     :worldMatrix(XMMatrixIdentity())
-{
-}
+{}

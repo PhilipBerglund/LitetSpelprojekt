@@ -43,7 +43,7 @@ Camera::Camera(float FOV, float aspectRatio, float nearZ, float farZ, float rota
 	this->perspectiveMatrix = XMMatrixPerspectiveFovLH(FOV, aspectRatio, nearZ, farZ);
 
 	this->direction = forward;
-	this->boundingsphere = BoundingSphere(transform.position, 1);
+	this->boundingsphere = BoundingSphere({ transform.position.x, 5, transform.position.z }, 1.0f);
 	this->pickingDistance = 50.0f;
 }
 
@@ -92,8 +92,8 @@ void Camera::Rotate(float dx, float dy)
 
 void Camera::PushBack(XMFLOAT3 direction, float dt)
 {
-	transform.position.x += direction.x * dt * speed;
-	transform.position.z += direction.z * dt * speed;
+	transform.position.x += direction.x * dt;
+	transform.position.z += direction.z * dt;
 }
 
 bool Camera::CheckCollision(BoundingOrientedBox& other)

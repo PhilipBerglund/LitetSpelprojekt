@@ -24,6 +24,7 @@ struct Suspect
 	int age = 0;
 	float height = 0;
 	float shoeSize = 0;
+	bool fullyKnown = false;
 	Information information;
 	std::string characteristics[3] = {""};
 
@@ -61,6 +62,5 @@ public:
 	Scenario(Scene& scene);
 	void InitializeClueLocations();
 	void SetRandomizedLocations();
-	bool TempLoadClues(std::string path);
 	void Update(Scene& scene, InGameUI& ui, Camera& camera);
 };

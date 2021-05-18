@@ -175,6 +175,7 @@
   <ItemGroup>
     <ClInclude Include="AudioChunks.h" />
     <ClInclude Include="Bounds.h" />
+    <ClInclude Include="ChatOverlay.h" />
     <ClInclude Include="GameSettings.h" />
     <ClInclude Include="Journal.h" />
     <ClInclude Include="MainMenu.h" />

@@ -2,8 +2,9 @@
 
 #include "Journal.h"
 #include "PauseMenu.h"
+#include "ChatOverlay.h"
 
-enum class CursorType { REGULAR, CROSS, CLUE, CHAT };
+enum class CursorType { REGULAR, CROSS, CLUE, CHAT, NONE };
 
 class InGameUI
 {
@@ -23,10 +24,14 @@ private:
 	Image cursor;
 	CursorType currentCursorType;
 
+	Text dtText;
+	ComPtr<IDWriteTextFormat> debugTextFormat;
+	ComPtr<ID2D1SolidColorBrush> debugBrush;
+
 	ComPtr<IDWriteTextFormat> textFormat;
-	ComPtr<IDWriteTextLayout> textLayout;
 
 	ComPtr<ID2D1SolidColorBrush> brush;
+	ComPtr<ID2D1SolidColorBrush> whiteBrush;
 	ComPtr<ID2D1SolidColorBrush> opacityBrush;
 
 	bool drawOverlay = false;
@@ -36,6 +41,8 @@ private:
 	FLOAT fontSize = 40;
 
 	PauseMenu pauseMenu;
+
+	bool gotNewInformation = false;
 private:
 	void SwitchJournalState()
 	{
@@ -79,6 +86,21 @@ private:
 		}
 	}
 
+	void SwitchChatState()
+	{
+		Event::DispatchEvent(EventType::STATECHANGE);
+		GameSettings::SetState(GameState::INGAME);
+		if (gotNewInformation)
+		{
+			newInformationNotation->SetVisibility(true);
+			newInformationNotation->SetOpacity(1.0f);
+		}
+		
+		gotNewInformation = false;
+		SetCursorType(CursorType::CROSS);
+		chatOverlay.Reset();
+	}
+
 	void Reset()
 	{
 		newInformationNotation->SetOpacity(1.0f);
@@ -114,6 +136,7 @@ private:
 	}
 public:
 	Journal journal;
+	ChatOverlay chatOverlay;
 public:
 	~InGameUI()
 	{
@@ -158,9 +181,24 @@ public:
 
 		Reset();
 
-		//TEXT
-		HRESULT hr = Graphics::GetWriteFactory().CreateTextFormat(font.c_str(), nullptr, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, fontSize, L"", &textFormat);
+		//TEX
+		//DEBUG
+		HRESULT hr = Graphics::GetWriteFactory().CreateTextFormat(font.c_str(), nullptr, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 30, L"", &debugTextFormat);
+		if FAILED(hr)
+		{
+			Error("FAILED TO CREATE TEXT FORMAT");
+			return;
+		}
 
+		hr = Graphics::Get2DRenderTarget().CreateSolidColorBrush(D2D1::ColorF(1.0f, 0.0f, 0.0f), &debugBrush);
+		if FAILED(hr)
+		{
+			Error("FAILED TO CREATE SOLID COLOR BRUSH");
+			return;
+		}
+
+		//REGULAR
+		hr = Graphics::GetWriteFactory().CreateTextFormat(font.c_str(), nullptr, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, fontSize, L"", &textFormat);
 		if FAILED(hr)
 		{
 			Error("FAILED TO CREATE TEXT FORMAT");
@@ -168,7 +206,13 @@ public:
 		}
 
 		hr = Graphics::Get2DRenderTarget().CreateSolidColorBrush(D2D1::ColorF(62.0f / 255.0f, 52.0f / 255.0f, 49.0f / 255.0f), &brush);
+		if FAILED(hr)
+		{
+			Error("FAILED TO CREATE SOLID COLOR BRUSH");
+			return;
+		}
 
+		hr = Graphics::Get2DRenderTarget().CreateSolidColorBrush(D2D1::ColorF(1, 1, 1), &whiteBrush);
 		if FAILED(hr)
 		{
 			Error("FAILED TO CREATE SOLID COLOR BRUSH");
@@ -176,7 +220,6 @@ public:
 		}
 
 		hr = Graphics::Get2DRenderTarget().CreateSolidColorBrush(D2D1::ColorF(62.0f / 255.0f, 52.0f / 255.0f, 49.0f / 255.0f), &opacityBrush);
-
 		if FAILED(hr)
 		{
 			Error("FAILED TO CREATE SOLID COLOR BRUSH");
@@ -185,6 +228,8 @@ public:
 
 		textFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 		textFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+
+		dtText = Text(L"", true, { Window::GetWidth() - 50, 0 }, 100);
 	};
 
 	void Render(float dt)
@@ -195,6 +240,11 @@ public:
 
 		if (pauseMenu.Resume())
 			SwitchPauseState();
+
+		if (chatOverlay.Exit())
+			SwitchChatState();
+
+		dtText.SetString(std::to_wstring(dt * 1000.0f));
 
 		//DRAWING
 		for (auto& image : images)
@@ -210,6 +260,11 @@ public:
 
 		if (GameSettings::GetState() == GameState::PAUSED)
 			pauseMenu.Draw();
+
+		if (GameSettings::GetState() == GameState::CHAT)
+			chatOverlay.Draw(*debugTextFormat.Get(), *whiteBrush.Get(), dt);
+
+		dtText.Draw(*debugTextFormat.Get(), *debugBrush.Get());
 
 		if (cursor.visible)
 			cursor.Draw();
@@ -248,8 +303,7 @@ public:
 
 	void ShowNotification()
 	{
-		newInformationNotation->SetVisibility(true);
-		newInformationNotation->SetOpacity(1.0f);
+		gotNewInformation = true;
 	}
 
 	void SetCursorType(CursorType type)
@@ -288,6 +342,15 @@ public:
 				crossCursor->SetVisibility(false);
 				clueCursor->SetVisibility(false);
 				cursor.SetVisibility(false);
+				break;
+
+			case CursorType::NONE:
+				currentCursorType = CursorType::NONE;
+				chatCursor->SetVisibility(false);
+				crossCursor->SetVisibility(false);
+				clueCursor->SetVisibility(false);
+				cursor.SetVisibility(false);
+				break;
 			};
 		}
 	}

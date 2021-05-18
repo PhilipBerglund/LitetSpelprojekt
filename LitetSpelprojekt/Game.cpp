@@ -1,8 +1,9 @@
 #include "Game.h"
 
 Game::Game(HWND window, UINT windowWidth, UINT windowHeight)
+	:scene(windowWidth,windowHeight, window)
 {
-	scene = Scene(windowWidth, windowHeight, window);
+	//scene = Scene(windowWidth, windowHeight, window);
 }
 
 void Game::Render(float dt)

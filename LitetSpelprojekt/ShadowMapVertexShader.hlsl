@@ -1,11 +1,20 @@
-cbuffer light : register(b0)
+struct VertexShaderInput
 {
-    matrix lightViewProj;
+    float3 position : POSITION;
+    float3 normal : NORMAL;
+    float2 uv : UV;
+    float3 tangent : TANGENT;
+    float3 binormal : BINORMAL;
+    float3 weights : WEIGHTS;
+    float4 boneIDs : BONEIDS;
 };
 
-
-
-float4 main( float4 pos : POSITION ) : SV_POSITION
+cbuffer light : register(b3)
 {
-	return pos; 
+    matrix lightWorldViewProj;
+};
+
+float4 main(VertexShaderInput input): SV_POSITION
+{
+    return mul(float4(input.position, 1.0f), lightWorldViewProj);
 }

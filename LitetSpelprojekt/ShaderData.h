@@ -3,6 +3,8 @@
 #include "Graphics.h"
 #include "Camera.h"
 #include "Random.h"
+#include "ShadowMap.h"
+#include "Light.h"
 
 #include <directXmath.h>
 using namespace DirectX;
@@ -19,6 +21,10 @@ private:
 	XMMATRIX viewMatrix = {};
 	XMMATRIX projectionMatrix = {};
 
+	//DIRECTIONAL_LIGHT
+	XMMATRIX lightViewMatrix = {};
+	XMMATRIX lightProjectionMatrix = {};
+
 	//-----SMOKE PARTICLE SYSTEM----
 	ComPtr<ID3D11VertexShader> smokeVS;
 	ComPtr<ID3D11GeometryShader> smokeGS;
@@ -32,10 +38,6 @@ private:
 	//BUFFERS
 	ComPtr<ID3D11Buffer> viewProjBuffer;
 
-
-	//-----RAIN PARTICLE SYSTEM-----
-	//BUFFERS
-
 	//SHADERS
 	ComPtr<ID3D11VertexShader> rainVS;
 	ComPtr<ID3D11GeometryShader> rainGS;
@@ -48,7 +50,18 @@ private:
 
 	//-----SHADOW MAP-----
 	//BUFFERS
+	ComPtr<ID3D11Buffer> shadowBuffer;
+	XMFLOAT4X4 shadowMapMatrix;
+	ComPtr<ID3D11Buffer> lightBuffer;
+
+	//SHADERS
 	ComPtr<ID3D11VertexShader> shadowMapVS;
+
+	//INPUT LAYOUT
+	ComPtr<ID3D11InputLayout> shadowLayout;
+
+	//ShadowMap
+	ShadowMap shadowMap;
 
 	//-----REGULAR-----
 	//BUFFERS
@@ -94,5 +107,5 @@ private:
 	bool LoadTexture(std::string fileName);
 public:
 	ShaderData();
-	void Update(const Camera& camera);
+	void Update(const Camera& camera, const Light& light);
 };

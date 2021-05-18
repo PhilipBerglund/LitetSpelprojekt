@@ -1,4 +1,5 @@
 Texture2D diffuseTexture : register(t0);
+Texture2D shadowDSV : register(t1);
 SamplerState wrapSampler : register(s0);
 
 struct PixelShaderInput

@@ -26,7 +26,8 @@ private:
 	std::vector<std::shared_ptr<GameObject>> gameObjects;
 	std::vector<std::shared_ptr<RainSystem>> rainSystem;
 	std::vector<std::shared_ptr<SmokeSystem>> smokeSystem;
-	std::vector<std::shared_ptr<ShadowMap>> shadowMap;
+	std::vector<std::shared_ptr<ShadowMap>> shadowMaps;
+	std::vector<std::shared_ptr<Model>> nonShadowModels;
 
 	//SHADERS
 	ShaderData shaderData;

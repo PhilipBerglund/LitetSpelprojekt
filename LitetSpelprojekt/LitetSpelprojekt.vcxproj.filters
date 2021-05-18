@@ -188,6 +188,12 @@
     <ClInclude Include="SmokeSystem.h">
       <Filter>Header Files\ParticleSystems\Smoke</Filter>
     </ClInclude>
+    <ClInclude Include="Bounds.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="ChatOverlay.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">

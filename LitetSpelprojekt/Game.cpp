@@ -20,16 +20,19 @@ void Game::Render(float dt)
 	case GameState::INGAME:
 		SetCursorPos((int)Window::GetWidth() / 2, (int)Window::GetHeight() / 2);
 		scene.Update(inGameUI, dt);
+		scene.RenderShadowMap();
 		scene.Render();
 		inGameUI.Render(dt);
 		break;
 	
 	case GameState::JOURNAL:
+		scene.RenderShadowMap();
 		scene.Render();
 		inGameUI.Render(dt);
 		break;
 
 	case GameState::PAUSED:
+		scene.RenderShadowMap();
 		scene.Render();
 		inGameUI.Render(dt);
 		break;

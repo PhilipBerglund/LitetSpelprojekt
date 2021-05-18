@@ -109,6 +109,13 @@ ShaderData::ShaderData()
 		Error("FAILED TO CREATE BUFFER");
 		return;
 	}
+	bufferDesc.ByteWidth = sizeof(XMFLOAT4X4);
+	hr = Graphics::GetDevice().CreateBuffer(&bufferDesc, nullptr, &lightViewProjBuffer);
+	if FAILED(hr)
+	{
+		Error("FAILED TO CREATE BUFFER");
+		return;
+	}
 	//---------------------------------------//
 	
 	//-----REGULAR-----
@@ -229,6 +236,7 @@ void ShaderData::Update(const Camera& camera, const Light& light)
 	Graphics::GetDeviceContext().Unmap(shadowBuffer.Get(), 0);
 	Graphics::GetDeviceContext().VSSetConstantBuffers(4, 1, shadowBuffer.GetAddressOf());
 	Graphics::GetDeviceContext().PSSetShaderResources(1, 1, shadowMap.DepthMapSRV());
+	Graphics::GetDeviceContext().PSSetConstantBuffers(2, 1, lightBuffer.GetAddressOf());
 
 	//-----REGULAR-----
 	//CAMERA BUFFER

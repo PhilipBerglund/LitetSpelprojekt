@@ -105,4 +105,30 @@ void RegularShader::Render(ShaderData& data, Scene& scene)
 
 		Graphics::GetDeviceContext().Draw(model->GetVertexCount(), 0);
 	}
+
+	const auto& noShadowModels = scene.GetNoShadowModels();
+
+	for (const auto& pair : noShadowModels)
+	{
+		auto& noShadowModel = pair.second;
+		UpdatePerMesh(data, *noShadowModel);
+
+		Graphics::GetDeviceContext().IASetVertexBuffers(0, 1, noShadowModel->GetVertexBuffer(), &stride, &offset);
+
+		Graphics::GetDeviceContext().PSSetShader(data.regularTexturePixelShader.Get(), nullptr, 0);
+		const float mat[] = { noShadowModel->GetMaterial().diffuse[0], noShadowModel->GetMaterial().diffuse[1], noShadowModel->GetMaterial().diffuse[2] };
+
+		if (noShadowModel->GetDiffuseTexture())
+			Graphics::GetDeviceContext().PSSetShaderResources(0, 1, noShadowModel->GetDiffuseTexture());
+
+		else if ((mat[0] == 0.5f && mat[1] == 0.5f && mat[2] == 0.5f) ||
+			(mat[0] == 1.0f && mat[1] == 1.0f && mat[2] == 1.0f) ||
+			(mat[0] == 0.0f && mat[1] == 0.0f && mat[2] == 0.0f))
+			Graphics::GetDeviceContext().PSSetShader(data.regularPixelShader.Get(), nullptr, 0);
+
+		else
+			Graphics::GetDeviceContext().PSSetShader(data.regularColorPixelShader.Get(), nullptr, 0);
+
+		Graphics::GetDeviceContext().Draw(noShadowModel->GetVertexCount(), 0);
+	}
 }

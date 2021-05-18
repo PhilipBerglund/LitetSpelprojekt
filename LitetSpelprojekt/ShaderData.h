@@ -53,6 +53,7 @@ private:
 	ComPtr<ID3D11Buffer> shadowBuffer;
 	XMFLOAT4X4 shadowMapMatrix;
 	ComPtr<ID3D11Buffer> lightBuffer;
+	ComPtr<ID3D11Buffer> lightViewProjBuffer;
 
 	//SHADERS
 	ComPtr<ID3D11VertexShader> shadowMapVS;

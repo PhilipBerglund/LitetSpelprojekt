@@ -21,16 +21,22 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	}
 
 	Importer::LoadScene("Models/Streets.mff");
-	auto noShadowModel = std::make_shared<Model>(Importer::Data::GetMeshAt(Importer::Data::scenes.size() - 1, 0));
-	nonShadowModels.push_back(noShadowModel);
-
+	for (int i = 0; i < Importer::Data::scenes.size(); ++i)
+	{
+		for (auto& noShadowMesh : Importer::Data::GetMeshes(i))
+		{
+			auto noShadowModel = std::make_shared<Model>(noShadowMesh);
+			nonShadowModels.insert(std::make_pair(noShadowModel->GetName(), noShadowModel));
+		}
+	}
+	
 	Importer::Initialize(Graphics::GetDevice());
 
 	AddRainParticleSystem(3000, 150, 200);
 	AddSmokeParticleSystem(200, 5, 10, { 25.0f, 10.0f, 40.0f, 1.0f }, 60);
 	AddSmokeParticleSystem(400, 5, 10, { -112.0f, 120.0f, 10.0f, 1.0f }, 200);
 	AddLight();
-	lights[0]->SetRotation({ 0.5f,0.5f,0.5f });
+	lights[0]->SetRotation({ 0.0f,-100.0f,100.0f });
 	AddShadowMap(Window::GetWidth(), Window::GetHeight());
 
 	scenario = Scenario(*this);
@@ -116,9 +122,13 @@ void Scene::Update(InGameUI& ui, float dt)
 
 void Scene::Render()
 {
-	ShadowMapShader.RenderShadowMap(shaderData, *this);
-	Graphics::BeginFrame();
 	GSRainShader.RenderRain(shaderData, *this);
 	GSSmokeShader.RenderSmoke(shaderData, *this);
 	regularShader.Render(shaderData, *this);
+}
+
+void Scene::RenderShadowMap()
+{
+	ShadowMapShader.RenderShadowMap(shaderData, *this);
+	Graphics::BeginFrame();
 }

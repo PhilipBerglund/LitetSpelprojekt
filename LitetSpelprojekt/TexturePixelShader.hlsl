@@ -15,11 +15,54 @@ cbuffer Camera : register(b0)
     float3 cameraPosition;
 };
 
+cbuffer light : register(b3)
+{
+    matrix lightWorldViewProj;
+};
+
 float4 main(PixelShaderInput input) : SV_TARGET
 {
     float diffuse = saturate(dot(input.normal, float3(40, 40, 40)));
     
     float4 finalColor = diffuseTexture.Sample(wrapSampler, input.uv);
+    
+    //Flytta ljuset till lightWVP
+    float4 positionInLightSpace = mul(input.worldPosition, lightWorldViewProj);
+    
+    positionInLightSpace.xy /= positionInLightSpace.w; //"Perspective divide" för att projicera texturkoordinaterna på shadow map
+
+    //Skalar till uv-koordinater (0-1)
+    float2 smTexUV = float2(0.5f * positionInLightSpace.x + 0.5f, -0.5f * positionInLightSpace.y + 0.5f);
+    
+    float4 depthMap = shadowDSV.Sample(wrapSampler, smTexUV);
+    
+    //Beräkna djup på pixel
+    float depth = positionInLightSpace.z / positionInLightSpace.w;
+    
+    float shadowMapSize = 2048;
+    float dx = 1.0f / shadowMapSize;
+    float bias = 0.005;
+    
+    //2x2 sampling, samplar de närmsta pixlarna ("point sampling")
+    float s0 = shadowDSV.Sample(wrapSampler, smTexUV).r;
+    float s1 = shadowDSV.Sample(wrapSampler, smTexUV + float2(dx, 0)).r;
+    float s2 = shadowDSV.Sample(wrapSampler, smTexUV + float2(0, dx)).r;
+    float s3 = shadowDSV.Sample(wrapSampler, smTexUV + float2(dx, dx)).r;
+    
+    //Jämför djup + bias(för att minska artifakter)
+    float result1 = depth <= s0 + bias;
+    float result2 = depth <= s1 + bias;
+    float result3 = depth <= s2 + bias;
+    float result4 = depth <= s3 + bias;
+
+    //Transformera shadow map uv positioner till texel space
+    float2 texelPos = shadowMapSize * smTexUV.xy;
+    
+    //Lerp resultat
+    float2 t = frac(texelPos);
+    float result = lerp(lerp(result1, result2, t.x), lerp(result3, result4, t.x), t.y);
+    
+    finalColor = finalColor * result;
     
     return finalColor;
 }

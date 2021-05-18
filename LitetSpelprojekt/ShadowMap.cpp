@@ -14,8 +14,8 @@ ShadowMap::ShadowMap()
 	// the bits as DXGI_FORMAT_D24_UNORM_S8_UINT, whereas the SRV is going
 	// to interpret the bits as DXGI_FORMAT_R24_UNORM_X8_TYPELESS.
 	D3D11_TEXTURE2D_DESC texDesc;
-	texDesc.Width = mWidth;
-	texDesc.Height = mHeight;
+	texDesc.Width = 2048;
+	texDesc.Height = 2048;
 	texDesc.MipLevels = 1;
 	texDesc.ArraySize = 1;
 	texDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
@@ -117,14 +117,14 @@ void ShadowMap::BindDsvAndSetNullRenderTarget()
 
 void ShadowMap::UpdateLightAndShadow(DirectX::XMFLOAT3 lightDir, DirectX::XMFLOAT4X4 shadowMatrix)
 {
-	sceneBounds.radius = 300;
+	sceneBounds.radius = 600;
 
 	//Normalize and store direction/rotation of light
 	XMVECTOR lightDirection = XMVector3Normalize(XMLoadFloat3(&lightDir));
 	XMStoreFloat3(&lightDir, lightDirection);
 
 	//For shadow matrix
-	XMVECTOR lightPosition = -2 * sceneBounds.radius * lightDirection;
+	XMVECTOR lightPosition = { 100.0f, 500.0f, 0.0f }; /*-2 * sceneBounds.radius * lightDirection;*/
 	XMVECTOR targetPosition = XMLoadFloat3(&sceneBounds.center);
 	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	XMMATRIX V = XMMatrixLookAtLH(lightPosition, targetPosition, up);

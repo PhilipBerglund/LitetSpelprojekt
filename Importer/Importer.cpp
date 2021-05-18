@@ -54,14 +54,6 @@ namespace Importer
 
 			tempTimer.Start();
 
-		/*	file.seekg(0, std::ios::end);
-			auto fileSize = file.tellg();
-			std::vector<char> buffer;
-			buffer.resize(fileSize);
-
-			file.seekg(0, std::ios::beg);
-			file.read(&buffer[0], fileSize);*/
-
 			buffer = std::vector<unsigned char>(std::istreambuf_iterator<char>(file), {});
 			std::cout << "LOAD FILE DATA: " << tempTimer.DeltaTime() << std::endl;
 

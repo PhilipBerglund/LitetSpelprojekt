@@ -17,7 +17,6 @@ private:
 	float rotationSpeed;
 	float speed;
 
-	BoundingSphere boundingsphere;
 	float pickingDistance;
 	XMVECTOR direction;
 
@@ -25,6 +24,9 @@ private:
 	bool a = false;
 	bool s = false;
 	bool d = false;
+public:
+	BoundingSphere boundingsphere;
+
 public:
 	Camera();
 	Camera(float FOV, float aspectRatio, float nearZ, float farZ, float rotationSpeed, float speed, XMFLOAT3 position, XMFLOAT3 rotation = { 0,0,0 }, XMFLOAT3 scale = { 1,1,1 });

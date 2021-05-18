@@ -17,27 +17,30 @@ void QuadTree::InsertModel(std::shared_ptr<Model> model)
 	centerPoint.x = model->GetPosition().x;
 	centerPoint.z = model->GetPosition().z;
 
-
-	if (!this->boundary.contains(centerPoint))
-	{
-		return;
-	}
-
-	if (models.size() < this->capacity)
-	{
-		this->models.push_back(model);
-	}
-	else
-	{
-		this->Divide();
-
-		this->TopR->InsertModel(model);
-		this->TopL->InsertModel(model);
-		this->BotR->InsertModel(model);
-		this->BotL->InsertModel(model);
-	}
 	
+	if (boundary.contains(centerPoint))
+	{
+		if (models.size() < capacity)
+		{
+			models.push_back(model);
+		}
+		else
+		{
+			if (divided == false)
+			{
+				Divide();
+			}
+
+			TopR->InsertModel(model);
+			TopL->InsertModel(model);
+			BotR->InsertModel(model);
+			BotL->InsertModel(model);
+		}
+	}
+
 }
+
+
 
 void QuadTree::Divide()
 {
@@ -71,6 +74,42 @@ void QuadTree::Divide()
 	this->BotL = new QuadTree(BL, this->capacity);
 
 	this->divided = true;
+
+	return;
 }
 
 
+void QuadTree::DeleteQuadTree()
+{
+	if (this->TopR->divided == true)
+	{
+		this->DeleteQuadTree();
+	}
+	if (this->TopL->divided == true)
+	{
+		this->DeleteQuadTree();
+	}
+	if (this->BotR->divided == true)
+	{
+		this->DeleteQuadTree();
+	}
+	if (this->BotR->divided == true)
+	{
+		this->DeleteQuadTree();
+	}
+
+	delete this;
+}
+
+QTFrustum::QTFrustum()
+{
+	this->Origin = {0,0,0};
+	this->Orientation = {0,0,0,0};
+
+	this->RightSlope = 0;
+	this->LeftSlope = 0;
+	this->TopSlope = 0;
+	this->BottomSlope = 0;
+	this->NearPlane = 0;
+	this->FarPlane = 0;
+}

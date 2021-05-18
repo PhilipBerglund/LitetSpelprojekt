@@ -1,5 +1,4 @@
 #pragma once
-
 #include <map>
 #include "Graphics.h"
 #include "Model.h"
@@ -10,6 +9,8 @@
 #include "ParticleShader.h"
 #include "RegularShader.h"
 #include "Bounds.h"
+#include "QuadTree.h"
+
 
 class Scene
 {

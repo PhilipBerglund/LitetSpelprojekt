@@ -24,6 +24,7 @@ private:
 	//DIRECTIONAL_LIGHT
 	XMMATRIX lightViewMatrix = {};
 	XMMATRIX lightProjectionMatrix = {};
+	XMMATRIX lightOrthographicMatrix = {};
 
 	//-----SMOKE PARTICLE SYSTEM----
 	ComPtr<ID3D11VertexShader> smokeVS;

@@ -3,6 +3,19 @@
 
 void RegularShader::SetShader(ShaderData& data)
 {
+	HRESULT hr;
+	D3D11_MAPPED_SUBRESOURCE mappedResource = {};
+
+	hr = Graphics::GetDeviceContext().Map(data.lightViewProjBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	if FAILED(hr)
+	{
+		Error("FAILED TO MAP BUFFER");
+		return;
+	}
+
+	memcpy(mappedResource.pData, &data.shadowMapMatrix, sizeof(XMFLOAT4X4));
+	Graphics::GetDeviceContext().Unmap(data.lightViewProjBuffer.Get(), 0);
+	Graphics::GetDeviceContext().PSSetConstantBuffers(3, 1, data.lightViewProjBuffer.GetAddressOf());
 	Graphics::GetDeviceContext().IASetInputLayout(data.regularLayout.Get());
 	Graphics::GetDeviceContext().VSSetShader(data.regularVertexShader.Get(), nullptr, 0);
 	Graphics::GetDeviceContext().IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -129,6 +142,7 @@ void RegularShader::Render(ShaderData& data, Scene& scene)
 		else
 			Graphics::GetDeviceContext().PSSetShader(data.regularColorPixelShader.Get(), nullptr, 0);
 
+		Graphics::GetDeviceContext().PSSetShaderResources(1, 1, data.shadowMap.DepthMapSRV());
 		Graphics::GetDeviceContext().Draw(noShadowModel->GetVertexCount(), 0);
 	}
 }

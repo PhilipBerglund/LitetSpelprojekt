@@ -23,8 +23,11 @@ cbuffer light : register(b3)
 float4 main(PixelShaderInput input) : SV_TARGET
 {
     float diffuse = saturate(dot(input.normal, float3(40, 40, 40)));
+    float4 ambient = (0.5f, 0.5f, 0.5f, 1);
+    float4 lightDiffuse = (0.5f, 0.5f, 0.5f, 1);
     
     float4 finalColor = diffuseTexture.Sample(wrapSampler, input.uv);
+    finalColor = finalColor * ambient * lightDiffuse;
     
     //Flytta ljuset till lightWVP
     float4 positionInLightSpace = mul(input.worldPosition, lightWorldViewProj);
@@ -32,12 +35,12 @@ float4 main(PixelShaderInput input) : SV_TARGET
     positionInLightSpace.xy /= positionInLightSpace.w; //"Perspective divide" för att projicera texturkoordinaterna på shadow map
 
     //Skalar till uv-koordinater (0-1)
-    float2 smTexUV = float2(0.5f * positionInLightSpace.x + 0.5f, -0.5f * positionInLightSpace.y + 0.5f);
+    float2 smTexUV = float2(0.5f * (positionInLightSpace.x + 1.0f), -0.5f * (positionInLightSpace.y + 1.0f));
     
     float4 depthMap = shadowDSV.Sample(wrapSampler, smTexUV);
     
     //Beräkna djup på pixel
-    float depth = positionInLightSpace.z / positionInLightSpace.w;
+    float depth = positionInLightSpace.z / positionInLightSpace.w + 1 * 0.5f;
     
     float shadowMapSize = 2048;
     float dx = 1.0f / shadowMapSize;
@@ -50,10 +53,10 @@ float4 main(PixelShaderInput input) : SV_TARGET
     float s3 = shadowDSV.Sample(wrapSampler, smTexUV + float2(dx, dx)).r;
     
     //Jämför djup + bias(för att minska artifakter)
-    float result1 = depth <= s0 + bias;
-    float result2 = depth <= s1 + bias;
-    float result3 = depth <= s2 + bias;
-    float result4 = depth <= s3 + bias;
+    float result1 = depth <= s0;
+    float result2 = depth <= s1;
+    float result3 = depth <= s2;
+    float result4 = depth <= s3s;
 
     //Transformera shadow map uv positioner till texel space
     float2 texelPos = shadowMapSize * smTexUV.xy;

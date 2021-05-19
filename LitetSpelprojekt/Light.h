@@ -5,6 +5,8 @@ struct LightAttributes
 {
 	XMFLOAT4 ambient;
 	XMFLOAT4 diffuse;
+	XMFLOAT3 direction;
+	XMFLOAT4 viewPosition;
 };
 
 class Light :public GameObject
@@ -13,6 +15,7 @@ private:
 	LightAttributes attributes;
 	XMMATRIX viewMatrix;
 	XMMATRIX perspectiveMatrix;
+	XMMATRIX orthographicMatrix;
 	XMFLOAT3 forward;
 public:
 	Light();
@@ -20,6 +23,7 @@ public:
 
 	XMMATRIX GetViewMatrix() const			{ return this->viewMatrix; };
 	XMMATRIX GetPerspectiveMatrix() const	{ return this->perspectiveMatrix; };
+	XMMATRIX GetOrthographicMatrix() const	{ return this->orthographicMatrix; };
 	LightAttributes GetAttributes() const	{ return this->attributes; };
 
 	Type type() const override { return Type::LIGHT; };

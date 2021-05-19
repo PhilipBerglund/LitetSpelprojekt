@@ -7,7 +7,9 @@ Light::Light()
   
     XMFLOAT3 up = { 0,1,0 };
     this->forward = { 0,0,1 };
+    this->transform.position = { 0,1,0 };
     this->viewMatrix = XMMatrixLookAtLH(XMLoadFloat3(&transform.position), XMLoadFloat3(&forward), XMLoadFloat3(&up));
+    this->orthographicMatrix = XMMatrixOrthographicOffCenterLH(-600.0f, 600.0f, -600, 600.0f, 0.1f, 100.0f);
 
     perspectiveMatrix = XMMatrixPerspectiveFovLH(XM_PIDIV4, (float)1024 / float(476), 0.1, 100);
 }
@@ -21,6 +23,7 @@ Light::Light(XMFLOAT4 ambient, XMFLOAT4 diffuse, float FOV, float aspectRatio, f
     XMFLOAT3 up = { 0,1,0 };
     this->forward = { 0,0,1 };
     this->viewMatrix = XMMatrixLookAtLH(XMLoadFloat3(&transform.position), XMLoadFloat3(&forward), XMLoadFloat3(&up));
+    this->orthographicMatrix = XMMatrixOrthographicOffCenterLH(-600.0f, 600.0f, -600, 600.0f, 0.1f, 100.0f);
 
     perspectiveMatrix = XMMatrixPerspectiveFovLH(FOV, aspectRatio, nearZ, farZ);
 }

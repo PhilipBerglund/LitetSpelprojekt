@@ -115,7 +115,7 @@ void ShadowMap::BindDsvAndSetNullRenderTarget()
 	Graphics::GetDeviceContext().ClearDepthStencilView(mDepthMapDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
-void ShadowMap::UpdateLightAndShadow(DirectX::XMFLOAT3 lightDir, DirectX::XMFLOAT4X4 shadowMatrix)
+void ShadowMap::UpdateLightAndShadow(DirectX::XMFLOAT3& lightDir, DirectX::XMFLOAT4X4& shadowMatrix)
 {
 	sceneBounds.radius = 600;
 
@@ -124,7 +124,7 @@ void ShadowMap::UpdateLightAndShadow(DirectX::XMFLOAT3 lightDir, DirectX::XMFLOA
 	XMStoreFloat3(&lightDir, lightDirection);
 
 	//For shadow matrix
-	XMVECTOR lightPosition = { 100.0f, 500.0f, 0.0f }; /*-2 * sceneBounds.radius * lightDirection;*/
+	XMVECTOR lightPosition = { 0.0f, 1.0f, 0.0f }; //-2 * sceneBounds.radius * lightDirection;
 	XMVECTOR targetPosition = XMLoadFloat3(&sceneBounds.center);
 	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	XMMATRIX V = XMMatrixLookAtLH(lightPosition, targetPosition, up);

@@ -20,7 +20,7 @@ public:
 	ID3D11ShaderResourceView** DepthMapSRV();
 	ComPtr<ID3D11DepthStencilView> DepthMapDSV();
 	void BindDsvAndSetNullRenderTarget();
-	void UpdateLightAndShadow(DirectX::XMFLOAT3 lightDir, DirectX::XMFLOAT4X4 shadowMatrix);
+	void UpdateLightAndShadow(DirectX::XMFLOAT3& lightDir, DirectX::XMFLOAT4X4& shadowMatrix);
 private:
 	ShadowMap(const ShadowMap& rhs);
 	ShadowMap& operator=(const ShadowMap& rhs);

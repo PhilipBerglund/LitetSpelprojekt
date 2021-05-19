@@ -87,6 +87,9 @@
     <ClCompile Include="SmokeSystem.cpp">
       <Filter>Header Files\ParticleSystems\Smoke</Filter>
     </ClCompile>
+    <ClCompile Include="SkinnedData.cpp">
+      <Filter>Header Files\Animation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -194,6 +197,15 @@
     <ClInclude Include="ChatOverlay.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
+    <ClInclude Include="SkinnedData.h">
+      <Filter>Header Files\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Header Files\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
@@ -231,6 +243,9 @@
     </Filter>
     <Filter Include="Header Files\ParticleSystems\Smoke">
       <UniqueIdentifier>{107f514e-d1df-463b-916a-071e689602a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Animation">
+      <UniqueIdentifier>{1ab58be2-37bd-439a-832c-0bc8edf6c6ce}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -1,7 +1,9 @@
 #include "Importer.h"
+#include <array>
 #include <iostream>
 #include <fstream>
 #include "TempTimer.h"
+
 
 namespace Importer
 {
@@ -79,6 +81,9 @@ namespace Importer
 				case DataType::VERTEXBUFFER:
 					ReadVertexBuffer(scene);
 					break;
+
+				case DataType::SKELETON:
+					ReadSkeleton(scene);
 				}
 			}
 			std::cout << "ACTUALLY READ DATA: " << tempTimer.DeltaTime() << std::endl;
@@ -133,7 +138,7 @@ namespace Importer
 				ReadVector(vertex.uv, 2);
 				ReadVector(vertex.tangent, 3);
 				ReadVector(vertex.binormal, 3);
-				ReadVector(vertex.weights, 3);
+				ReadVector(vertex.weights, 4);
 				ReadVector(vertex.boneIDs, 4);
 
 				vertexBuffer.vertices.emplace_back(vertex);
@@ -176,6 +181,108 @@ namespace Importer
 
 			material.sceneID = Data::scenes.size();
 			scene.materials.emplace_back(material);
+		}
+
+		//SKELETON
+		void Read(Shape& shape)
+		{
+			Read(shape.vertexCount);
+			for (int i = 0; i < shape.vertexCount; ++i)
+			{
+				std::array<float, 4> quaternion;
+				std::array<float, 3> position;
+
+				for (int j = 0; j < 4; ++j)
+					Read(quaternion[j]);
+
+				for (int j = 0; j < 3; ++j)
+					Read(position[j]);
+
+				shape.transform.push_back(std::make_pair(quaternion, position));
+			}
+		}
+
+		void Read(MorphAnimation& morphAnim)
+		{
+			Read(morphAnim.shapeCount);
+			for (int i = 0; i < morphAnim.shapeCount; ++i)
+			{
+				Shape shape;
+				Read(shape);
+				morphAnim.shapes.push_back(shape);
+			}	
+		}
+
+		void Read(Skinning& skinning)
+		{
+			Read(skinning.weightCount);
+			Read(skinning.indexCount);
+
+			for (int i = 0; i < skinning.weightCount; ++i)
+			{
+				float weight;
+				Read(weight);
+
+				skinning.weights.push_back(weight);
+			}
+
+			for (int i = 0; i < skinning.indexCount; ++i)
+			{
+				unsigned int index;
+				Read(index);
+
+				skinning.indices.push_back(index);
+			}
+		}
+
+		void Read(KeyFrame& keyFrame)
+		{
+			Read(keyFrame.timeStamp);
+			ReadVector(keyFrame.transform.translation, 3);
+			ReadVector(keyFrame.transform.rotation, 4);
+			ReadVector(keyFrame.transform.scale, 3);
+		}
+
+		void Read(Animation& animation)
+		{
+			ReadName(animation.name);
+			Read(animation.keyFrameCount);
+
+			for (int i = 0; i < animation.keyFrameCount; ++i)
+			{
+				KeyFrame keyFrame;
+				Read(keyFrame);
+				animation.keyFrames.push_back(keyFrame);
+			}
+		}
+
+		void Read(Joint& joint)
+		{
+			Read(joint.parentID);
+			Read(joint.ID);
+			ReadName(joint.name);
+			ReadVector(joint.inverseBP, 16);
+
+			Read(joint.animation);
+			Read(joint.skinning);
+		}
+
+		void ReadSkeleton(SceneData& scene)
+		{
+			Skeleton skeleton;
+
+			Read(skeleton.ID);
+			Read(skeleton.morphAnim);
+			Read(skeleton.jointCount);
+
+			for (int i = 0; i < skeleton.jointCount; ++i)
+			{
+				Joint joint;
+				Read(joint);
+				skeleton.joints.push_back(joint);
+			}
+
+			scene.skeletons.push_back(skeleton);
 		}
 	};
 

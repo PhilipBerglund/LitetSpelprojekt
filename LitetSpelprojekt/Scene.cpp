@@ -4,15 +4,16 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.001f, 50.0f, { 0, 15, 0 })
 {
 	//Längst upp om man ska rita ut skitn (som alla andra modeller)
-	Importer::LoadScene("Models/Office.mff");
+	//Importer::LoadScene("Models/Office.mff");
 	//Importer::LoadScene("Models/Bar.mff");
 	//Importer::LoadScene("Models/Hotel.mff");
 	//Importer::LoadScene("Models/Restaurant.mff");
 	//Importer::LoadScene("Models/Park.mff");
 	//Importer::LoadScene("Models/Objects.mff");
 	//Importer::LoadScene("Models/Houses.mff");
-	Importer::LoadScene("Models/Streets.mff");
+	//Importer::LoadScene("Models/Streets.mff");
 
+	Importer::LoadScene("Models/Smol.mff");
 	Importer::Initialize(Graphics::GetDevice());
 
 	for (int i = 0; i < Importer::Data::scenes.size(); ++i)
@@ -24,14 +25,14 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 		}
 	}
 
-	bounds = Bounds("Models/BBoxes.mff");
+	//bounds = Bounds("Models/BBoxes.mff");
 
 	AddRainParticleSystem(3000, 150, 200);
 	AddSmokeParticleSystem(200, 5, 10, { 25.0f, 10.0f, 40.0f, 1.0f }, 60);
 	AddSmokeParticleSystem(400, 5, 10, { -112.0f, 120.0f, 10.0f, 1.0f }, 200);
 	AddLight();
 
-	scenario = Scenario(*this);
+	//scenario = Scenario(*this);
 }
 
 

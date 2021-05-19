@@ -44,4 +44,6 @@ public:
 	}
 
 	Material GetMaterial() const				{ return Importer::Data::GetMaterialAt(mesh.sceneID, mesh.materialIDs[0]); };
+
+	void UpdateAnimation(float time);
 };

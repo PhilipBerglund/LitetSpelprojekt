@@ -13,6 +13,7 @@ namespace Importer
 		static Material& GetMaterialAt(int sceneID, int index) { return scenes.at(sceneID).materials.at(index); }
 		static VertexBuffer& GetVertexBufferAt(int sceneID, int index, bool) { return scenes.at(sceneID).vertexBuffers.at(index); }
 		static ID3D11Buffer** GetVertexBufferAt(int sceneID, int index) { return scenes.at(sceneID).vertexBuffers.at(index).GetBuffer(); }
+		static Skeleton& GetSkeletonAt(int sceneID, int index) { return scenes.at(sceneID).skeletons.at(index); }
 		static int GetVertexCountAt(int sceneID, int index) { return scenes.at(sceneID).vertexBuffers.at(index).vertexCount; }
 	};
 

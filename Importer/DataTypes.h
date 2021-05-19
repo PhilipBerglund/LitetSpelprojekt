@@ -9,7 +9,6 @@ template <typename T>
 using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 #define MAX_CHAR 100
-#define MAX_TEXTURESIZE 4096
 
 enum class DataType
 {
@@ -17,84 +16,16 @@ enum class DataType
 	VERTEXBUFFER,
 	MESH,
 	MATERIAL,
-	TEXTURE,
-	MATERIAL_TEXTURE_CONNECTION,
 	GROUP,
 	CAMERA,
 	LIGHT,
 	POINTLIGHT,
 	SPOTLIGHT,
 	DIRECTIONALLIGHT,
-	JOINT,
 	SKELETON,
 	ATTRIBUTE,
-	SKINNING,
-	KEYFRAME,
 	MISC
 };
-//enum class AttributeType { UNKNOWN, VECTOR3, VECTOR4, INTEGER, STRING, FLOAT, BOOLEAN, DOUBLE, ENUM };
-//
-//struct Value
-//{};
-//
-//struct Boolean : Value
-//{
-//	bool value = false;
-//};
-//
-//struct Integer : Value
-//{
-//	int value = 0;
-//};
-//
-//struct Float : Value
-//{
-//	float value = 0.0f;
-//};
-//
-//struct Double : Value
-//{
-//	double value = 0.0;
-//};
-//
-//struct String : Value
-//{
-//	char value[MAX_CHAR] = "";
-//};
-//
-//struct Vector3 : Value
-//{
-//	double x = 0;
-//	double y = 0;
-//	double z = 0;
-//};
-//
-//struct Vector4 : Value
-//{
-//	double x = 0;
-//	double y = 0;
-//	double z = 0;
-//	double w = 0;
-//};
-//
-//struct Attribute
-//{
-//	int ID = -1;
-//	char name[MAX_CHAR] = "";
-//
-//	bool isAnimateable = false;
-//
-//	bool hasMaxLimit = false;
-//	double maxLimit = 0;
-//
-//	bool hasMinLimit = false;
-//	double minLimit = 0;
-//
-//	AttributeType type = AttributeType::UNKNOWN;
-//	Value value;
-//
-//	Attribute() = default;
-//};
 
 struct Node
 {
@@ -104,6 +35,70 @@ struct Node
 	//std::vector<Attribute> attributes;
 
 	virtual ~Node() {};
+};
+
+struct Transform
+{
+	float translation[3] = {0};
+	float rotation[4] = {0};
+	float scale[3] = {0};
+};
+
+struct KeyFrame
+{
+	unsigned int timeStamp;
+	Transform transform;
+};
+
+struct Animation
+{
+	char name[MAX_CHAR] = "";
+	int keyFrameCount = 0;
+	std::vector<KeyFrame> keyFrames;
+};
+
+struct Shape
+{
+	int vertexCount = 0;
+	std::vector<std::pair<std::array<float, 4>, std::array<float, 3>>> transform;
+};
+
+struct MorphAnimation
+{
+	int shapeCount = 0;
+	std::vector<Shape> shapes;
+};
+
+struct Skinning
+{
+	unsigned int weightCount = 0;
+	unsigned int indexCount = 0;
+	std::vector<float> weights;
+	std::vector<unsigned int> indices;
+};
+
+struct Joint
+{
+	int parentID = -1;
+	int ID = -1;
+	char name[MAX_CHAR] = "";
+	float inverseBP[16] = { 1.0f, 0.0f, 0.0f, 0.0f,
+							0.0f, 1.0f, 0.0f, 0.0f,
+							0.0f, 0.0f, 1.0f, 0.0f,
+							0.0f, 0.0f, 0.0f, 1.0f };
+
+	Animation animation;
+	Skinning skinning;
+};
+
+struct Skeleton : Node
+{
+	int ID = -1;
+
+	MorphAnimation morphAnim;
+
+	unsigned int jointCount = 0;
+	std::vector<Joint> joints;
 };
 
 enum class TextureType { UNKNOWN, DIFFUSE_COLOR, NORMAL_MAP, TRANSPARENT_COLOR };
@@ -197,7 +192,7 @@ struct Vertex
 	float uv[2] = { 0 };
 	float tangent[3] = { 0 };
 	float binormal[3] = { 0 };
-	float weights[3] = { 0 };
+	float weights[4] = { 0 };
 	int boneIDs[4] = { -1 };
 };
 
@@ -259,4 +254,5 @@ struct SceneData
 	std::vector<Mesh> meshes;
 	std::vector<Material> materials;
 	std::vector<VertexBuffer> vertexBuffers;
+	std::vector<Skeleton> skeletons;
 };

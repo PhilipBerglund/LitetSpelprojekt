@@ -168,17 +168,20 @@
     <ClCompile Include="Scenario.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShaderData.cpp" />
+    <ClCompile Include="SkinnedData.cpp" />
     <ClCompile Include="SmokeSystem.cpp" />
     <ClCompile Include="SoundHandler.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="AudioChunks.h" />
     <ClInclude Include="Bounds.h" />
     <ClInclude Include="ChatOverlay.h" />
     <ClInclude Include="GameSettings.h" />
     <ClInclude Include="Journal.h" />
     <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="Math.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ParticleShader.h" />
     <ClInclude Include="RainSystem.h" />
@@ -198,6 +201,7 @@
     <ClInclude Include="Random.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShaderLoader.h" />
+    <ClInclude Include="SkinnedData.h" />
     <ClInclude Include="SmokeSystem.h" />
     <ClInclude Include="SoundHandler.h" />
     <ClInclude Include="Event.h" />

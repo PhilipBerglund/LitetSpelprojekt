@@ -1,4 +1,5 @@
 #include "Model.h"
+#include "Math.h"
 
 void Model::Update(ID3D11DeviceContext& context)
 {
@@ -9,6 +10,17 @@ void Model::Update(ID3D11DeviceContext& context)
     worldMatrix = scale * translation * rotation;
 
     boundingbox.Center = transform.position;
+}
+
+void Model::UpdateAnimation(float time)
+{
+    //Skeleton skeleton = Importer::Data::GetSkeletonAt(mesh.sceneID, 0);
+
+    //std::vector<XMMATRIX> localTransform(skeleton.jointCount);
+    //std::vector<XMMATRIX> modelTransform(skeleton.jointCount);
+
+    //for (int i = 0; i < skeleton.jointCount; ++i)
+    //    localTransform[i] = FloatArrToMatrix(skeleton.joints[i].inverseBP) * worldMatrix;
 }
 
 Model::Model(const Mesh& mesh)

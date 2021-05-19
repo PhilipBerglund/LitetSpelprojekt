@@ -12,6 +12,7 @@ private:
 	Mesh mesh;
 	std::string name;
 	XMMATRIX worldMatrix;
+	std::vector<XMMATRIX> jointTransforms;
 public:
 	ColliderType collidertype = ColliderType::BOX;
 	bool isInteractable = true;
@@ -45,5 +46,6 @@ public:
 
 	Material GetMaterial() const				{ return Importer::Data::GetMaterialAt(mesh.sceneID, mesh.materialIDs[0]); };
 
+	std::vector<XMMATRIX> GetJointTransforms() { return this->jointTransforms; }
 	void UpdateAnimation(float time);
 };

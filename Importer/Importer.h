@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <array>
 #include "DataTypes.h"
 
 namespace Importer

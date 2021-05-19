@@ -76,12 +76,6 @@ ShaderData::ShaderData()
 	};
 	hr = Graphics::GetDevice().CreateInputLayout(smokeInputDesc, particleNumElements, byteCode.c_str(), byteCode.length(), &smokeLayout);
 
-
-
-
-
-
-
 	//-----REGULAR-----
 	//SHADERS
 	vs_path = "../x64/Debug/VertexShader.cso";
@@ -147,6 +141,14 @@ ShaderData::ShaderData()
 
 	bufferDesc.ByteWidth = sizeof(CameraCbuf);
 	hr = Graphics::GetDevice().CreateBuffer(&bufferDesc, nullptr, &regularCameraBuffer);
+	if FAILED(hr)
+	{
+		Error("FAILED TO CREATE BUFFER");
+		return;
+	}
+
+	bufferDesc.ByteWidth = sizeof(JointCbuf);
+	hr = Graphics::GetDevice().CreateBuffer(&bufferDesc, nullptr, &jointBuffer);
 	if FAILED(hr)
 	{
 		Error("FAILED TO CREATE BUFFER");

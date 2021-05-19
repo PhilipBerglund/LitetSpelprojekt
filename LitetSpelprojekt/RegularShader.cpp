@@ -12,7 +12,7 @@ void RegularShader::UpdatePerMesh(ShaderData& data, Model& model)
 {
 	HRESULT hr;
 	D3D11_MAPPED_SUBRESOURCE mappedResource = {};
-	
+
 	//VERTEX SHADER BUFFERS
 
 	//MATRICES
@@ -71,6 +71,27 @@ void RegularShader::UpdatePerMesh(ShaderData& data, Model& model)
 	memcpy(mappedResource.pData, &material, sizeof(ShaderData::MaterialCBuf));
 	Graphics::GetDeviceContext().Unmap(data.regularMaterialBuffer.Get(), 0);
 	Graphics::GetDeviceContext().PSSetConstantBuffers(1, 1, data.regularMaterialBuffer.GetAddressOf());
+
+	//JOINTS
+	hr = Graphics::GetDeviceContext().Map(data.jointBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	if FAILED(hr)
+	{
+		Error("FAILED TO MAP BUFFER");
+		return;
+	}
+
+	ShaderData::JointCbuf joints = {};
+	joints.jointCount = model.GetJointTransforms().size();
+
+	for (int i = 0; i < joints.jointCount; ++i)
+		if (i < MAX_JOINTS)
+			XMStoreFloat4x4(&joints.jointMatrices[i], XMMatrixTranspose(model.GetJointTransforms()[i]));
+
+	Print(std::to_string(joints.jointMatrices[0]._11));
+
+	memcpy(mappedResource.pData, &joints, sizeof(ShaderData::JointCbuf));
+	Graphics::GetDeviceContext().Unmap(data.jointBuffer.Get(), 0);
+	Graphics::GetDeviceContext().VSSetConstantBuffers(2, 1, data.jointBuffer.GetAddressOf());
 }
 
 void RegularShader::Render(ShaderData& data, Scene& scene)

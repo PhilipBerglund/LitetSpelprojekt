@@ -28,27 +28,38 @@ cbuffer LightMatrix : register(b1)
     float4x4 lightWVPMatrix;
 }
 
-StructuredBuffer<float4x4> anim;
+#define MAX_JOINTS 5
+cbuffer JointMatrices : register(b2)
+{
+    float4x4 jointMatrices[MAX_JOINTS];
+    int numJoints;
+}
 
 VertexShaderOutput main(VertexShaderInput input)
 {
 	VertexShaderOutput output;
-	
-    float4x4 boneTX[4];
-    boneTX[0] = anim[input.boneIDs[0]] * input.weights[0];
-    boneTX[1] = anim[input.boneIDs[1]] * input.weights[1];
-    boneTX[2] = anim[input.boneIDs[2]] * input.weights[2];
-    boneTX[3] = anim[input.boneIDs[3]] * input.weights[3];
-    float4x4 combined = boneTX[0] * boneTX[1] * boneTX[2] * boneTX[3];
+
+    float4x4 boneTX = { 1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1};
+ 
+    for (int i = 0; i < numJoints; ++i)
+    {
+        if (input.boneIDs[i] == -1)
+            continue;
+        
+        if (i == 0)
+            boneTX = jointMatrices[input.boneIDs[i]] * input.weights[i];
+        else
+            boneTX *= jointMatrices[input.boneIDs[i]] * input.weights[i];
+    }
     
     if (input.boneIDs[0] != -1)
-        output.position = mul(float4(input.position, 1.0f), combined);
+        output.position = mul(float4(input.position, 1.0f), boneTX);
     
     else
         output.position = float4(input.position, 1.0f);
     
     output.worldPosition = mul(output.position, worldMatrix);
-    output.position = mul(float4(input.position, 1.0f), WVPMatrix);
+    output.position = mul(output.position, WVPMatrix);
 	
 	output.uv = input.uv;
 	

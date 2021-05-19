@@ -13,7 +13,7 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	//Importer::LoadScene("Models/Houses.mff");
 	//Importer::LoadScene("Models/Streets.mff");
 
-	Importer::LoadScene("Models/Smol.mff");
+	Importer::LoadScene("Models/PlsWork.mff");
 	Importer::Initialize(Graphics::GetDevice());
 
 	for (int i = 0; i < Importer::Data::scenes.size(); ++i)
@@ -90,6 +90,9 @@ void Scene::Update(InGameUI& ui, float dt)
 			break;
 		}
 	}
+
+	for (auto& model : models)
+		animator.PlayAnimation(dt, *model.second);
 
 	for (auto& particleSystem : rainSystem)
 		particleSystem->Update(dt);

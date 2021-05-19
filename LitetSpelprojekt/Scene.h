@@ -10,6 +10,7 @@
 #include "ParticleShader.h"
 #include "RegularShader.h"
 #include "Bounds.h"
+#include "Animation.h"
 
 class Scene
 {
@@ -18,6 +19,7 @@ private:
 	Scenario scenario;
 	Bounds bounds;
 	Camera camera;
+	Animator animator;
 
 	std::map<std::string, std::shared_ptr<Model>> models;
 	std::vector<std::shared_ptr<Light>> lights;

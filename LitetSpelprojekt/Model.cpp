@@ -12,15 +12,96 @@ void Model::Update(ID3D11DeviceContext& context)
     boundingbox.Center = transform.position;
 }
 
+void GetParentMatrix(Skeleton& skeleton, Joint& joint, int timeStamp, XMMATRIX& matrix)
+{
+    if (joint.parentID == -1)
+        return;
+
+    Joint parent = skeleton.joints.at(joint.parentID);
+
+    XMVECTOR translation;
+    XMVECTOR rotation;
+    XMVECTOR scale;
+
+    if (parent.animation.keyFrameCount != 0)
+    {
+        translation = FloatArrToVec(parent.animation.keyFrames[timeStamp].transform.translation);
+        rotation = FloatArrToQuat(parent.animation.keyFrames[timeStamp].transform.rotation);
+        scale = FloatArrToVec(parent.animation.keyFrames[timeStamp].transform.scale);
+    }
+    
+    else
+    {
+        translation = {0,0,0};
+        rotation = { 0,0,0,0 };
+        scale = { 1,1,1 };
+    }
+
+    XMMATRIX mat = VecsToMatrix(scale, rotation, translation);
+
+    matrix *= mat;
+    GetParentMatrix(skeleton, parent, timeStamp, matrix);
+}
+
 void Model::UpdateAnimation(float time)
 {
-    //Skeleton skeleton = Importer::Data::GetSkeletonAt(mesh.sceneID, 0);
+    Skeleton skeleton = Importer::Data::GetSkeletonAt(mesh.sceneID, 0);
+    jointTransforms.resize(skeleton.jointCount);
 
-    //std::vector<XMMATRIX> localTransform(skeleton.jointCount);
-    //std::vector<XMMATRIX> modelTransform(skeleton.jointCount);
+    XMVECTOR translation;
+    XMVECTOR rotation;
+    XMVECTOR scale;
 
-    //for (int i = 0; i < skeleton.jointCount; ++i)
-    //    localTransform[i] = FloatArrToMatrix(skeleton.joints[i].inverseBP) * worldMatrix;
+    XMMATRIX rootTransform = XMMatrixIdentity();
+
+    if (time == 0)
+    {
+
+    }
+
+    else
+    {
+        int timeStamp = round(time);
+
+        if (skeleton.joints[0].animation.keyFrameCount != 0)
+        {
+            translation = FloatArrToVec(skeleton.joints[0].animation.keyFrames[timeStamp].transform.translation);
+            rotation = FloatArrToQuat(skeleton.joints[0].animation.keyFrames[timeStamp].transform.rotation);
+            scale = FloatArrToVec(skeleton.joints[0].animation.keyFrames[timeStamp].transform.scale);
+        }
+
+        else
+        {
+            translation = { 0,0,0 };
+            rotation = { 0,0,0,0 };
+            scale = { 1,1,1 };
+        }
+
+        rootTransform = VecsToMatrix(scale, rotation, translation);
+
+        jointTransforms[0] = rootTransform * FloatArrToMatrix(skeleton.joints[0].inverseBP);
+
+        for (int i = 1; i < skeleton.jointCount; ++i)
+        {
+            if (skeleton.joints[i].animation.keyFrameCount != 0)
+            {
+                translation = FloatArrToVec(skeleton.joints[i].animation.keyFrames[timeStamp].transform.translation);
+                rotation = FloatArrToQuat(skeleton.joints[i].animation.keyFrames[timeStamp].transform.rotation);
+                scale = FloatArrToVec(skeleton.joints[i].animation.keyFrames[timeStamp].transform.scale);
+            }
+
+            else
+            {
+                translation = { 0,0,0 };
+                rotation = { 0,0,0,0 };
+                scale = { 1,1,1 };
+            }
+
+            XMMATRIX parentMatrix = XMMatrixIdentity();
+            GetParentMatrix(skeleton, skeleton.joints[i], timeStamp, parentMatrix);
+            jointTransforms[i] = parentMatrix * VecsToMatrix(scale, rotation, translation) * FloatArrToMatrix(skeleton.joints[i].inverseBP);
+        }
+    }
 }
 
 Model::Model(const Mesh& mesh)

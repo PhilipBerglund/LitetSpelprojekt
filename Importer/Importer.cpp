@@ -1,5 +1,4 @@
 #include "Importer.h"
-#include <array>
 #include <iostream>
 #include <fstream>
 #include "TempTimer.h"

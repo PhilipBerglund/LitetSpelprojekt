@@ -7,6 +7,8 @@
 #include <directXmath.h>
 using namespace DirectX;
 
+#define MAX_JOINTS 5
+
 class ShaderData
 {
 	friend class ParticleShader;
@@ -47,6 +49,8 @@ private:
 
 	//-----REGULAR-----
 	//BUFFERS
+
+	//--Matrices--
 	ComPtr<ID3D11Buffer> regularMatricesBuffer;
 	struct MatricesCbuf
 	{
@@ -57,6 +61,7 @@ private:
 	XMFLOAT4X4 lightWVPMatrix = {};
 	ComPtr<ID3D11Buffer> regularLightMatrixBuffer;
 
+	//--Material--
 	struct MaterialCBuf
 	{
 		float diffuse[3] = { 0 };
@@ -70,12 +75,22 @@ private:
 	};
 	ComPtr<ID3D11Buffer> regularMaterialBuffer;
 
+	//--Camera--
 	struct CameraCbuf
 	{
 		XMFLOAT3 cameraPosition;
 		float padding;
 	};
 	ComPtr<ID3D11Buffer> regularCameraBuffer;
+
+	//--Joints--
+	struct JointCbuf
+	{
+		XMFLOAT4X4 jointMatrices[MAX_JOINTS] = { {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f} };
+		int jointCount = 0;
+		float padding[3];
+	};
+	ComPtr<ID3D11Buffer> jointBuffer;
 
 	//SHADERS
 	ComPtr<ID3D11VertexShader> regularVertexShader;

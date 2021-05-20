@@ -266,6 +266,9 @@ public:
 
 		dtText.Draw(*debugTextFormat.Get(), *debugBrush.Get());
 
+		if (chatOverlay.ShowCursor())
+			SetCursorType(CursorType::REGULAR);
+
 		if (cursor.visible)
 			cursor.Draw();
 	}

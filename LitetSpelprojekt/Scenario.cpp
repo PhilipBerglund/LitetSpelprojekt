@@ -131,10 +131,14 @@ void Scenario::Update(Scene& scene, InGameUI& ui, Camera& camera)
 		cursor = CursorType::CLUE;
 
 	//SUSPECTS
+	static std::string lastSuspect;
 	bool chattingSuspect = false;
 	bool hoveringSuspect = false;
 	for (auto& suspect : suspects)
 	{
+		if (suspect.name == lastSuspect)
+			return;
+
 		if (camera.CheckIntersection(suspect.model->boundingbox))
 		{
 			hoveringSuspect = true;
@@ -172,6 +176,7 @@ void Scenario::Update(Scene& scene, InGameUI& ui, Camera& camera)
 
 				chattingSuspect = true;
 				GameSettings::SetState(GameState::CHAT);
+				lastSuspect = suspect.name;
 			}
 		}
 	}

@@ -247,10 +247,11 @@ void WindowInitializer::OnEvent()
 		Window::DisableCursor();
 		break;
 
-	case GameState::JOURNAL: case GameState::PAUSED:
+	case GameState::JOURNAL: case GameState::PAUSED: case GameState::CHAT:
 		SetCursorPos(Window::width / 2, Window::height / 2);
 		Window::EnableCursor();
 		break;
+
 	case GameState::MAINMENU:
 		Window::EnableCursor();
 		break;

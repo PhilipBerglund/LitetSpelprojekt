@@ -12,7 +12,7 @@ void RegularShader::SetShader(ShaderData& data)
 		Error("FAILED TO MAP BUFFER");
 		return;
 	}
-	XMMATRIX WVP = XMMatrixTranspose(data.lightOrthographicMatrix * data.lightViewMatrix);
+	XMMATRIX WVP = XMMatrixTranspose(data.lightViewMatrix * data.lightOrthographicMatrix);
 	XMFLOAT4X4 lightWVP;
 	XMStoreFloat4x4(&lightWVP, WVP);
 

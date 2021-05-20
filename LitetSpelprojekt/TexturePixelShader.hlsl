@@ -17,7 +17,7 @@ cbuffer Camera : register(b0)
 
 cbuffer light : register(b3)
 {
-    matrix lightWorldViewProj;
+    matrix lightViewProj;
 };
 
 float4 main(PixelShaderInput input) : SV_TARGET
@@ -30,17 +30,21 @@ float4 main(PixelShaderInput input) : SV_TARGET
     finalColor = finalColor * ambient * lightDiffuse;
     
     //Flytta ljuset till lightWVP
-    float4 positionInLightSpace = mul(input.worldPosition, lightWorldViewProj);
+    float4 positionInLightSpace = mul(input.worldPosition, lightViewProj);
     
     positionInLightSpace.xy /= positionInLightSpace.w; //"Perspective divide" för att projicera texturkoordinaterna på shadow map
 
     //Skalar till uv-koordinater (0-1)
-    float2 smTexUV = float2(0.5f * (positionInLightSpace.x + 1.0f), -0.5f * (positionInLightSpace.y + 1.0f)); /*(0.5f * positionInLightSpace.x + 0.5f, -0.5f * positionInLightSpace.y + 0.5f);*/
+    float2 smTexUV = float2 /*(0.5f * (positionInLightSpace.x + 1.0f), -0.5f * (positionInLightSpace.y + 1.0f));*/(0.5f * positionInLightSpace.x + 0.5f, -0.5f * positionInLightSpace.y + 0.5f);
     
+    if (smTexUV.x >= 0 && smTexUV.x <= 1 && smTexUV.y >= 0 && smTexUV.y <= 1)
+    {
+        return float4(0, 0, 1, 1);
+    }
     float4 depthMap = shadowDSV.Sample(wrapSampler, smTexUV);
     
     //Beräkna djup på pixel
-    float depth = positionInLightSpace.z / positionInLightSpace.w + 1 * 0.5f;
+    float depth = positionInLightSpace.z / positionInLightSpace.w; //(positionInLightSpace.z / positionInLightSpace.w + 1) * 0.5f;
     
     float shadowMapSize = 2048;
     float dx = 1.0f / shadowMapSize;
@@ -59,11 +63,11 @@ float4 main(PixelShaderInput input) : SV_TARGET
     float result4 = depth <= s3;
 
     //Transformera shadow map uv positioner till texel space
-    float2 texelPos = shadowMapSize * smTexUV.xy;
+    float2 texelPos = shadowMapSize * smTexUV;
     
     //Lerp resultat
     float2 t = frac(texelPos);
-    float result = lerp(lerp(result1, result2, t.x), lerp(result3, result4, t.x), t.y);
+    float result = lerp(lerp(s0, s1, t.x), lerp(s2, s3, t.x), t.y);
     
     finalColor = finalColor * result;
     

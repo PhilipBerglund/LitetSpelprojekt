@@ -24,7 +24,7 @@ void ShadowMapShader::UpdatePerMesh(ShaderData& data, Model& model)
 		return;
 	}
 
-	XMMATRIX WVP = XMMatrixTranspose(model.GetMatrix() * data.lightOrthographicMatrix * data.lightViewMatrix); //Korrekt!!!
+	XMMATRIX WVP = XMMatrixTranspose(model.GetMatrix() * data.lightViewMatrix * data.lightOrthographicMatrix); //Korrekt!!!
 	XMFLOAT4X4 lightWVP;
 	XMStoreFloat4x4(&lightWVP, WVP);
 

@@ -112,7 +112,6 @@ void ShadowMap::BindDsvAndSetNullRenderTarget()
 	// color writes.
 	ID3D11RenderTargetView* renderTargets[1] = { 0 };
 	Graphics::GetDeviceContext().OMSetRenderTargets(1, renderTargets, mDepthMapDSV.Get());
-	Graphics::GetDeviceContext().ClearDepthStencilView(mDepthMapDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
 void ShadowMap::UpdateLightAndShadow(DirectX::XMFLOAT3& lightDir, DirectX::XMFLOAT4X4& shadowMatrix)

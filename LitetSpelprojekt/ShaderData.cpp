@@ -204,6 +204,7 @@ void ShaderData::Update(const Camera& camera, const Light& light)
 	lightViewMatrix = light.GetViewMatrix();
 	lightProjectionMatrix = light.GetPerspectiveMatrix();
 	lightOrthographicMatrix = light.GetOrthographicMatrix();
+	lightShadowViewMatrix = light.GetShadowViewMatrix();
 
 	//-----PARTICLE_SYSTEM-----
 	//VIEW PROJ BUFFER

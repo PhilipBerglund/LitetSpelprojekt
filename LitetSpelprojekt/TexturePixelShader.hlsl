@@ -35,7 +35,7 @@ float4 main(PixelShaderInput input) : SV_TARGET
     positionInLightSpace.xy /= positionInLightSpace.w; //"Perspective divide" för att projicera texturkoordinaterna på shadow map
 
     //Skalar till uv-koordinater (0-1)
-    float2 smTexUV = float2(0.5f * (positionInLightSpace.x + 1.0f), -0.5f * (positionInLightSpace.y + 1.0f));
+    float2 smTexUV = float2(0.5f * (positionInLightSpace.x + 1.0f), -0.5f * (positionInLightSpace.y + 1.0f)); /*(0.5f * positionInLightSpace.x + 0.5f, -0.5f * positionInLightSpace.y + 0.5f);*/
     
     float4 depthMap = shadowDSV.Sample(wrapSampler, smTexUV);
     
@@ -56,7 +56,7 @@ float4 main(PixelShaderInput input) : SV_TARGET
     float result1 = depth <= s0;
     float result2 = depth <= s1;
     float result3 = depth <= s2;
-    float result4 = depth <= s3s;
+    float result4 = depth <= s3;
 
     //Transformera shadow map uv positioner till texel space
     float2 texelPos = shadowMapSize * smTexUV.xy;

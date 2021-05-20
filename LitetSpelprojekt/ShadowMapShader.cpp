@@ -7,7 +7,6 @@ void ShadowMapShader::SetShadowMapShader(ShaderData& data)
 	Graphics::GetDeviceContext().IASetInputLayout(data.regularLayout.Get());
 	Graphics::GetDeviceContext().VSSetShader(data.shadowMapVS.Get(), nullptr, 0);
 	Graphics::GetDeviceContext().PSSetShader(nullptr, nullptr, 0);
-	Graphics::GetDeviceContext().RSSetState(0);
 }
 
 void ShadowMapShader::UpdatePerMesh(ShaderData& data, Model& model)
@@ -25,11 +24,11 @@ void ShadowMapShader::UpdatePerMesh(ShaderData& data, Model& model)
 		return;
 	}
 
-	XMMATRIX WVP = XMMatrixTranspose(model.GetMatrix() * data.lightOrthographicMatrix * data.lightViewMatrix);
+	XMMATRIX WVP = XMMatrixTranspose(model.GetMatrix() * data.lightOrthographicMatrix * data.lightViewMatrix); //Korrekt!!!
 	XMFLOAT4X4 lightWVP;
 	XMStoreFloat4x4(&lightWVP, WVP);
 
-	memcpy(mappedResource.pData, &data.shadowMapMatrix, sizeof(XMFLOAT4X4));
+	memcpy(mappedResource.pData, &lightWVP, sizeof(XMFLOAT4X4));
 	Graphics::GetDeviceContext().Unmap(data.lightBuffer.Get(), 0);
 	Graphics::GetDeviceContext().VSSetConstantBuffers(3, 1, data.lightBuffer.GetAddressOf());
 }
@@ -57,4 +56,8 @@ void ShadowMapShader::RenderShadowMap(ShaderData& data, Scene& scene)
 
 		Graphics::GetDeviceContext().Draw(model->GetVertexCount(), 0);
 	}
+
+	//Back-/depth-buffer, och viewport sätts till normala
+	/*Graphics::GetDeviceContext().OMSetRenderTargets(1, Graphics::GetRenderTargetView(), Graphics::GetDepthStencilView());
+	Graphics::GetDeviceContext().RSSetViewports(1, &Graphics::GetViewport());*/
 }

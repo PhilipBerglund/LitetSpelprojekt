@@ -24,6 +24,18 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 		}
 	}
 
+	QTSquare treeBoundaries;
+	treeBoundaries.xPos = 0;
+	treeBoundaries.zPos = 0;
+	treeBoundaries.w = 600;
+	treeBoundaries.h = 600;
+	QuadTree* tree = nullptr;
+	SetupQuadTree(tree, treeBoundaries, 20);
+	for (auto& mod : models)
+	{
+		tree->InsertModel(mod.second);
+	}
+	
 	bounds = Bounds("Models/BBoxes.mff");
 
 	AddRainParticleSystem(3000, 150, 200);

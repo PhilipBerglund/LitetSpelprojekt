@@ -31,7 +31,8 @@ inline XMMATRIX VecsToMatrix(XMVECTOR scale, XMVECTOR rotation, XMVECTOR transla
 	XMMATRIX matrix = XMMatrixIdentity();
 
 	XMMATRIX translationMat = XMMatrixTranslationFromVector(translation);
-	XMMATRIX rotationMat = XMMatrixRotationQuaternion(rotation);
+	XMMATRIX rotationMat = XMMatrixRotationRollPitchYawFromVector(rotation);
+	//XMMATRIX rotationMat = XMMatrixRotationQuaternion(rotation);
 	XMMATRIX scaleMat = XMMatrixScalingFromVector(scale);
 
 	matrix = scaleMat * rotationMat * translationMat;

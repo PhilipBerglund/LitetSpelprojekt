@@ -87,8 +87,6 @@ void RegularShader::UpdatePerMesh(ShaderData& data, Model& model)
 		if (i < MAX_JOINTS)
 			XMStoreFloat4x4(&joints.jointMatrices[i], XMMatrixTranspose(model.GetJointTransforms()[i]));
 
-	Print(std::to_string(joints.jointMatrices[0]._11));
-
 	memcpy(mappedResource.pData, &joints, sizeof(ShaderData::JointCbuf));
 	Graphics::GetDeviceContext().Unmap(data.jointBuffer.Get(), 0);
 	Graphics::GetDeviceContext().VSSetConstantBuffers(2, 1, data.jointBuffer.GetAddressOf());

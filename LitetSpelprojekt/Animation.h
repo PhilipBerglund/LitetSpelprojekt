@@ -12,9 +12,9 @@ public:
 	{
 		time += dt;
 
-		model.UpdateAnimation(time);
-
-		if (time >= 25)
+		if (time > 11.5)
 			time = 0;
+
+		model.UpdateAnimation(time);
 	}
 };

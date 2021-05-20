@@ -39,17 +39,20 @@ VertexShaderOutput main(VertexShaderInput input)
 {
 	VertexShaderOutput output;
 
-    float4x4 boneTX = { 1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1};
- 
-    for (int i = 0; i < numJoints; ++i)
+    float4x4 boneTX;
+    for (int i = 0; i < 1; ++i)
     {
         if (input.boneIDs[i] == -1)
-            continue;
+            break;
         
-        if (i == 0)
+        else if (input.weights[i] == 0)
+            break;
+        
+        else if (i == 0)
             boneTX = jointMatrices[input.boneIDs[i]] * input.weights[i];
+        
         else
-            boneTX *= jointMatrices[input.boneIDs[i]] * input.weights[i];
+            boneTX = mul(boneTX, jointMatrices[input.boneIDs[i]] * input.weights[i]);
     }
     
     if (input.boneIDs[0] != -1)

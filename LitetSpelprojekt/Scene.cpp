@@ -4,9 +4,7 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.001f, 50.0f, { 0, 15, 0 })
 {
 	//Längst upp om man ska rita ut skitn (som alla andra modeller)
-	bounds = Bounds("Models/BBoxes.mff");
-
-	//Importer::LoadScene("Models/Office.mff");
+	Importer::LoadScene("Models/Office.mff");
 	//Importer::LoadScene("Models/Bar.mff");
 	//Importer::LoadScene("Models/Hotel.mff");
 	//Importer::LoadScene("Models/Restaurant.mff");
@@ -26,28 +24,12 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 		}
 	}
 
-	QuadTree* Tree = nullptr;
-	QTSquare bounds;
-	bounds.xPos = 0;
-	bounds.zPos = 0;
-	bounds.w = 600;
-	bounds.h = 600;
-	SetupQuadTree(Tree, bounds, 40);
-	QTFrustum viewFrust;
-	SetupFrustum(viewFrust, camera);
-	for (auto& mod : models)
-	{
-		Tree->InsertModel(mod.second);
-	}
-
-
+	bounds = Bounds("Models/BBoxes.mff");
 
 	AddRainParticleSystem(3000, 150, 200);
 	AddSmokeParticleSystem(200, 5, 10, { 25.0f, 10.0f, 40.0f, 1.0f }, 60);
 	AddSmokeParticleSystem(400, 5, 10, { -112.0f, 120.0f, 10.0f, 1.0f }, 200);
 	AddLight();
-
-
 
 	scenario = Scenario(*this);
 }

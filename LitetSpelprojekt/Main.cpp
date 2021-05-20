@@ -15,7 +15,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	UINT WIDTH = GetSystemMetrics(SM_CXSCREEN);
 	UINT HEIGHT = GetSystemMetrics(SM_CYSCREEN);
 
-	bool windowed = true;
+	bool windowed = false;
 
 	if (windowed)
 	{
@@ -27,8 +27,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	}
 	
 	LPCWSTR windowTitle = L"Jessica Woolf: Murder Mysteries";
-	Window window;
 
+	Window window;
 	WindowInitializer winInit;
 	winInit.Initialize(window, WIDTH, HEIGHT, windowTitle, hInstance);
 	SetCursorPos(WIDTH / 2, HEIGHT / 2);

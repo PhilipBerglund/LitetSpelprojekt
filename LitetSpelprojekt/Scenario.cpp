@@ -33,7 +33,7 @@ Scenario::Scenario(Scene& scene)
 	testSuspect.age = 55;
 	testSuspect.height = 180;
 	testSuspect.shoeSize = 45;
-	testSuspect.information.info = "I got some information about person B";
+	testSuspect.information.info = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
 	testSuspect.information.connections[0] = "B";
 	testSuspect.information.numConnections = 1;
 	testSuspect.information.rumours[0] = "According to A, B looked sketchy last night";
@@ -50,6 +50,7 @@ Scenario::Scenario(Scene& scene)
 	testSuspect2.age = 28;
 	testSuspect2.height = 167;
 	testSuspect2.shoeSize = 38;
+	testSuspect2.information.info = ". . .";
 	testSuspect2.information.valueable = false;
 	testSuspect2.characteristics[0] = "Does not like A.";
 	testSuspect2.characteristics[1] = "monkeeeeh";
@@ -130,6 +131,7 @@ void Scenario::Update(Scene& scene, InGameUI& ui, Camera& camera)
 		cursor = CursorType::CLUE;
 
 	//SUSPECTS
+	bool chattingSuspect = false;
 	bool hoveringSuspect = false;
 	for (auto& suspect : suspects)
 	{
@@ -139,6 +141,8 @@ void Scenario::Update(Scene& scene, InGameUI& ui, Camera& camera)
 
 			if (Event::GetCurrentEvent() == EventType::LEFTCLICK)
 			{
+				ui.chatOverlay.SetUp(suspect.name, suspect.information.info);
+
 				if (!ui.journal.HasSuspect(suspect.name))
 				{
 					ui.journal.AddSuspect(identifiedSuspects, suspect.name, suspect.characteristics[0], suspect.characteristics[1], suspect.characteristics[2], suspect.age, suspect.height, suspect.shoeSize);
@@ -165,12 +169,18 @@ void Scenario::Update(Scene& scene, InGameUI& ui, Camera& camera)
 					suspect.fullyKnown = true;
 					ui.ShowNotification();
 				}
+
+				chattingSuspect = true;
+				GameSettings::SetState(GameState::CHAT);
 			}
 		}
 	}
 
 	if (hoveringSuspect)
 		cursor = CursorType::CHAT;
+
+	else if (chattingSuspect)
+		cursor = CursorType::NONE;
 
 	ui.SetCursorType(cursor);
 }

@@ -20,7 +20,11 @@ private:
 	Bounds bounds;
 	Camera camera;
 
+	QTFrustum viewFrustum;
+	QuadTree* tree = nullptr;
+
 	std::map<std::string, std::shared_ptr<Model>> models;
+	std::vector<std::shared_ptr<Model>> QTFoundModels;
 	std::vector<std::shared_ptr<Light>> lights;
 	//std::vector<std::shared_ptr<Model>> models;
 	std::vector<std::shared_ptr<GameObject>> gameObjects;
@@ -47,7 +51,10 @@ public:
 
 	const std::vector<std::shared_ptr<Light>>& GetLights() const					{ return this->lights; }
 	const std::map<std::string, std::shared_ptr<Model>>& GetModels() const			{ return this->models; }
+	const std::vector<std::shared_ptr<Model>>& GetQTModels() const					{ return this->QTFoundModels; }
 	const std::vector<std::shared_ptr<RainSystem>>& GetRainSystem() const			{ return this->rainSystem; }
 	const std::vector<std::shared_ptr<SmokeSystem>>& GetSmokeSystem() const			{ return this->smokeSystem; }
 	const Camera& GetCamera() const													{ return this->camera; }
+
+	void ClearQTModels()															{ this->QTFoundModels.clear(); }
 };

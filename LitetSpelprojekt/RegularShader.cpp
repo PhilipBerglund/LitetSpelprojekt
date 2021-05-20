@@ -80,11 +80,11 @@ void RegularShader::Render(ShaderData& data, Scene& scene)
 	unsigned int stride = sizeof(Vertex);
 	unsigned int offset = 0;
 
-	const auto& models = scene.GetModels();
+	const auto& models = scene.GetQTModels();
 
-	for (const auto& pair : models)
+	for (const auto& model : models)
 	{
-		auto& model = pair.second;
+		//auto& model = pair.second;
 		UpdatePerMesh(data, *model);
 
 		Graphics::GetDeviceContext().IASetVertexBuffers(0, 1, model->GetVertexBuffer(), &stride, &offset);

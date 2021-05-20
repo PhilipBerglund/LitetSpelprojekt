@@ -16,6 +16,7 @@ private:
 	float yaw;
 	float rotationSpeed;
 	float speed;
+	float viewDistance;
 
 	float pickingDistance;
 	XMVECTOR direction;
@@ -33,6 +34,7 @@ public:
 
 	XMMATRIX GetViewMatrix() const { return this->viewMatrix; };
 	XMMATRIX GetPerspectiveMatrix() const { return this->perspectiveMatrix; };
+	float getViewDistance();
 
 	Type type() const override { return Type::CAMERA; };
 

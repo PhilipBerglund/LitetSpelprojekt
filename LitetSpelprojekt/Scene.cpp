@@ -24,12 +24,13 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 		}
 	}
 
+
+	viewFrustum.Update(camera);
 	QTSquare treeBoundaries;
 	treeBoundaries.xPos = 0;
 	treeBoundaries.zPos = 0;
 	treeBoundaries.w = 600;
 	treeBoundaries.h = 600;
-	QuadTree* tree = nullptr;
 	SetupQuadTree(tree, treeBoundaries, 20);
 	for (auto& mod : models)
 	{
@@ -84,6 +85,7 @@ void Scene::AddLight()
 
 void Scene::Update(InGameUI& ui, float dt)
 {
+	ClearQTModels();
 	XMFLOAT3 lastPosition = camera.GetPosition();
 	camera.Update(dt);
 
@@ -102,6 +104,9 @@ void Scene::Update(InGameUI& ui, float dt)
 		}
 	}
 
+	viewFrustum.Update(camera);
+	QTIntersect(viewFrustum, tree, QTFoundModels);
+
 	for (auto& particleSystem : rainSystem)
 		particleSystem->Update(dt);
 
@@ -110,6 +115,7 @@ void Scene::Update(InGameUI& ui, float dt)
 
 	scenario.Update(*this, ui, camera);
 	shaderData.Update(camera);
+	Print("NrOfObjects: " + std::to_string(QTFoundModels.size()));
 }
 
 void Scene::Render()

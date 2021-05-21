@@ -58,6 +58,6 @@ void ShadowMapShader::RenderShadowMap(ShaderData& data, Scene& scene)
 	}
 
 	//Back-/depth-buffer, och viewport sätts till normala
-	/*Graphics::GetDeviceContext().OMSetRenderTargets(1, Graphics::GetRenderTargetView(), Graphics::GetDepthStencilView());
-	Graphics::GetDeviceContext().RSSetViewports(1, &Graphics::GetViewport());*/
+	Graphics::GetDeviceContext().OMSetRenderTargets(1, Graphics::GetRenderTargetView(), Graphics::GetDepthStencilView());
+	Graphics::GetDeviceContext().RSSetViewports(1, &Graphics::GetViewport());
 }

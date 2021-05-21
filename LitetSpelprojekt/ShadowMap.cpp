@@ -2,7 +2,7 @@
 #include "Window.h"
 
 ShadowMap::ShadowMap()
-	: mWidth(Window::GetWidth()), mHeight(Window::GetHeight()), mDepthMapSRV(0), mDepthMapDSV(0)
+	: mWidth(4096), mHeight(4096), mDepthMapSRV(0), mDepthMapDSV(0)
 {
 	mViewport.TopLeftX = 0.0f;
 	mViewport.TopLeftY = 0.0f;
@@ -14,8 +14,8 @@ ShadowMap::ShadowMap()
 	// the bits as DXGI_FORMAT_D24_UNORM_S8_UINT, whereas the SRV is going
 	// to interpret the bits as DXGI_FORMAT_R24_UNORM_X8_TYPELESS.
 	D3D11_TEXTURE2D_DESC texDesc;
-	texDesc.Width = 2048;
-	texDesc.Height = 2048;
+	texDesc.Width = mWidth;
+	texDesc.Height = mHeight;
 	texDesc.MipLevels = 1;
 	texDesc.ArraySize = 1;
 	texDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;

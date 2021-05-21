@@ -12,11 +12,11 @@ void RegularShader::SetShader(ShaderData& data)
 		Error("FAILED TO MAP BUFFER");
 		return;
 	}
-	XMMATRIX WVP = XMMatrixTranspose(data.lightViewMatrix * data.lightOrthographicMatrix);
-	XMFLOAT4X4 lightWVP;
-	XMStoreFloat4x4(&lightWVP, WVP);
+	XMMATRIX VP = XMMatrixTranspose(data.lightViewMatrix * data.lightOrthographicMatrix);
+	XMFLOAT4X4 lightVP;
+	XMStoreFloat4x4(&lightVP, VP);
 
-	memcpy(mappedResource.pData, &lightWVP, sizeof(XMFLOAT4X4));
+	memcpy(mappedResource.pData, &lightVP, sizeof(XMFLOAT4X4));
 	Graphics::GetDeviceContext().Unmap(data.lightViewProjBuffer.Get(), 0);
 	Graphics::GetDeviceContext().PSSetConstantBuffers(3, 1, data.lightViewProjBuffer.GetAddressOf());
 	Graphics::GetDeviceContext().IASetInputLayout(data.regularLayout.Get());

@@ -35,20 +35,15 @@ float4 main(PixelShaderInput input) : SV_TARGET
     positionInLightSpace.xy /= positionInLightSpace.w; //"Perspective divide" för att projicera texturkoordinaterna på shadow map
 
     //Skalar till uv-koordinater (0-1)
-    float2 smTexUV = float2 /*(0.5f * (positionInLightSpace.x + 1.0f), -0.5f * (positionInLightSpace.y + 1.0f));*/(0.5f * positionInLightSpace.x + 0.5f, -0.5f * positionInLightSpace.y + 0.5f);
+    float2 smTexUV = float2(0.5f * positionInLightSpace.x + 0.5f, -0.5f * positionInLightSpace.y + 0.5f);
     
-    if (smTexUV.x >= 0 && smTexUV.x <= 1 && smTexUV.y >= 0 && smTexUV.y <= 1)
-    {
-        return float4(0, 0, 1, 1);
-    }
     float4 depthMap = shadowDSV.Sample(wrapSampler, smTexUV);
     
     //Beräkna djup på pixel
-    float depth = positionInLightSpace.z / positionInLightSpace.w; //(positionInLightSpace.z / positionInLightSpace.w + 1) * 0.5f;
+    float depth = positionInLightSpace.z / positionInLightSpace.w;
     
-    float shadowMapSize = 2048;
+    float shadowMapSize = 4096;
     float dx = 1.0f / shadowMapSize;
-    float bias = 0.005;
     
     //2x2 sampling, samplar de närmsta pixlarna ("point sampling")
     float s0 = shadowDSV.Sample(wrapSampler, smTexUV).r;
@@ -57,10 +52,11 @@ float4 main(PixelShaderInput input) : SV_TARGET
     float s3 = shadowDSV.Sample(wrapSampler, smTexUV + float2(dx, dx)).r;
     
     //Jämför djup + bias(för att minska artifakter)
-    float result1 = depth <= s0;
-    float result2 = depth <= s1;
-    float result3 = depth <= s2;
-    float result4 = depth <= s3;
+    float bias = 0.00005;
+    float result1 = depth <= s0 + bias;
+    float result2 = depth <= s1 + bias;
+    float result3 = depth <= s2 + bias;
+    float result4 = depth <= s3 + bias;
 
     //Transformera shadow map uv positioner till texel space
     float2 texelPos = shadowMapSize * smTexUV;

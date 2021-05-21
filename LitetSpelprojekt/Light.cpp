@@ -6,7 +6,7 @@ Light::Light()
     attributes.diffuse = { 1,1,1,1 };
   
     XMFLOAT3 up = { 0,1,0 };
-    this->forward = { 1,0,1 };
+    this->forward = { -1,0,1 };
     this->transform.position = { 0,1.4,0 };
     this->viewMatrix = XMMatrixLookAtLH(XMLoadFloat3(&transform.position), XMLoadFloat3(&forward), XMLoadFloat3(&up));
     this->shadowViewMatrix = XMMatrixLookAtLH(XMLoadFloat3(&transform.position), { 0,0,0 }, XMLoadFloat3(&up));

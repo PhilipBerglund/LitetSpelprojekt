@@ -23,7 +23,7 @@ cbuffer light : register(b3)
 float4 main(PixelShaderInput input) : SV_TARGET
 {
     float diffuse = saturate(dot(input.normal, float3(40, 40, 40)));
-    float4 ambient = (0.5f, 0.5f, 0.5f, 1);
+    float4 ambient = (0.3f, 0.3f, 0.3f, 1);
     float4 lightDiffuse = (0.5f, 0.5f, 0.5f, 1);
     
     float4 finalColor = diffuseTexture.Sample(wrapSampler, input.uv);
@@ -66,6 +66,17 @@ float4 main(PixelShaderInput input) : SV_TARGET
     float result = lerp(lerp(s0, s1, t.x), lerp(s2, s3, t.x), t.y);
     
     finalColor = finalColor * result;
+
+    //FOG
+
+    float4 fogColor = float4(0.25f, 0.25f, 0.25f, 1.0f);
+    float fogStart = 50.0f;
+    float fogRange = 350.0f;
+
+    float fogDistance = distance(cameraPosition, input.worldPosition);  
+
+    float fogFactor = saturate((fogDistance - fogStart) / fogRange);
+    finalColor = lerp(finalColor, fogColor, fogFactor);
     
     return finalColor;
 }

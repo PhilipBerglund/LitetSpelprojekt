@@ -1,7 +1,7 @@
 #include "Scene.h"
 
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
-	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.001f, 50.0f, { 0, 15, 0 })
+	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.0015f, 50.0f, { 0, 15, 0 })
 {
 	//Längst upp om man ska rita ut skitn (som alla andra modeller)
 	Importer::LoadScene("Models/Office.mff");

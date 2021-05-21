@@ -17,7 +17,7 @@ struct PS_INPUT
 
 float4 main(PS_INPUT input) : SV_TARGET
 {
-    return float4(146.0f / 255.0f, 186.0f / 255.0f, 210.0f / 255.0f, 1.0f);
+    return float4(0.35f, 0.35f, 0.45f, 1.0f);
     input.normal = normalize(input.normal);
     
     float3 toEye = eyePos - input.position;

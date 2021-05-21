@@ -79,6 +79,7 @@ struct Skinning
 
 struct Joint
 {
+	std::vector<int> childIDs;
 	int parentID = -1;
 	int ID = -1;
 	char name[MAX_CHAR] = "";
@@ -193,7 +194,7 @@ struct Vertex
 	float tangent[3] = { 0 };
 	float binormal[3] = { 0 };
 	float weights[4] = { 0 };
-	int boneIDs[4] = { -1 };
+	int boneIDs[4] = { -1, -1, -1, -1 };
 };
 
 struct VertexBuffer

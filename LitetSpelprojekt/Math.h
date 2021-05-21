@@ -10,7 +10,6 @@ inline XMMATRIX FloatArrToMatrix(float arr[])
 						arr[4],		arr[5],		arr[6],		arr[7], 
 						arr[8],		arr[9],		arr[10],	arr[11],
 						arr[12],	arr[13],	arr[14],	arr[15] };
-
 	return matrix;
 }
 
@@ -38,4 +37,13 @@ inline XMMATRIX VecsToMatrix(XMVECTOR scale, XMVECTOR rotation, XMVECTOR transla
 	matrix = scaleMat * rotationMat * translationMat;
 
 	return matrix;
+}
+
+inline XMMATRIX TransformToMatrix(float translation[], float rotation[], float scale[])
+{
+	XMVECTOR T = FloatArrToVec(translation);
+	XMVECTOR R = FloatArrToVec(rotation);
+	XMVECTOR S = FloatArrToVec(scale);
+
+	return VecsToMatrix(S, R, T);
 }

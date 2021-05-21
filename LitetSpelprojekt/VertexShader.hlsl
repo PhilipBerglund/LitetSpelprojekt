@@ -6,7 +6,7 @@ struct VertexShaderInput
     float3 tangent : TANGENT;
     float3 binormal : BINORMAL;
     float4 weights : WEIGHTS;
-    float4 boneIDs : BONEIDS;
+    int4 boneIDs : BONEIDS;
 };
 
 struct VertexShaderOutput
@@ -32,20 +32,16 @@ cbuffer LightMatrix : register(b1)
 cbuffer JointMatrices : register(b2)
 {
     float4x4 jointMatrices[MAX_JOINTS];
-    int numJoints;
 }
 
 VertexShaderOutput main(VertexShaderInput input)
 {
 	VertexShaderOutput output;
 
-    float4x4 boneTX;
-    for (int i = 0; i < 1; ++i)
+    float4x4 boneTX = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+    for (int i = 0; i < 4; ++i)
     {
-        if (input.boneIDs[i] == -1)
-            break;
-        
-        else if (input.weights[i] == 0)
+        if (input.boneIDs[i] == -1 || input.weights[i] == 0)
             break;
         
         else if (i == 0)
@@ -57,7 +53,6 @@ VertexShaderOutput main(VertexShaderInput input)
     
     if (input.boneIDs[0] != -1)
         output.position = mul(float4(input.position, 1.0f), boneTX);
-    
     else
         output.position = float4(input.position, 1.0f);
     

@@ -138,7 +138,11 @@ namespace Importer
 				ReadVector(vertex.tangent, 3);
 				ReadVector(vertex.binormal, 3);
 				ReadVector(vertex.weights, 4);
-				ReadVector(vertex.boneIDs, 4);
+				Read(vertex.boneIDs[0]);
+				Read(vertex.boneIDs[1]);
+				Read(vertex.boneIDs[2]);
+				Read(vertex.boneIDs[3]);
+				//ReadVector(vertex.boneIDs, 4);
 
 				vertexBuffer.vertices.emplace_back(vertex);
 			}

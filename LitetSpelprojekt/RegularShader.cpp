@@ -80,14 +80,11 @@ void RegularShader::UpdatePerMesh(ShaderData& data, Model& model)
 		return;
 	}
 
-	ShaderData::JointCbuf joints = {};
-	joints.jointCount = model.GetJointTransforms().size();
-
-	for (int i = 0; i < joints.jointCount; ++i)
+	for (int i = 0; i < model.GetNumJoints(); ++i)
 		if (i < MAX_JOINTS)
-			XMStoreFloat4x4(&joints.jointMatrices[i], XMMatrixTranspose(model.GetJointTransforms()[i]));
+			data.jointMatrices[i] = model.GetJointTransform(i, model.GetCurrentKeyFrame());
 
-	memcpy(mappedResource.pData, &joints, sizeof(ShaderData::JointCbuf));
+	memcpy(mappedResource.pData, &data.jointMatrices, sizeof(XMFLOAT4X4) * MAX_JOINTS);
 	Graphics::GetDeviceContext().Unmap(data.jointBuffer.Get(), 0);
 	Graphics::GetDeviceContext().VSSetConstantBuffers(2, 1, data.jointBuffer.GetAddressOf());
 }

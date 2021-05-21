@@ -84,12 +84,8 @@ private:
 	ComPtr<ID3D11Buffer> regularCameraBuffer;
 
 	//--Joints--
-	struct JointCbuf
-	{
-		XMFLOAT4X4 jointMatrices[MAX_JOINTS] = { {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f} };
-		int jointCount = 0;
-		float padding[3];
-	};
+
+	XMFLOAT4X4 jointMatrices[MAX_JOINTS] = { {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f} };
 	ComPtr<ID3D11Buffer> jointBuffer;
 
 	//SHADERS

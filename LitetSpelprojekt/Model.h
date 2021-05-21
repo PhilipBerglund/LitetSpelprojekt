@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include <DirectXCollision.h>
 #include "Graphics.h"
+#include <map>
 
 enum class ColliderType {BOX, SPHERE};
 
@@ -11,8 +12,13 @@ class Model :public GameObject
 private:
 	Mesh mesh;
 	std::string name;
+	int currentKeyFrame;
+	int keyFrames;
+
 	XMMATRIX worldMatrix;
-	std::vector<XMMATRIX> jointTransforms;
+	std::vector<std::map<int, XMFLOAT4X4>> jointAnim;
+
+	void GetJointMatrix(Skeleton& skeleton, int jointID, int keyFrame, XMMATRIX& matrix);
 public:
 	ColliderType collidertype = ColliderType::BOX;
 	bool isInteractable = true;
@@ -46,6 +52,11 @@ public:
 
 	Material GetMaterial() const				{ return Importer::Data::GetMaterialAt(mesh.sceneID, mesh.materialIDs[0]); };
 
-	std::vector<XMMATRIX> GetJointTransforms() { return this->jointTransforms; }
+	//std::vector<XMMATRIX> GetJointTransforms() { return this->jointTransforms; }
+
+	int GetCurrentKeyFrame() const { return currentKeyFrame; }
+	int GetNumJoints() const { return jointAnim.size(); };
+	int GetNumKeyFrames() const { return keyFrames; }
+	XMFLOAT4X4 GetJointTransform(int ID, int keyFrame) { return jointAnim[ID].at(keyFrame); }
 	void UpdateAnimation(float time);
 };

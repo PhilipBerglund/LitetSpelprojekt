@@ -104,7 +104,7 @@ ShaderData::ShaderData()
 		{"TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"WEIGHTS", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"BONEIDS", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
+		{"BONEIDS", 0, DXGI_FORMAT_R32G32B32A32_SINT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
 	hr = Graphics::GetDevice().CreateInputLayout(regularInputDesc, regularNumElements, byteCode.c_str(), byteCode.length(), &regularLayout);
@@ -147,7 +147,7 @@ ShaderData::ShaderData()
 		return;
 	}
 
-	bufferDesc.ByteWidth = sizeof(JointCbuf);
+	bufferDesc.ByteWidth = sizeof(XMFLOAT4X4) * MAX_JOINTS;
 	hr = Graphics::GetDevice().CreateBuffer(&bufferDesc, nullptr, &jointBuffer);
 	if FAILED(hr)
 	{

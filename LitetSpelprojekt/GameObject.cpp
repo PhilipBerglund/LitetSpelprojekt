@@ -39,6 +39,11 @@ XMFLOAT3 GameObject::GetRotation() const
 	return this->transform.rotation;
 }
 
+XMFLOAT3& GameObject::GetRotationRef()
+{
+	return this->transform.rotation;
+}
+
 XMFLOAT3 GameObject::GetPosition() const
 {
 	return this->transform.position;

@@ -49,12 +49,17 @@ ShaderData::ShaderData()
 		{ "SIZE", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 	hr = Graphics::GetDevice().CreateInputLayout(particle2InputDesc, particleNumElements, byteCode.c_str(), byteCode.length(), &rainLayout);
+	if FAILED(hr)
+	{
+		Error("FAILED TO CREATE INPUT LAYOUT");
+		return;
+	}
 
 	//LOAD TEXTURE
 	LoadTexture("RainParticle.png");
 	//---------------------------------------//
 
-	//-----Smoke PARTICLE SYSTEM-----
+	//-----SMOKE PARTICLE SYSTEM-----
 	//SHADERS
 	vs_path = "../x64/Debug/SmokeVertexShader.cso";
 	if (!LoadVertexShader(smokeVS, vs_path, byteCode))
@@ -75,13 +80,44 @@ ShaderData::ShaderData()
 		{ "SIZE", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 	hr = Graphics::GetDevice().CreateInputLayout(smokeInputDesc, particleNumElements, byteCode.c_str(), byteCode.length(), &smokeLayout);
+	if FAILED(hr)
+	{
+		Error("FAILED TO CREATE INPUT LAYOUT");
+		return;
+	}
+	//---------------------------------------//
+	
+	//-----SHADOW MAP-----
+	//SHADERS
+	byteCode = "";
+	vs_path = "../x64/Debug/ShadowMapVertexShader.cso";
+	if (!LoadVertexShader(shadowMapVS, vs_path, byteCode))
+		return;
 
-
-
-
-
-
-
+	//BUFFERS
+	bufferDesc.ByteWidth = sizeof(XMFLOAT4X4);
+	hr = Graphics::GetDevice().CreateBuffer(&bufferDesc, nullptr, &shadowBuffer);
+	if FAILED(hr)
+	{
+		Error("FAILED TO CREATE BUFFER");
+		return;
+	}
+	bufferDesc.ByteWidth = sizeof(XMFLOAT4X4);
+	hr = Graphics::GetDevice().CreateBuffer(&bufferDesc, nullptr, &lightBuffer);
+	if FAILED(hr)
+	{
+		Error("FAILED TO CREATE BUFFER");
+		return;
+	}
+	bufferDesc.ByteWidth = sizeof(XMFLOAT4X4);
+	hr = Graphics::GetDevice().CreateBuffer(&bufferDesc, nullptr, &lightViewProjBuffer);
+	if FAILED(hr)
+	{
+		Error("FAILED TO CREATE BUFFER");
+		return;
+	}
+	//---------------------------------------//
+	
 	//-----REGULAR-----
 	//SHADERS
 	vs_path = "../x64/Debug/VertexShader.cso";
@@ -154,7 +190,7 @@ ShaderData::ShaderData()
 	}
 }
 
-void ShaderData::Update(const Camera& camera)
+void ShaderData::Update(const Camera& camera, const Light& light)
 {
 	HRESULT hr;
 	D3D11_MAPPED_SUBRESOURCE mappedResource = {};
@@ -163,6 +199,12 @@ void ShaderData::Update(const Camera& camera)
 	cameraPosition = camera.GetPosition();
 	viewMatrix = camera.GetViewMatrix();
 	projectionMatrix = camera.GetPerspectiveMatrix();
+
+	//-----LIGHT------
+	lightViewMatrix = light.GetViewMatrix();
+	lightProjectionMatrix = light.GetPerspectiveMatrix();
+	lightOrthographicMatrix = light.GetOrthographicMatrix();
+	lightShadowViewMatrix = light.GetShadowViewMatrix();
 
 	//-----PARTICLE_SYSTEM-----
 	//VIEW PROJ BUFFER
@@ -183,7 +225,20 @@ void ShaderData::Update(const Camera& camera)
 	//-----SECOND_PARTICLE_SYSTEM-----
 	Graphics::GetDeviceContext().GSSetConstantBuffers(0, 1, viewProjBuffer.GetAddressOf());
 	Graphics::GetDeviceContext().GSSetConstantBuffers(1, 1, regularCameraBuffer.GetAddressOf());
-	Graphics::GetDeviceContext().PSSetShaderResources(0, 1, rainTexSRV.GetAddressOf());
+
+	//-----SHADOW_MAP-----
+	hr = Graphics::GetDeviceContext().Map(shadowBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	if FAILED(hr)
+	{
+		Error("FAILED TO MAP SHADOW BUFFER");
+		return;
+	}
+
+	memcpy(mappedResource.pData, &shadowMapMatrix, sizeof(XMFLOAT4X4));
+	Graphics::GetDeviceContext().Unmap(shadowBuffer.Get(), 0);
+	Graphics::GetDeviceContext().VSSetConstantBuffers(4, 1, shadowBuffer.GetAddressOf());
+	Graphics::GetDeviceContext().PSSetShaderResources(1, 1, shadowMap.DepthMapSRV());
+	Graphics::GetDeviceContext().PSSetConstantBuffers(2, 1, lightBuffer.GetAddressOf());
 
 	//-----REGULAR-----
 	//CAMERA BUFFER
@@ -242,7 +297,7 @@ bool ShaderData::LoadTexture(std::string fileName)
 	desc.MiscFlags = 0; //No additional flags
 
 	//The subresource data 
-	D3D11_SUBRESOURCE_DATA  data; //Pointer to the initialization data
+	D3D11_SUBRESOURCE_DATA data; //Pointer to the initialization data
 	data.pSysMem = &textureData[0];
 	data.SysMemPitch = textureWidth * 4; //Distance (bytes) between beginning of a row in a texture to the next one 
 	data.SysMemSlicePitch = 0; // --Only used for 3D texture data-- Distance (bytes) from the beginning of depth level to the next

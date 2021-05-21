@@ -9,6 +9,8 @@
 #include "SmokeSystem.h"
 #include "ParticleShader.h"
 #include "RegularShader.h"
+#include "ShadowMap.h"
+#include "ShadowMapShader.h"
 #include "Bounds.h"
 
 class Scene
@@ -25,27 +27,33 @@ private:
 	std::vector<std::shared_ptr<GameObject>> gameObjects;
 	std::vector<std::shared_ptr<RainSystem>> rainSystem;
 	std::vector<std::shared_ptr<SmokeSystem>> smokeSystem;
+	std::vector<std::shared_ptr<ShadowMap>> shadowMaps;
+	std::map<std::string, std::shared_ptr<Model>> nonShadowModels;
 
 	//SHADERS
 	ShaderData shaderData;
 	ParticleShader GSRainShader;
 	ParticleShader GSSmokeShader;
 	RegularShader regularShader;
+	ShadowMapShader ShadowMapShader;
 
 	//void AddParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size);
 	void AddRainParticleSystem(UINT maxParticles, float minVelocity, float maxVelocity);
 	void AddSmokeParticleSystem(UINT maxParticles, float minVelocity, float maxVelocity, XMFLOAT4 starPos, float maxParticleRange);
 	void AddModel(std::shared_ptr<Model> model);
 	void AddLight();
+	void AddShadowMap(UINT width, UINT height);
 public:
 	Scene() = default;
 	Scene(UINT windowWidth, UINT windowHeight, HWND window);
 
 	void Update(InGameUI& ui, float dt);
 	void Render();
+	void RenderShadowMap();
 
 	const std::vector<std::shared_ptr<Light>>& GetLights() const					{ return this->lights; }
 	const std::map<std::string, std::shared_ptr<Model>>& GetModels() const			{ return this->models; }
+	const std::map<std::string, std::shared_ptr<Model>>& GetNoShadowModels() const	{ return this->nonShadowModels; }
 	const std::vector<std::shared_ptr<RainSystem>>& GetRainSystem() const			{ return this->rainSystem; }
 	const std::vector<std::shared_ptr<SmokeSystem>>& GetSmokeSystem() const			{ return this->smokeSystem; }
 	const Camera& GetCamera() const													{ return this->camera; }

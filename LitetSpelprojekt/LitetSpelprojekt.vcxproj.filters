@@ -202,6 +202,11 @@
     </ClInclude>
     <ClInclude Include="ShadowMapShader.h">
       <Filter>Header Files\Shaders</Filter>
+    <ClInclude Include="Bounds.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="ChatOverlay.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

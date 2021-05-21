@@ -3,6 +3,7 @@
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.001f, 50.0f, { 0, 15, 0 })
 {
+	//Längst upp om man ska rita ut skitn (som alla andra modeller)
 	Importer::LoadScene("Models/Office.mff");
 	Importer::LoadScene("Models/Bar.mff");
 	Importer::LoadScene("Models/Hotel.mff");
@@ -10,6 +11,8 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	Importer::LoadScene("Models/Park.mff");
 	Importer::LoadScene("Models/Objects.mff");
 	Importer::LoadScene("Models/Houses.mff");
+
+	Importer::Initialize(Graphics::GetDevice());
 
 	for (int i = 0; i < Importer::Data::scenes.size(); ++i)
 	{
@@ -19,7 +22,7 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 			models.insert(std::make_pair(model->GetName(), model));
 		}
 	}
-
+    
 	Importer::LoadScene("Models/Streets.mff");
 	for (int i = 0; i < Importer::Data::scenes.size(); ++i)
 	{
@@ -31,6 +34,8 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	}
 	
 	Importer::Initialize(Graphics::GetDevice());
+    
+	bounds = Bounds("Models/BBoxes.mff");
 
 	AddRainParticleSystem(3000, 150, 200);
 	AddSmokeParticleSystem(200, 5, 10, { 25.0f, 10.0f, 40.0f, 1.0f }, 60);
@@ -87,35 +92,31 @@ void Scene::AddShadowMap(UINT width, UINT height)
 void Scene::Update(InGameUI& ui, float dt)
 {
 	XMFLOAT3 lastPosition = camera.GetPosition();
+	camera.Update(dt);
 
-	//for (auto& model : models)
-	//{
-	//	bool hit = false;
-
-	//	switch (model->collidertype)
-	//	{
-	//	case ColliderType::BOX:
-	//		hit = camera.CheckCollision(model->boundingbox);
-	//		break;
-	//	case ColliderType::SPHERE:
-	//		break;
-	//	}
-
-	//	if (hit)
-	//	{
-	//		camera.SetPosition(lastPosition);
-	//		XMFLOAT3 direction = { camera.GetPosition().x - model->GetPosition().x, 0.0f,
-	//								camera.GetPosition().z - model->GetPosition().z };
-	//		camera.PushBack(direction, dt);
-	//	}
-	//}
+	for (auto& box : bounds.boxes)
+	{
+		if (box.Intersects(camera.boundingsphere))
+		{
+			camera.SetPosition(lastPosition);
+			/*XMVECTOR direction = { camera.GetPosition().x - box.Center.x, 0.0f,
+									camera.GetPosition().z - box.Center.z };
+			direction = XMVector3Normalize(direction);
+			XMFLOAT3 dir;
+			XMStoreFloat3(&dir, direction);
+			camera.PushBack(dir, dt);*/
+			break;
+		}
+	}
 
 	for (auto& particleSystem : rainSystem)
 		particleSystem->Update(dt);
+
 	for (auto& particleSystem : smokeSystem)
 		particleSystem->Update(dt);
 
 	scenario.Update(*this, ui, camera);
+  
 	camera.Update(dt);
 	shaderData.Update(camera, *lights[0]);
 }

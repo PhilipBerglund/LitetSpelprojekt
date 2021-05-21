@@ -36,6 +36,12 @@ void Game::Render(float dt)
 		scene.Render();
 		inGameUI.Render(dt);
 		break;
+	
+	case GameState::CHAT:
+		scene.Update(inGameUI, dt);
+		scene.Render();
+		inGameUI.Render(dt);
+		break;
 
 	case GameState::END:
 		break;

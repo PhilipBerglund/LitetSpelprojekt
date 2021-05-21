@@ -136,7 +136,7 @@ bool QTFrustum::Contains(QTSquare bounds)
 			XMVECTOR length = XMVector3Length(crossP);
 			XMFLOAT3 crossProd;
 			XMStoreFloat3(&crossProd, length);
-			if (crossProd.x < 0)
+			if (crossProd.x > 0)
 			{
 				pInFront[j] = false;
 			}

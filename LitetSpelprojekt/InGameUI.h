@@ -3,6 +3,7 @@
 #include "Journal.h"
 #include "PauseMenu.h"
 #include "ChatOverlay.h"
+#include "ClueInfoOverlay.h"
 
 enum class CursorType { REGULAR, CROSS, CLUE, CHAT, NONE };
 
@@ -86,10 +87,12 @@ private:
 		}
 	}
 
-	void SwitchChatState()
+	void DeactivateChatOverlay()
 	{
+		chatOverlay.Deactivate();
 		Event::DispatchEvent(EventType::STATECHANGE);
 		GameSettings::SetState(GameState::INGAME);
+
 		if (gotNewInformation)
 		{
 			newInformationNotation->SetVisibility(true);
@@ -98,7 +101,14 @@ private:
 		
 		gotNewInformation = false;
 		SetCursorType(CursorType::CROSS);
-		chatOverlay.Reset();
+	}
+
+	void DeactivateClueOverlay()
+	{
+		clueOverlay.Deactivate();
+		Event::DispatchEvent(EventType::STATECHANGE);
+		GameSettings::SetState(GameState::INGAME);
+		SetCursorType(CursorType::CROSS);
 	}
 
 	void Reset()
@@ -137,6 +147,7 @@ private:
 public:
 	Journal journal;
 	ChatOverlay chatOverlay;
+	ClueInfoOverlay clueOverlay;
 public:
 	~InGameUI()
 	{
@@ -241,10 +252,13 @@ public:
 		if (pauseMenu.Resume())
 			SwitchPauseState();
 
-		if (chatOverlay.Exit())
-			SwitchChatState();
+		if (chatOverlay.IsDone())
+			DeactivateChatOverlay();
 
+		#ifdef _DEBUG
 		dtText.SetString(std::to_wstring(dt * 1000.0f));
+		dtText.Draw(*debugTextFormat.Get(), *debugBrush.Get());
+		#endif
 
 		//DRAWING
 		for (auto& image : images)
@@ -261,14 +275,26 @@ public:
 		if (GameSettings::GetState() == GameState::PAUSED)
 			pauseMenu.Draw();
 
-		if (GameSettings::GetState() == GameState::CHAT)
-			chatOverlay.Draw(*debugTextFormat.Get(), *whiteBrush.Get(), dt);
+		if (chatOverlay.IsActive())
+		{
+			chatOverlay.Update(dt);
+			chatOverlay.Draw(*debugTextFormat.Get(), *whiteBrush.Get());
 
-		dtText.Draw(*debugTextFormat.Get(), *debugBrush.Get());
+			if (chatOverlay.ShowCursor())
+				SetCursorType(CursorType::REGULAR);
 
-		if (chatOverlay.ShowCursor())
-			SetCursorType(CursorType::REGULAR);
+			else
+				SetCursorType(CursorType::NONE);
+		}
 
+		if (clueOverlay.IsActive())
+		{
+			clueOverlay.Draw(*textFormat.Get(), *debugTextFormat.Get(), *whiteBrush.Get());
+
+			if (clueOverlay.IsDone())
+				DeactivateClueOverlay();
+		}
+			
 		if (cursor.visible)
 			cursor.Draw();
 	}

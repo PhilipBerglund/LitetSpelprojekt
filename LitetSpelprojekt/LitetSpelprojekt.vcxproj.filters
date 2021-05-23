@@ -1,250 +1,78 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <FxCompile Include="ColorPixelShader.hlsl">
-      <Filter>Resource Files</Filter>
-    </FxCompile>
-    <FxCompile Include="PixelShader.hlsl">
-      <Filter>Resource Files</Filter>
-    </FxCompile>
-    <FxCompile Include="TexturePixelShader.hlsl">
-      <Filter>Resource Files</Filter>
-    </FxCompile>
-    <FxCompile Include="VertexShader.hlsl">
-      <Filter>Resource Files</Filter>
-    </FxCompile>
-    <FxCompile Include="RainPixelShader.hlsl">
-      <Filter>Header Files\ParticleSystems\Rain</Filter>
-    </FxCompile>
-    <FxCompile Include="RainVertexShader.hlsl">
-      <Filter>Header Files\ParticleSystems\Rain</Filter>
-    </FxCompile>
-    <FxCompile Include="RainGeometryShader.hlsl">
-      <Filter>Header Files\ParticleSystems\Rain</Filter>
-    </FxCompile>
-    <FxCompile Include="SmokeVertexShader.hlsl">
-      <Filter>Header Files\ParticleSystems\Smoke</Filter>
-    </FxCompile>
-    <FxCompile Include="SmokePixelShader.hlsl">
-      <Filter>Header Files\ParticleSystems\Smoke</Filter>
-    </FxCompile>
-    <FxCompile Include="SmokeGeometryShader.hlsl">
-      <Filter>Header Files\ParticleSystems\Smoke</Filter>
-    </FxCompile>
-    <FxCompile Include="ShadowMapVertexShader.hlsl">
-      <Filter>Resource Files</Filter>
-    </FxCompile>
+    <FxCompile Include="ColorPixelShader.hlsl" />
+    <FxCompile Include="RainPixelShader.hlsl" />
+    <FxCompile Include="RainVertexShader.hlsl" />
+    <FxCompile Include="RainGeometryShader.hlsl" />
+    <FxCompile Include="PixelShader.hlsl" />
+    <FxCompile Include="ShadowMapVertexShader.hlsl" />
+    <FxCompile Include="SmokeGeometryShader.hlsl" />
+    <FxCompile Include="SmokePixelShader.hlsl" />
+    <FxCompile Include="SmokeVertexShader.hlsl" />
+    <FxCompile Include="TexturePixelShader.hlsl" />
+    <FxCompile Include="VertexShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Event.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameSettings.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Scenario.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Window.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SoundHandler.cpp">
-      <Filter>Source Files\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="RegularShader.cpp">
-      <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderData.cpp">
-      <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="RainSystem.cpp">
-      <Filter>Header Files\ParticleSystems\Rain</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleShader.cpp">
-      <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="SmokeSystem.cpp">
-      <Filter>Header Files\ParticleSystems\Smoke</Filter>
-    </ClCompile>
-    <ClCompile Include="ShadowMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ShadowMapShader.cpp">
-      <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Event.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameSettings.cpp" />
+    <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ParticleShader.cpp" />
+    <ClCompile Include="RainSystem.cpp" />
+    <ClCompile Include="RegularShader.cpp" />
+    <ClCompile Include="Scenario.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="ShaderData.cpp" />
+    <ClCompile Include="ShadowMap.cpp" />
+    <ClCompile Include="ShadowMapShader.cpp" />
+    <ClCompile Include="SmokeSystem.cpp" />
+    <ClCompile Include="SoundHandler.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameSettings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Scenario.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AudioChunks.h">
-      <Filter>Header Files\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Button.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Image.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="InGameUI.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Journal.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="MainMenu.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="PauseMenu.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Text.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UIComponent.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="RegularShader.h">
-      <Filter>Header Files\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="SoundHandler.h">
-      <Filter>Header Files\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="ComPtr.h">
-      <Filter>Header Files\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="Print.h">
-      <Filter>Header Files\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="Random.h">
-      <Filter>Header Files\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderLoader.h">
-      <Filter>Header Files\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Header Files\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="Event.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderData.h">
-      <Filter>Header Files\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="stb_image.h">
-      <Filter>Header Files\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="RainSystem.h">
-      <Filter>Header Files\ParticleSystems\Rain</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleShader.h">
-      <Filter>Header Files\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="SmokeSystem.h">
-      <Filter>Header Files\ParticleSystems\Smoke</Filter>
-    </ClInclude>
-    <ClInclude Include="ShadowMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ShadowMapShader.h">
-      <Filter>Header Files\Shaders</Filter>
-    <ClInclude Include="Bounds.h">
-      <Filter>Header Files\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="ChatOverlay.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{c42741a2-13fa-4cc1-a77e-e5eb85d75ee4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{0c0de825-9204-4f97-b7d0-1b75c9ee36dc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{8ea36cbb-5b7f-4c9e-96d3-9404aa0d061e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\UI">
-      <UniqueIdentifier>{e8154e61-caba-4422-90e5-0aba3202b54d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Audio">
-      <UniqueIdentifier>{acfe1029-d16c-4015-a0b6-e9c25b9a3a23}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Shaders">
-      <UniqueIdentifier>{60876fa3-c9d4-4f9c-997b-77538df1e008}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Utilities">
-      <UniqueIdentifier>{381c1720-2123-4489-9fd0-478a8e505acd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Shaders">
-      <UniqueIdentifier>{cbefe316-311c-4342-a8cd-b91283fccb2f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Audio">
-      <UniqueIdentifier>{f7ca2af8-fd24-4c0b-8676-baadc6cdb863}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\ParticleSystems">
-      <UniqueIdentifier>{bef46962-4d6b-4310-bcb1-4bd8294035c8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\ParticleSystems\Rain">
-      <UniqueIdentifier>{b1e2dcaf-91f7-45fc-b509-112d1ef12f2b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\ParticleSystems\Smoke">
-      <UniqueIdentifier>{107f514e-d1df-463b-916a-071e689602a2}</UniqueIdentifier>
-    </Filter>
+    <ClInclude Include="AudioChunks.h" />
+    <ClInclude Include="Bounds.h" />
+    <ClInclude Include="ChatOverlay.h" />
+    <ClInclude Include="GameSettings.h" />
+    <ClInclude Include="Journal.h" />
+    <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="Model.h" />
+    <ClInclude Include="ParticleShader.h" />
+    <ClInclude Include="RainSystem.h" />
+    <ClInclude Include="PauseMenu.h" />
+    <ClInclude Include="RegularShader.h" />
+    <ClInclude Include="Scenario.h" />
+    <ClInclude Include="ShaderData.h" />
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="ComPtr.h" />
+    <ClInclude Include="Print.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Graphics.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="InGameUI.h" />
+    <ClInclude Include="Random.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="ShaderLoader.h" />
+    <ClInclude Include="ShadowMap.h" />
+    <ClInclude Include="ShadowMapShader.h" />
+    <ClInclude Include="SmokeSystem.h" />
+    <ClInclude Include="SoundHandler.h" />
+    <ClInclude Include="Event.h" />
+    <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Text.h" />
+    <ClInclude Include="Timer.h" />
+    <ClInclude Include="UI.h" />
+    <ClInclude Include="UIComponent.h" />
+    <ClInclude Include="Image.h" />
+    <ClInclude Include="Window.h" />
+    <ClInclude Include="ClueInfoOverlay.h" />
   </ItemGroup>
 </Project>

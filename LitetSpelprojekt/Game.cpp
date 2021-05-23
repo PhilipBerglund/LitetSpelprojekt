@@ -43,7 +43,14 @@ void Game::Render(float dt)
 		inGameUI.Render(dt);
 		break;
 
+	case GameState::CLUE:
+		scene.Update(inGameUI, dt);
+		scene.Render();
+		inGameUI.Render(dt);
+		break;
+
 	case GameState::END:
+		inGameUI.Render(dt);
 		break;
 	}
 

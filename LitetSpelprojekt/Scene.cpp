@@ -117,7 +117,6 @@ void Scene::Update(InGameUI& ui, float dt)
 
 	scenario.Update(*this, ui, camera);
   
-	camera.Update(dt);
 	shaderData.Update(camera, *lights[0]);
 }
 

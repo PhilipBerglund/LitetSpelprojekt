@@ -3,6 +3,8 @@
 #include "Graphics.h"
 #include "Camera.h"
 #include "Random.h"
+#include "ShadowMap.h"
+#include "Light.h"
 
 #include <directXmath.h>
 using namespace DirectX;
@@ -11,12 +13,19 @@ class ShaderData
 {
 	friend class ParticleShader;
 	friend class RegularShader;
+	friend class ShadowMapShader;
 private:
 	//-----GENERAL-----
 	//CAMERA
 	XMFLOAT3 cameraPosition = {};
 	XMMATRIX viewMatrix = {};
 	XMMATRIX projectionMatrix = {};
+
+	//DIRECTIONAL_LIGHT
+	XMMATRIX lightViewMatrix = {};
+	XMMATRIX lightProjectionMatrix = {};
+	XMMATRIX lightOrthographicMatrix = {};
+	XMMATRIX lightShadowViewMatrix = {};
 
 	//-----SMOKE PARTICLE SYSTEM----
 	ComPtr<ID3D11VertexShader> smokeVS;
@@ -31,10 +40,6 @@ private:
 	//BUFFERS
 	ComPtr<ID3D11Buffer> viewProjBuffer;
 
-
-	//-----RAIN PARTICLE SYSTEM-----
-	//BUFFERS
-
 	//SHADERS
 	ComPtr<ID3D11VertexShader> rainVS;
 	ComPtr<ID3D11GeometryShader> rainGS;
@@ -44,6 +49,22 @@ private:
 	ComPtr<ID3D11InputLayout> rainLayout;
 	//If textures wanted on particle
 	ComPtr<ID3D11ShaderResourceView> rainTexSRV;
+
+	//-----SHADOW MAP-----
+	//BUFFERS
+	ComPtr<ID3D11Buffer> shadowBuffer;
+	XMFLOAT4X4 shadowMapMatrix;
+	ComPtr<ID3D11Buffer> lightBuffer;
+	ComPtr<ID3D11Buffer> lightViewProjBuffer;
+
+	//SHADERS
+	ComPtr<ID3D11VertexShader> shadowMapVS;
+
+	//INPUT LAYOUT
+	ComPtr<ID3D11InputLayout> shadowLayout;
+
+	//ShadowMap
+	ShadowMap shadowMap;
 
 	//-----REGULAR-----
 	//BUFFERS
@@ -89,5 +110,5 @@ private:
 	bool LoadTexture(std::string fileName);
 public:
 	ShaderData();
-	void Update(const Camera& camera);
+	void Update(const Camera& camera, const Light& light);
 };

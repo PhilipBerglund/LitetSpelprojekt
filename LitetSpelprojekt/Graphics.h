@@ -45,6 +45,9 @@ public:
 
 	static ID3D11Device& GetDevice()				{ return *device.Get(); };
 	static ID3D11DeviceContext& GetDeviceContext()	{ return *context.Get(); };
+	static ID3D11RenderTargetView** GetRenderTargetView() { return rtv.GetAddressOf(); };
+	static ID3D11DepthStencilView* GetDepthStencilView() { return dsView.Get(); };
+	static D3D11_VIEWPORT& GetViewport() { return viewport; };
 	static IDXGISwapChain& GetSwapChain()			{ return *swapChain.Get(); };
 	static IDXGISurface& GetSurface()				{ return *surface.Get(); };
 	static ID3D11SamplerState** GetWrapSampler()	{ return wrapSampler.GetAddressOf(); }

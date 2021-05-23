@@ -31,6 +31,9 @@
     <FxCompile Include="SmokeGeometryShader.hlsl">
       <Filter>Header Files\ParticleSystems\Smoke</Filter>
     </FxCompile>
+    <FxCompile Include="ShadowMapVertexShader.hlsl">
+      <Filter>Resource Files</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -86,6 +89,12 @@
     </ClCompile>
     <ClCompile Include="SmokeSystem.cpp">
       <Filter>Header Files\ParticleSystems\Smoke</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowMapShader.cpp">
+      <Filter>Source Files\Shaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -188,6 +197,11 @@
     <ClInclude Include="SmokeSystem.h">
       <Filter>Header Files\ParticleSystems\Smoke</Filter>
     </ClInclude>
+    <ClInclude Include="ShadowMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMapShader.h">
+      <Filter>Header Files\Shaders</Filter>
     <ClInclude Include="Bounds.h">
       <Filter>Header Files\Utilities</Filter>
     </ClInclude>

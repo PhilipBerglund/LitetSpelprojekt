@@ -24,7 +24,7 @@ inline bool LoadVertexShader(ComPtr<ID3D11VertexShader>& vertexShader, std::stri
 	HRESULT hr = Graphics::GetDevice().CreateVertexShader(shaderData.c_str(), shaderData.length(), nullptr, &vertexShader);
 	if FAILED(hr)
 	{
-		Error("FAILED TO CREATE VERTEX SHADER");
+		Error("FAILED TO CREATE VERTEX SHADER" + path);
 		return false;
 	}
 

@@ -29,6 +29,17 @@ float4 main(PixelShaderInput input) : SV_TARGET
     float diffuseShadow = saturate(dot(input.normal, cameraPosition));
     
     float4 finalColor = float4(diffuse, 1.0f);
-    
+
+    //FOG
+
+    float4 fogColor = float4(0.25f, 0.25f, 0.25f, 1.0f);
+    float fogStart = 50.0f;
+    float fogRange = 350.0f;
+
+    float fogDistance = distance(cameraPosition, input.worldPosition);
+
+    float fogFactor = saturate((fogDistance - fogStart) / fogRange);
+    finalColor = lerp(finalColor, fogColor, fogFactor);
+
     return finalColor;
 }

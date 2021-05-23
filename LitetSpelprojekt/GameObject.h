@@ -28,6 +28,7 @@ public:
 
 	XMFLOAT3 GetScale() const;
 	XMFLOAT3 GetRotation() const;
+	XMFLOAT3& GetRotationRef();
 	XMFLOAT3 GetPosition() const;
 
 	virtual Type type() const { return Type::GAMEOBJECT; };

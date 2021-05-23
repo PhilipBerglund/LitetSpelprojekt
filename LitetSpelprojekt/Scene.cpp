@@ -3,15 +3,14 @@
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.001f, 50.0f, { 0, 15, 0 })
 {
-	//Längst upp om man ska rita ut skitn (som alla andra modeller)
+	//LÃ¤ngst upp om man ska rita ut skitn (som alla andra modeller)
 	Importer::LoadScene("Models/Office.mff");
-	//Importer::LoadScene("Models/Bar.mff");
-	//Importer::LoadScene("Models/Hotel.mff");
-	//Importer::LoadScene("Models/Restaurant.mff");
-	//Importer::LoadScene("Models/Park.mff");
-	//Importer::LoadScene("Models/Objects.mff");
-	//Importer::LoadScene("Models/Houses.mff");
-	Importer::LoadScene("Models/Streets.mff");
+	Importer::LoadScene("Models/Bar.mff");
+	Importer::LoadScene("Models/Hotel.mff");
+	Importer::LoadScene("Models/Restaurant.mff");
+	Importer::LoadScene("Models/Park.mff");
+	Importer::LoadScene("Models/Objects.mff");
+	Importer::LoadScene("Models/Houses.mff");
 
 	Importer::Initialize(Graphics::GetDevice());
 
@@ -23,26 +22,27 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 			models.insert(std::make_pair(model->GetName(), model));
 		}
 	}
-
-
-	viewFrustum.Update(camera);
-	QTSquare treeBoundaries;
-	treeBoundaries.xPos = 0;
-	treeBoundaries.zPos = 0;
-	treeBoundaries.w = 600;
-	treeBoundaries.h = 600;
-	SetupQuadTree(tree, treeBoundaries, 20);
-	for (auto& mod : models)
+    
+	Importer::LoadScene("Models/Streets.mff");
+	for (int i = 0; i < Importer::Data::scenes.size(); ++i)
 	{
-		tree->InsertModel(mod.second);
+		for (auto& noShadowMesh : Importer::Data::GetMeshes(i))
+		{
+			auto noShadowModel = std::make_shared<Model>(noShadowMesh);
+			nonShadowModels.insert(std::make_pair(noShadowModel->GetName(), noShadowModel));
+		}
 	}
 	
+	Importer::Initialize(Graphics::GetDevice());
+    
 	bounds = Bounds("Models/BBoxes.mff");
 
 	AddRainParticleSystem(3000, 150, 200);
 	AddSmokeParticleSystem(200, 5, 10, { 25.0f, 10.0f, 40.0f, 1.0f }, 60);
 	AddSmokeParticleSystem(400, 5, 10, { -112.0f, 120.0f, 10.0f, 1.0f }, 200);
 	AddLight();
+	lights[0]->SetRotation({ 0.0f,-10.0f,10.0f });
+	AddShadowMap(Window::GetWidth(), Window::GetHeight());
 
 	scenario = Scenario(*this);
 }
@@ -83,9 +83,14 @@ void Scene::AddLight()
 	gameObjects.push_back(light);
 }
 
+void Scene::AddShadowMap(UINT width, UINT height)
+{
+	auto shadowMap = std::make_shared<ShadowMap>(width, height);
+	shadowMaps.push_back(shadowMap);
+}
+
 void Scene::Update(InGameUI& ui, float dt)
 {
-	ClearQTModels();
 	XMFLOAT3 lastPosition = camera.GetPosition();
 	camera.Update(dt);
 
@@ -104,9 +109,6 @@ void Scene::Update(InGameUI& ui, float dt)
 		}
 	}
 
-	viewFrustum.Update(camera);
-	QTIntersect(viewFrustum, tree, QTFoundModels);
-
 	for (auto& particleSystem : rainSystem)
 		particleSystem->Update(dt);
 
@@ -114,8 +116,9 @@ void Scene::Update(InGameUI& ui, float dt)
 		particleSystem->Update(dt);
 
 	scenario.Update(*this, ui, camera);
-	shaderData.Update(camera);
-	Print("NrOfObjects: " + std::to_string(QTFoundModels.size()));
+  
+	camera.Update(dt);
+	shaderData.Update(camera, *lights[0]);
 }
 
 void Scene::Render()
@@ -123,4 +126,10 @@ void Scene::Render()
 	GSRainShader.RenderRain(shaderData, *this);
 	GSSmokeShader.RenderSmoke(shaderData, *this);
 	regularShader.Render(shaderData, *this);
+}
+
+void Scene::RenderShadowMap()
+{
+	ShadowMapShader.RenderShadowMap(shaderData, *this);
+	Graphics::BeginFrame();
 }

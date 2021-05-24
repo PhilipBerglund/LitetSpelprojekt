@@ -116,28 +116,34 @@ bool QTFrustum::Contains(QTSquare bounds)
 	corners[2] = { bounds.xPos + bounds.w, 0, bounds.zPos - bounds.h }; //BottomRight
 	corners[3] = { bounds.xPos - bounds.w, 0, bounds.zPos - bounds.h }; //BottomLeft
 
-	for (int i = 0; i < 4; i++) //Points
+	//for (int i = 0; i < 4; i++) //Points
+	//{
+	//	bool inside[4];
+	//	for (int i = 0; i < 4; i++)
+	//	{
+	//		inside[i] = false;
+	//	}
+	//	for (int j = 0; j < 4; j++) //Planes
+	//	{
+	//		XMVECTOR planeNormal = XMLoadFloat3(&this->planes[j].normal);
+	//		XMVECTOR planePoint = XMLoadFloat3(&this->planes[j].point);
+	//		XMVECTOR dVec = XMVector3Dot((corners[i] - planePoint), planeNormal);
+	//		float d = XMVectorGetX(dVec);
+	//		if (d < 0)
+	//		{
+	//			inside[j] = true;
+	//		}
+	//	}
+	//	if (inside[0] == true && inside[1] == true && inside[2] == true && inside[3] == true)
+	//	{
+	//		return true;
+	//	}
+	//}
+
+	if (this->pos.x < bounds.xPos + bounds.w && this->pos.x > bounds.xPos - bounds.w
+		&& this->pos.z < bounds.zPos + bounds.h && this->pos.z > bounds.zPos - bounds.h)
 	{
-		bool inside[4];
-		for (int i = 0; i < 4; i++)
-		{
-			inside[i] = false;
-		}
-		for (int j = 0; j < 4; j++) //Planes
-		{
-			XMVECTOR planeNormal = XMLoadFloat3(&this->planes[j].normal);
-			XMVECTOR planePoint = XMLoadFloat3(&this->planes[j].point);
-			XMVECTOR dVec = XMVector3Dot((corners[i] - planePoint), planeNormal);
-			float d = XMVectorGetX(dVec);
-			if (d < 0)
-			{
-				inside[j] = true;
-			}
-		}
-		if (inside[0] == true && inside[1] == true && inside[2] == true && inside[3] == true)
-		{
-			return true;
-		}
+		return true;
 	}
 
 	return false;
@@ -178,8 +184,8 @@ void QTFrustum::Update(Camera cam)
 	XMVECTOR rightPoint = CamPosVector + cam.GetForwardVector() * nearZ + CamUpV * (nearH / 2) + cam.GetRightVector() * (nearW / 2);
 	XMVECTOR leftPoint = CamPosVector + cam.GetForwardVector() * nearZ + CamUpV * (nearH / 2) + cam.GetRightVector() * (-nearW / 2);
 
-	XMVECTOR rightPlaneNormal = DirectX::XMVector3Cross(DirectX::XMVector3Normalize(CamUpV), rightPoint - CamPosVector); //Hämta kamerans uppvektor, gör en vektor till punkten rightPoint i högra planet
-	XMVECTOR leftPlaneNormal = DirectX::XMVector3Cross(leftPoint - CamPosVector, DirectX::XMVector3Normalize(CamUpV)); //Hämta kamerans uppvektor, gör en vektor till punkten leftPoint i vänstra planet //Tänka på ordning i crossproduct
+	XMVECTOR rightPlaneNormal = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(DirectX::XMVector3Normalize(CamUpV), rightPoint - CamPosVector)); //Hämta kamerans uppvektor, gör en vektor till punkten rightPoint i högra planet
+	XMVECTOR leftPlaneNormal = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(leftPoint - CamPosVector, DirectX::XMVector3Normalize(CamUpV))); //Hämta kamerans uppvektor, gör en vektor till punkten leftPoint i vänstra planet //Tänka på ordning i crossproduct
 
 
 	XMStoreFloat3(&this->planes[2].normal, rightPlaneNormal);

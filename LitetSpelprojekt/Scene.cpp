@@ -24,13 +24,10 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	}
     
 	Importer::LoadScene("Models/Streets.mff");
-	for (int i = 0; i < Importer::Data::scenes.size(); ++i)
+	for (auto& noShadowMesh : Importer::Data::GetMeshes(Importer::Data::scenes.size()-1))
 	{
-		for (auto& noShadowMesh : Importer::Data::GetMeshes(i))
-		{
-			auto noShadowModel = std::make_shared<Model>(noShadowMesh);
-			nonShadowModels.insert(std::make_pair(noShadowModel->GetName(), noShadowModel));
-		}
+		auto noShadowModel = std::make_shared<Model>(noShadowMesh);
+		nonShadowModels.insert(std::make_pair(noShadowModel->GetName(), noShadowModel));
 	}
 	
 	Importer::Initialize(Graphics::GetDevice());
@@ -42,9 +39,9 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	QTbounds.xPos = 0;
 	QTbounds.zPos = 0;
 	SetupQuadTree(this->tree, QTbounds, 20);
-	for (auto& mod : QTModels)
+	for (auto& mod : models)
 	{
-		this->tree->InsertModel(mod);
+		this->tree->InsertModel(mod.second);
 	}
 	this->frust.Update(this->camera);
    

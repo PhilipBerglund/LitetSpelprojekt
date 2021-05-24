@@ -227,7 +227,11 @@ public:
 	//RESET JOURNAL INFORMATION
 	void Reset()
 	{
-
+		for (unsigned int i = 0; i < 9; ++i)
+		{
+			slots[i] = Slot(L"Unknown", L"UI/Unknown.png", slotPositions[i], i);
+			pages[i] = Page();
+		}
 	}
 
 	void Draw(IDWriteTextFormat& format, ID2D1Brush& brush, float dt)

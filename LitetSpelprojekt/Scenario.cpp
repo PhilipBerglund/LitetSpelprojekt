@@ -70,6 +70,18 @@ Scenario::Scenario(Scene& scene)
 	Importer::Initialize(Graphics::GetDevice());
 }
 
+void Scenario::Reset()
+{
+	identifiedSuspects = 0;
+	foundClues = 0;
+
+	for (auto& clue : clues)
+		clue.isFound = false;
+
+	for (auto& suspect : suspects)
+		suspect.fullyKnown = false;
+}
+
 void Scenario::InitializeClueLocations()
 {
 	clueLocations.push_back({ 5,0,0 });
@@ -90,22 +102,6 @@ void Scenario::SetRandomizedLocations()
 		clues[i].model->Update(Graphics::GetDeviceContext());
 	}
 }
-
-//bool Scenario::TempLoadClues(std::string path)
-//{
-//	Clue clue("");
-//	clue.model = std::make_shared<Model>();
-//
-//	//if (!clue.model->Initialize(Graphics::GetDevice(), path))
-//	//{
-//	//	Error("FAILED TO INITIALIZE CLUE");
-//	//	return false;
-//	//}
-//
-//	clues.push_back(clue);
-//
-//	return true;
-//}
 
 void Scenario::Update(Scene& scene, InGameUI& ui, Camera& camera)
 {

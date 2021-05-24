@@ -243,7 +243,6 @@ void WindowInitializer::OnEvent()
 	switch (GameSettings::GetState())
 	{
 	case GameState::INGAME:
-		Event::DispatchEvent(EventType::RESET);
 		Window::DisableCursor();
 		break;
 
@@ -252,7 +251,7 @@ void WindowInitializer::OnEvent()
 		Window::EnableCursor();
 		break;
 
-	case GameState::MAINMENU:
+	case GameState::MAINMENU: case GameState::END:
 		Window::EnableCursor();
 		break;
 	}

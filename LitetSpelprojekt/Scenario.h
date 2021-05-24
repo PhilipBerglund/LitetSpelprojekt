@@ -62,6 +62,7 @@ public:
 
 	Scenario() = default;
 	Scenario(Scene& scene);
+	void Reset();
 	void InitializeClueLocations();
 	void SetRandomizedLocations();
 	void Update(Scene& scene, InGameUI& ui, Camera& camera);

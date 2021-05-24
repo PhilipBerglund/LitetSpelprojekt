@@ -46,7 +46,8 @@ private:
 public:
 	Scene() = default;
 	Scene(UINT windowWidth, UINT windowHeight, HWND window);
-
+	
+	void Reset(InGameUI& ui);
 	void Update(InGameUI& ui, float dt);
 	void Render();
 	void RenderShadowMap();

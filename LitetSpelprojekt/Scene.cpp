@@ -34,7 +34,20 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	}
 	
 	Importer::Initialize(Graphics::GetDevice());
-    
+
+	//QuadTree Setup
+	QTSquare QTbounds;
+	QTbounds.h = 600;
+	QTbounds.w = 600;
+	QTbounds.xPos = 0;
+	QTbounds.zPos = 0;
+	SetupQuadTree(this->tree, QTbounds, 20);
+	for (auto& mod : QTModels)
+	{
+		this->tree->InsertModel(mod);
+	}
+	this->frust.Update(this->camera);
+   
 	bounds = Bounds("Models/BBoxes.mff");
 
 	AddRainParticleSystem(3000, 150, 200);
@@ -91,8 +104,11 @@ void Scene::AddShadowMap(UINT width, UINT height)
 
 void Scene::Update(InGameUI& ui, float dt)
 {
+	this->ClearQTModels();
 	XMFLOAT3 lastPosition = camera.GetPosition();
 	camera.Update(dt);
+	this->frust.Update(this->camera);
+	QTIntersect(this->frust, this->tree, this->QTModels);
 
 	for (auto& box : bounds.boxes)
 	{
@@ -117,8 +133,10 @@ void Scene::Update(InGameUI& ui, float dt)
 
 	scenario.Update(*this, ui, camera);
   
-	camera.Update(dt);
+	//camera.Update(dt);
 	shaderData.Update(camera, *lights[0]);
+
+	Print("NrOfModels: " + std::to_string(this->QTModels.size()));
 }
 
 void Scene::Render()

@@ -46,6 +46,11 @@ Camera::Camera(float FOV, float aspectRatio, float nearZ, float farZ, float rota
 	this->direction = forward;
 	this->boundingsphere = BoundingSphere({ transform.position.x, 5, transform.position.z }, 1.0f);
 	this->pickingDistance = 50.0f;
+
+	this->FOV = FOV;
+	this->aspectRatio = aspectRatio;
+	this->nearZ = nearZ;
+	this->farZ = farZ;
 }
 
 float Camera::getViewDistance()

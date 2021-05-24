@@ -38,7 +38,7 @@ class QTFrustum
 public:
 	
 	Plane planes[4];
-
+	XMFLOAT3 pos;
 	XMMATRIX viewMatrix;
 
 	QTFrustum();
@@ -100,24 +100,3 @@ inline void SetupQuadTree(QuadTree* &QTree, QTSquare bounds, int capacity)
 	QTree = new QuadTree(bounds, capacity);
 };
 
-inline void SetupFrustum(QTFrustum& frust, const Camera& cam)
-{
-	XMMATRIX pMatrix = cam.GetPerspectiveMatrix();
-	XMMATRIX vMatrix = cam.GetViewMatrix();
-
-	//Från 3D-GameProgramming
-	//static XMVECTOR HomogenousPoints[6] =
-	//{
-	//{ 1.0f, 0.0f, 1.0f, 1.0f }, // right (at far plane)
-	//{ -1.0f, 0.0f, 1.0f, 1.0f }, // left
-	//{ 0.0f, 1.0f, 1.0f, 1.0f }, // top
-	//{ 0.0f, -1.0f, 1.0f, 1.0f }, // bottom
-
-	//{ 0.0f, 0.0f, 0.0f, 1.0f }, // near
-	//{ 0.0f, 0.0f, 1.0f, 1.0f } // far
-	//};
-
-	//XMVECTOR pDeterminant;
-	//XMMATRIX pMatrixInv = XMMatrixInverse(&pDeterminant, pMatrix);
-
-};

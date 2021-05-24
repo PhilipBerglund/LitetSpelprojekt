@@ -91,10 +91,10 @@ void Model::UpdateAnimation(float time)
     //    //GetParentMatrix(skeleton, skeleton.joints[i], timeStamp, parentMatrix);
     //    jointTransforms[i] = /*parentMatrix * jointTransform **/ FloatArrToMatrix(skeleton.joints[i].inverseBP);
     //}
-}
+} 
 
 Model::Model(const Mesh& mesh)
-    :mesh(mesh), name(mesh.name), currentKeyFrame(0)
+    :mesh(mesh), name(mesh.name), currentKeyFrame(0), keyFrames(0)
 {
     transform.position = { mesh.translation[0], mesh.translation[1], mesh.translation[2] };
     transform.rotation = { mesh.rotation[0], mesh.rotation[1], mesh.rotation[2] };
@@ -142,17 +142,20 @@ Model::Model(const Mesh& mesh)
 
 void Model::GetJointMatrix(Skeleton& skeleton, int jointID, int keyFrame, XMMATRIX& matrix)
 {
+    XMFLOAT4X4 mat;
+
     if (skeleton.joints[jointID].animation.keyFrameCount > 0)
     {
         auto transform = skeleton.joints[jointID].animation.keyFrames[keyFrame].transform;
-        matrix *= TransformToMatrix(transform.translation, transform.rotation, transform.scale);
-        matrix = XMMatrixTranspose(matrix);
+        matrix = TransformToMatrix(transform.translation, transform.rotation, transform.scale);
+        XMStoreFloat4x4(&mat, XMMatrixTranspose(matrix * FloatArrToMatrix(skeleton.joints[jointID].inverseBP)));
     }
 
-    XMFLOAT4X4 mat;
-    XMStoreFloat4x4(&mat, matrix);
+    else  
+        XMStoreFloat4x4(&mat, XMMatrixTranspose(matrix * FloatArrToMatrix(skeleton.joints[jointID].inverseBP)));
+   
     jointAnim[jointID].insert(std::pair<int, XMFLOAT4X4>(keyFrame, mat));
-
+    Print(std::to_string(jointID));
     for (int childID : skeleton.joints[jointID].childIDs)
         GetJointMatrix(skeleton, childID, keyFrame, matrix);
 }

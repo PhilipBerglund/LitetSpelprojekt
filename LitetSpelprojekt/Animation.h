@@ -12,7 +12,7 @@ public:
 	{
 		time += dt;
 
-		if (time > model.GetNumKeyFrames())
+		if (time > model.GetNumKeyFrames()-1)
 			time = 0;
 
 		model.UpdateAnimation(time);

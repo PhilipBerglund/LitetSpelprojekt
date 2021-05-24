@@ -13,7 +13,7 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	//Importer::LoadScene("Models/Houses.mff");
 	//Importer::LoadScene("Models/Streets.mff");
 
-	Importer::LoadScene("Models/MaDude.mff");
+	Importer::LoadScene("Models/NewTestTranslation.mff");
 	Importer::Initialize(Graphics::GetDevice());
 
 	for (int i = 0; i < Importer::Data::scenes.size(); ++i)

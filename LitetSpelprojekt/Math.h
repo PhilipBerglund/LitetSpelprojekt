@@ -28,7 +28,6 @@ inline XMVECTOR FloatArrToVec(float arr[])
 inline XMMATRIX VecsToMatrix(XMVECTOR scale, XMVECTOR rotation, XMVECTOR translation)
 {
 	XMMATRIX matrix = XMMatrixIdentity();
-
 	XMMATRIX translationMat = XMMatrixTranslationFromVector(translation);
 	XMMATRIX rotationMat = XMMatrixRotationRollPitchYawFromVector(rotation);
 	//XMMATRIX rotationMat = XMMatrixRotationQuaternion(rotation);

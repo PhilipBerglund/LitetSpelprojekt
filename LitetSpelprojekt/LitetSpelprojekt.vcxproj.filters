@@ -195,6 +195,9 @@
     <ClInclude Include="ShaderData.h">
       <Filter>Shaders\Classes</Filter>
     </ClInclude>
+    <ClInclude Include="ClueInfoOverlay.h">
+      <Filter>UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="UI">

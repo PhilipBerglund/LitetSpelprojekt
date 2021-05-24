@@ -48,8 +48,7 @@ public:
 
 		std::wstring info(clueInformation.begin(), clueInformation.end());
 		this->clueInformation = Text(info, true, this->clueInformation.position, info.size() * 3.5f);
-		//this->clueInformation.SetString(info);
-		//this->clueInformation.SetPosition(this->clueInformation.position.x - (info.size() * 30.0f / 2.0f), this->clueInformation.position.y);
+	
 		Activate();
 		GameSettings::SetState(GameState::CLUE);
 	}

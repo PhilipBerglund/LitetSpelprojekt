@@ -3,13 +3,13 @@
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.0015f, 50.0f, { 0, 15, 0 })
 {
-	//Importer::LoadScene("Models/Office.mff");
-	//Importer::LoadScene("Models/Bar.mff");
-	//Importer::LoadScene("Models/Hotel.mff");
-	//Importer::LoadScene("Models/Restaurant.mff");
+	Importer::LoadScene("Models/Office.mff");
+	Importer::LoadScene("Models/Bar.mff");
+	Importer::LoadScene("Models/Hotel.mff");
+	Importer::LoadScene("Models/Restaurant.mff");
 	Importer::LoadScene("Models/Park.mff");
-	//Importer::LoadScene("Models/Objects.mff");
-	//Importer::LoadScene("Models/Houses.mff");
+	Importer::LoadScene("Models/Objects.mff");
+	Importer::LoadScene("Models/Houses.mff");
 
 	Importer::Initialize(Graphics::GetDevice());
 
@@ -72,7 +72,7 @@ void Scene::AddModel(std::shared_ptr<Model> model)
 	if (dupes != 0)
 		model->SetName(model->GetName() + std::to_string(dupes));
 
-	models.insert(std::make_pair(model->GetName(), model));
+	nonShadowModels.insert(std::make_pair(model->GetName(), model));
 }
 
 void Scene::AddLight()
@@ -121,6 +121,7 @@ void Scene::Update(InGameUI& ui, float dt)
 
 void Scene::Render()
 {
+	RenderShadowMap();
 	GSRainShader.RenderRain(shaderData, *this);
 	GSSmokeShader.RenderSmoke(shaderData, *this);
 	regularShader.Render(shaderData, *this);

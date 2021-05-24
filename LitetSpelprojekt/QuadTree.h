@@ -27,11 +27,17 @@ struct QTSquare
 
 };
 
+struct Plane
+{
+	XMFLOAT3 point;
+	XMFLOAT3 normal;
+};
+
 class QTFrustum
 {
 public:
 	
-	XMFLOAT4 planes[4];
+	Plane planes[4];
 
 	XMMATRIX viewMatrix;
 

@@ -156,57 +156,21 @@ bool QTFrustum::Contains(QTSquare bounds)
 
 void QTFrustum::Update(Camera cam)
 {
-	this->viewMatrix = cam.GetViewMatrix();
+	XMFLOAT3 CamForwardV;
+	XMFLOAT3 CamForwardVNegative;
+	XMStoreFloat3(&CamForwardV, DirectX::XMVector3Normalize(cam.GetForwardVector()));	//Spara normaliserad kameras fram-vektor i float3
+	XMStoreFloat3(&CamForwardVNegative, DirectX::XMVector3Normalize(XMVectorNegate(cam.GetForwardVector()))); ////Spara Negerad normaliserad kameras fram-vektor i float3
+	XMFLOAT3 CamUpV;
+	XMStoreFloat3(&CamUpV, DirectX::XMVector3Normalize(cam.GetUpVector()));
 
-	XMFLOAT4X4 pMatrix;
-	XMStoreFloat4x4(&pMatrix, cam.GetPerspectiveMatrix());
-	XMFLOAT4X4 vMatrix;
-	XMStoreFloat4x4(&vMatrix, cam.GetViewMatrix());
+	this->planes[2].point = cam.GetPosition();	//Right Plane
+	this->planes[3].point = cam.GetPosition();	//Left Plane
 
-	float zMin, r;
 
-	//Beräkning av det minsta Z-värdet i frustrumet
-	zMin = -pMatrix._43 / pMatrix._33;
-	r = cam.getViewDistance() / (cam.getViewDistance() - zMin);
-	pMatrix._33 = r;
-	pMatrix._43 = -r * zMin;
 
-	XMMATRIX ProjMatrix = XMLoadFloat4x4(&pMatrix);
-	XMMATRIX ViewMatrix = XMLoadFloat4x4(&vMatrix);
+	this->planes[0].normal = CamForwardV; //Hämta kamerans forward vector //Far Plane
+	this->planes[1].normal = CamForwardVNegative; //Negera kamerans forward vector //Near Plane
 
-	XMMATRIX fMatrix = XMMatrixMultiply(ProjMatrix, ViewMatrix);
-	XMFLOAT4X4 frustMatrix;
-	XMStoreFloat4x4(&frustMatrix, fMatrix);
-
-	planes[0].x = frustMatrix._14 + frustMatrix._13; //Near Plane
-	planes[0].y = frustMatrix._24 + frustMatrix._23;
-	planes[0].z = frustMatrix._34 + frustMatrix._33;
-	planes[0].w = frustMatrix._44 + frustMatrix._43;
-	XMVECTOR plane0 = XMLoadFloat4(&planes[0]);
-	plane0 = XMVector4Normalize(plane0);
-	XMStoreFloat4(&planes[0], plane0);
-
-	planes[1].x = frustMatrix._14 - frustMatrix._13; //Far Plane
-	planes[1].y = frustMatrix._24 - frustMatrix._23;
-	planes[1].z = frustMatrix._34 - frustMatrix._33;
-	planes[1].w = frustMatrix._44 - frustMatrix._43;
-	XMVECTOR plane1 = XMLoadFloat4(&planes[1]);
-	plane1 = XMVector4Normalize(plane1);
-	XMStoreFloat4(&planes[1], plane1);
-
-	planes[2].x = frustMatrix._14 + frustMatrix._11; //Left Plane
-	planes[2].y = frustMatrix._24 + frustMatrix._21;
-	planes[2].z = frustMatrix._34 + frustMatrix._31;
-	planes[2].w = frustMatrix._44 + frustMatrix._41;
-	XMVECTOR plane2 = XMLoadFloat4(&planes[2]);
-	plane2 = XMVector4Normalize(plane2);
-	XMStoreFloat4(&planes[2], plane2);
-
-	planes[3].x = frustMatrix._14 - frustMatrix._11; //Right Plane
-	planes[3].y = frustMatrix._24 - frustMatrix._21;
-	planes[3].z = frustMatrix._34 - frustMatrix._31;
-	planes[3].w = frustMatrix._44 - frustMatrix._41;
-	XMVECTOR plane3 = XMLoadFloat4(&planes[3]);
-	plane3 = XMVector4Normalize(plane3);
-	XMStoreFloat4(&planes[3], plane3);
+	this->planes[3].normal = DirectX::XMVector3Cross(DirectX::XMVector3Normalize(cam.GetUpVector(), rightPoint - cam.GetPosition())) //Hämta kamerans uppvektor, gör en vektor till punkten rightPoint i högra planet
+	this->planes[3].normal = DirectX::XMVector3Cross(DirectX::XMVector3Normalize(leftPoint - cam.GetPosition(), cam.GetUpVector())) //Hämta kamerans uppvektor, gör en vektor till punkten leftPoint i vänstra planet //Tänka på ordning i crossproduct
 }

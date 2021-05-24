@@ -32,6 +32,10 @@ public:
 	Camera();
 	Camera(float FOV, float aspectRatio, float nearZ, float farZ, float rotationSpeed, float speed, XMFLOAT3 position, XMFLOAT3 rotation = { 0,0,0 }, XMFLOAT3 scale = { 1,1,1 });
 
+
+	XMVECTOR GetRightVector() const { return this->right; };
+	XMVECTOR GetUpVector() const { return this->up; };
+	XMVECTOR GetForwardVector() const { return this->forward; };
 	XMMATRIX GetViewMatrix() const { return this->viewMatrix; };
 	XMMATRIX GetPerspectiveMatrix() const { return this->perspectiveMatrix; };
 	float getViewDistance();

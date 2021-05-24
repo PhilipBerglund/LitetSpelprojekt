@@ -7,7 +7,7 @@
 Clue::Clue(std::string path, XMFLOAT3 position)
 {
 	Importer::LoadScene(path);
-	information = "Description of item and where it was found";
+	information = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
 
 	Mesh mesh = Importer::Data::GetMeshAt(Importer::Data::scenes.size() - 1, 0);
 	model = std::make_shared<Model>(mesh);
@@ -109,20 +109,31 @@ void Scenario::SetRandomizedLocations()
 
 void Scenario::Update(Scene& scene, InGameUI& ui, Camera& camera)
 {
+	if (GameSettings::GetState() != GameState::INGAME)
+		return;
+
 	CursorType cursor = CursorType::CROSS;
 
 	//CLUES
 	bool hoveringClue = false;
 	for (auto& clue : clues)
 	{
-		if (!clue.isFound && camera.CheckIntersection(clue.model->boundingbox))
+		if (camera.CheckIntersection(clue.model->boundingbox))
 		{
 			hoveringClue = true;
 
 			if (Event::GetCurrentEvent() == EventType::LEFTCLICK)
 			{
-				scene.models.erase(clue.model->GetName());
-				clue.isFound = true;
+				if (!clue.isFound)
+				{
+					foundClues++;
+					clue.isFound = true;
+					clue.ID = foundClues;
+				}
+
+				ui.clueOverlay.SetUp(clue.ID, clue.information);
+				hoveringClue = false;
+				cursor = CursorType::NONE;
 			}
 		}
 	}
@@ -131,7 +142,6 @@ void Scenario::Update(Scene& scene, InGameUI& ui, Camera& camera)
 		cursor = CursorType::CLUE;
 
 	//SUSPECTS
-	bool chattingSuspect = false;
 	bool hoveringSuspect = false;
 	for (auto& suspect : suspects)
 	{
@@ -141,7 +151,10 @@ void Scenario::Update(Scene& scene, InGameUI& ui, Camera& camera)
 
 			if (Event::GetCurrentEvent() == EventType::LEFTCLICK)
 			{
-				ui.chatOverlay.SetUp(suspect.name, suspect.information.info);
+				if (suspect.fullyKnown)
+					ui.chatOverlay.SetUp(suspect.name, suspect.information.info);
+				else
+					ui.chatOverlay.SetUp(suspect.name, suspect.information.info, true);
 
 				if (!ui.journal.HasSuspect(suspect.name))
 				{
@@ -169,18 +182,12 @@ void Scenario::Update(Scene& scene, InGameUI& ui, Camera& camera)
 					suspect.fullyKnown = true;
 					ui.ShowNotification();
 				}
-
-				chattingSuspect = true;
-				GameSettings::SetState(GameState::CHAT);
 			}
 		}
 	}
 
 	if (hoveringSuspect)
 		cursor = CursorType::CHAT;
-
-	else if (chattingSuspect)
-		cursor = CursorType::NONE;
 
 	ui.SetCursorType(cursor);
 }

@@ -197,7 +197,4 @@ void Camera::Update(float dt)
 	this->boundingsphere.Center.x = transform.position.x;
 	this->boundingsphere.Center.y = transform.position.y;
 	this->boundingsphere.Center.z = transform.position.z;
-
-	Print("Character X-pos: " + std::to_string(transform.position.x) + "\nCharacter Z-Pos: " + std::to_string(transform.position.z));
-
 }

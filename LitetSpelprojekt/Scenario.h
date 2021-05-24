@@ -42,6 +42,7 @@ struct Victim
 
 struct Clue
 {
+	int ID = -1;
 	std::shared_ptr<Model> model;
 	std::string information;
 	bool isFound = false;
@@ -53,6 +54,7 @@ class Scenario
 {
 private:
 	int identifiedSuspects = 0;
+	int foundClues = 0;
 public:
 	std::vector<Clue> clues;
 	std::vector<Suspect> suspects;

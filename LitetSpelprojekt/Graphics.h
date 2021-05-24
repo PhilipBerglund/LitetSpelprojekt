@@ -21,7 +21,10 @@ private:
 	static ComPtr<ID3D11DepthStencilView> dsView;
 	static ComPtr<IDXGISurface> surface;
 	static ComPtr<ID3D11SamplerState> wrapSampler;
+	static ComPtr<ID3D11BlendState> alphaBlendState;
+	static ComPtr<ID3D11BlendState> noAlphaBlendState;
 
+	static HRESULT CreateBlendStates();
 	static HRESULT CreateDeviceSwapchain(UINT windowWidth, UINT windowHeight, HWND window, bool windowed);
 	static HRESULT CreateRenderTarget();
 	static HRESULT CreateDepthStencil(UINT windowWidth, UINT windowHeight);

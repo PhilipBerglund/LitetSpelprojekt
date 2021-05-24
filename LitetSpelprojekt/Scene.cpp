@@ -3,14 +3,13 @@
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.0015f, 50.0f, { 0, 15, 0 })
 {
-	//Längst upp om man ska rita ut skitn (som alla andra modeller)
-	Importer::LoadScene("Models/Office.mff");
-	Importer::LoadScene("Models/Bar.mff");
-	Importer::LoadScene("Models/Hotel.mff");
-	Importer::LoadScene("Models/Restaurant.mff");
+	//Importer::LoadScene("Models/Office.mff");
+	//Importer::LoadScene("Models/Bar.mff");
+	//Importer::LoadScene("Models/Hotel.mff");
+	//Importer::LoadScene("Models/Restaurant.mff");
 	Importer::LoadScene("Models/Park.mff");
-	Importer::LoadScene("Models/Objects.mff");
-	Importer::LoadScene("Models/Houses.mff");
+	//Importer::LoadScene("Models/Objects.mff");
+	//Importer::LoadScene("Models/Houses.mff");
 
 	Importer::Initialize(Graphics::GetDevice());
 

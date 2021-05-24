@@ -10,9 +10,36 @@ ComPtr<ID3D11Texture2D> Graphics::dsTexture;
 ComPtr<ID3D11DepthStencilView> Graphics::dsView;
 ComPtr<IDXGISurface> Graphics::surface;
 ComPtr<ID3D11SamplerState> Graphics::wrapSampler;
+ComPtr<ID3D11BlendState> Graphics::alphaBlendState;
+ComPtr<ID3D11BlendState> Graphics::noAlphaBlendState;
 ComPtr<IDWriteFactory> Graphics::writeFactory;
 ComPtr<ID2D1Factory> Graphics::factory;
 ComPtr<ID2D1RenderTarget> Graphics::renderTarget;
+
+HRESULT Graphics::CreateBlendStates()
+{
+	HRESULT hr;
+	D3D11_BLEND_DESC blendDesc = {};
+	blendDesc.RenderTarget[0].BlendEnable = TRUE;
+	blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+	blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_MAX;
+
+	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_SRC_ALPHA;
+	blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_DEST_ALPHA;
+	blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_MAX;
+	blendDesc.RenderTarget[0].RenderTargetWriteMask = 0x0f;
+
+	hr = device->CreateBlendState(&blendDesc, &alphaBlendState);
+
+	if FAILED(hr)
+		return hr;
+
+	blendDesc.RenderTarget[0].BlendEnable = FALSE;
+	hr = device->CreateBlendState(&blendDesc, &noAlphaBlendState);
+
+	return hr;
+}
 
 HRESULT Graphics::CreateDeviceSwapchain(UINT windowWidth, UINT windowHeight, HWND window, bool windowed)
 {
@@ -154,6 +181,12 @@ bool Graphics::InitializeD3D11(UINT windowWidth, UINT windowHeight, HWND window,
 	if FAILED(CreateWrapSamplerState())
 	{
 		Error("FAILED TO CREATE WRAP SAMPLER STATE");
+		return false;
+	}
+
+	if FAILED(CreateBlendStates())
+	{
+		Error("FAILED TO CREATE BLEND STATE");
 		return false;
 	}
 

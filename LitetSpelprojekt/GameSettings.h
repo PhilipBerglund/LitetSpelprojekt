@@ -1,6 +1,6 @@
 #pragma once
 
-enum class GameState { MAINMENU, INGAME, PAUSED, JOURNAL, CHAT, END };
+enum class GameState { MAINMENU, INGAME, PAUSED, JOURNAL, CHAT, CLUE, END };
 
 class GameSettings
 {

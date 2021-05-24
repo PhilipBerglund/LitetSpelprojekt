@@ -168,6 +168,9 @@ void QTFrustum::Update(Camera cam)
 
 	float nearH = XMScalarCos(cam.GetFov()) / XMScalarSin(cam.GetFov());
 	float nearW = nearH * cam.GetRatio();
+
+	float farH = 2 * ((XMScalarCos(cam.GetFov()) / 2) / (XMScalarSin(cam.GetFov()) / 2)) * farZ;
+	float farW = farH * cam.GetRatio();
  
 
 	XMVECTOR fPoint = CamPosVector + cam.GetForwardVector() * farZ;
@@ -182,8 +185,8 @@ void QTFrustum::Update(Camera cam)
 	this->planes[1].normal = CamForwardVNegative; //Negera kamerans forward vector //Near Plane
 
 
-	XMVECTOR rightPoint = CamPosVector + cam.GetForwardVector() * nearZ + CamUpV * (nearH / 2.0f) + cam.GetRightVector() * (nearW / 2.0f);
-	XMVECTOR leftPoint = CamPosVector + cam.GetForwardVector() * nearZ + CamUpV * (nearH / 2.0f) + cam.GetRightVector() * (-nearW / 2.0f);
+	XMVECTOR rightPoint = CamPosVector + cam.GetForwardVector() * farZ + CamUpV * (farH / 2.0f) + cam.GetRightVector() * (farW / 2.0f);
+	XMVECTOR leftPoint = CamPosVector + cam.GetForwardVector() * farZ + CamUpV * (farH / 2.0f) + cam.GetRightVector() * (-farW / 2.0f);
 
 	XMVECTOR rightPlaneNormal = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(CamUpV, DirectX::XMVector3Normalize(rightPoint - CamPosVector))); //Hämta kamerans uppvektor, gör en vektor till punkten rightPoint i högra planet
 	XMVECTOR leftPlaneNormal = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(DirectX::XMVector3Normalize(leftPoint - CamPosVector), CamUpV)); //Hämta kamerans uppvektor, gör en vektor till punkten leftPoint i vänstra planet //Tänka på ordning i crossproduct

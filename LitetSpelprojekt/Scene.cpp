@@ -107,20 +107,14 @@ void Scene::Update(InGameUI& ui, float dt)
 	this->frust.Update(this->camera);
 	QTIntersect(this->frust, this->tree, this->QTModels);
 
-	for (auto& box : bounds.boxes)
-	{
-		if (box.Intersects(camera.boundingsphere))
-		{
-			camera.SetPosition(lastPosition);
-			/*XMVECTOR direction = { camera.GetPosition().x - box.Center.x, 0.0f,
-									camera.GetPosition().z - box.Center.z };
-			direction = XMVector3Normalize(direction);
-			XMFLOAT3 dir;
-			XMStoreFloat3(&dir, direction);
-			camera.PushBack(dir, dt);*/
-			break;
-		}
-	}
+	//for (auto& box : bounds.boxes)
+	//{
+	//	if (box.Intersects(camera.boundingsphere))
+	//	{
+	//		camera.SetPosition(lastPosition);
+	//		break;
+	//	}
+	//}
 
 	for (auto& particleSystem : rainSystem)
 		particleSystem->Update(dt);

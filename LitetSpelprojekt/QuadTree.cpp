@@ -110,14 +110,14 @@ QTFrustum::QTFrustum()
 
 bool QTFrustum::Contains(QTSquare bounds)
 {
-	XMVECTOR corners[4];
+	XMVECTOR corners[5];
 	corners[0] = { bounds.xPos + bounds.w, 0, bounds.zPos + bounds.h }; //TopRight
 	corners[1] = { bounds.xPos - bounds.w, 0, bounds.zPos + bounds.h }; //TopLeft
 	corners[2] = { bounds.xPos + bounds.w, 0, bounds.zPos - bounds.h }; //BottomRight
 	corners[3] = { bounds.xPos - bounds.w, 0, bounds.zPos - bounds.h }; //BottomLeft
+	corners[4] = { bounds.xPos, 0, bounds.zPos };						//CenterPoint
 
-
-	for (int i = 0; i < 4; i++) //Points
+	for (int i = 0; i < 5; i++) //Points
 	{
 		bool inside[4];
 		for (int i = 0; i < 4; i++)

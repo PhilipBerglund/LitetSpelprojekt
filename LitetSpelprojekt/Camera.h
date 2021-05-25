@@ -12,6 +12,9 @@ private:
 	XMVECTOR right;
 	XMVECTOR up;
 
+	XMVECTOR frustForward;
+	XMVECTOR frustRight;
+
 	float pitch;
 	float yaw;
 	float rotationSpeed;
@@ -41,9 +44,9 @@ public:
 	float GetFarZ() const { return this->farZ; };
 	float GetRatio() const { return this->aspectRatio; };
 	float GetFov() const { return this->FOV; };
-	XMVECTOR GetRightVector() const { return this->right; };
+	XMVECTOR GetFRightVector() const { return this->frustRight; };
 	XMVECTOR GetUpVector() const { return this->up; };
-	XMVECTOR GetForwardVector() const { return this->forward; };
+	XMVECTOR GetFForwardVector() const { return this->frustForward; };
 	XMMATRIX GetViewMatrix() const { return this->viewMatrix; };
 	XMMATRIX GetPerspectiveMatrix() const { return this->perspectiveMatrix; };
 	float getViewDistance();

@@ -51,6 +51,9 @@ Camera::Camera(float FOV, float aspectRatio, float nearZ, float farZ, float rota
 	this->aspectRatio = aspectRatio;
 	this->nearZ = nearZ;
 	this->farZ = farZ;
+
+	this->frustForward = { 0,0,1 };
+	this->frustRight = { 1,0,0 };
 }
 
 float Camera::getViewDistance()
@@ -208,6 +211,9 @@ void Camera::Update(float dt)
 	this->boundingsphere.Center.x = transform.position.x;
 	this->boundingsphere.Center.y = transform.position.y;
 	this->boundingsphere.Center.z = transform.position.z;
+
+	this->frustForward = lookAtVec;
+	this->frustRight = XMVector3Cross(up, lookAtVec);
 
 	//Print("Character X-pos: " + std::to_string(transform.position.x) + "\nCharacter Z-Pos: " + std::to_string(transform.position.z));
 

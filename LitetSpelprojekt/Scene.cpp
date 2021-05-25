@@ -38,7 +38,7 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	QTbounds.w = 600;
 	QTbounds.xPos = 0;
 	QTbounds.zPos = 0;
-	SetupQuadTree(this->tree, QTbounds, 20);
+	SetupQuadTree(this->tree, QTbounds, 5);
 	for (auto& mod : models)
 	{
 		this->tree->InsertModel(mod.second);
@@ -107,14 +107,14 @@ void Scene::Update(InGameUI& ui, float dt)
 	this->frust.Update(this->camera);
 	QTIntersect(this->frust, this->tree, this->QTModels);
 
-	//for (auto& box : bounds.boxes)
-	//{
-	//	if (box.Intersects(camera.boundingsphere))
-	//	{
-	//		camera.SetPosition(lastPosition);
-	//		break;
-	//	}
-	//}
+	for (auto& box : bounds.boxes)
+	{
+		if (box.Intersects(camera.boundingsphere))
+		{
+			camera.SetPosition(lastPosition);
+			break;
+		}
+	}
 
 	for (auto& particleSystem : rainSystem)
 		particleSystem->Update(dt);
@@ -124,7 +124,6 @@ void Scene::Update(InGameUI& ui, float dt)
 
 	scenario.Update(*this, ui, camera);
   
-	//camera.Update(dt);
 	shaderData.Update(camera, *lights[0]);
 
 	Print("NrOfModels: " + std::to_string(this->QTModels.size()));

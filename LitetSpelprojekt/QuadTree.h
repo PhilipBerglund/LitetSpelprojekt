@@ -2,6 +2,7 @@
 #include <DirectXMath.h>
 #include "Model.h"
 #include "Camera.h"
+#include "Event.h"
 
 struct QTPoint
 {
@@ -44,6 +45,9 @@ public:
 	QTFrustum();
 	bool Contains(QTSquare bounds);
 	void Update(Camera cam);
+	void OnEvent();
+
+	bool active = true;
 };
 
 

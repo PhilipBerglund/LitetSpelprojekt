@@ -142,6 +142,7 @@ Model::Model(const Mesh& mesh)
 
             GetJointMatrix(skeleton, 0, i, matrix /* scale, translation, rotation*/);
         }
+        Print("");
     }
 }
 

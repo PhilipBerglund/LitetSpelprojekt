@@ -45,10 +45,10 @@ VertexShaderOutput main(VertexShaderInput input)
             continue;
         
         else if (i == 0)
-            boneTX = jointMatrices[input.boneIDs[i]] /** input.weights[i]*/;
+            boneTX = jointMatrices[input.boneIDs[i]] * input.weights[i];
         
         else
-            boneTX += (jointMatrices[input.boneIDs[i]] /** input.weights[i]*/);
+            boneTX += (jointMatrices[input.boneIDs[i]] * input.weights[i]);
     }
     
     if (input.boneIDs[0] != -1)

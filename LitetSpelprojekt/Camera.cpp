@@ -39,12 +39,26 @@ Camera::Camera(float FOV, float aspectRatio, float nearZ, float farZ, float rota
 	this->forward = { 0,0,1 };
 	this->right = { 1,0,0 };
 	this->viewMatrix = XMMatrixLookAtLH(XMLoadFloat3(&transform.position), forward, up);
+	this->viewDistance = farZ;
 
 	this->perspectiveMatrix = XMMatrixPerspectiveFovLH(FOV, aspectRatio, nearZ, farZ);
 
 	this->direction = forward;
 	this->boundingsphere = BoundingSphere({ transform.position.x, 5, transform.position.z }, 1.0f);
 	this->pickingDistance = 50.0f;
+
+	this->FOV = FOV;
+	this->aspectRatio = aspectRatio;
+	this->nearZ = nearZ;
+	this->farZ = farZ;
+
+	this->frustForward = { 0,0,1 };
+	this->frustRight = { 1,0,0 };
+}
+
+float Camera::getViewDistance()
+{
+	return this->viewDistance;
 }
 
 void Camera::MoveRight(float dt)
@@ -197,4 +211,10 @@ void Camera::Update(float dt)
 	this->boundingsphere.Center.x = transform.position.x;
 	this->boundingsphere.Center.y = transform.position.y;
 	this->boundingsphere.Center.z = transform.position.z;
+
+	this->frustForward = lookAtVec;
+	this->frustRight = XMVector3Cross(up, lookAtVec);
+
+	//Print("Character X-pos: " + std::to_string(transform.position.x) + "\nCharacter Z-Pos: " + std::to_string(transform.position.z));
+
 }

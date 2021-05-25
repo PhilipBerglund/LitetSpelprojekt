@@ -12,10 +12,19 @@ private:
 	XMVECTOR right;
 	XMVECTOR up;
 
+	XMVECTOR frustForward;
+	XMVECTOR frustRight;
+
 	float pitch;
 	float yaw;
 	float rotationSpeed;
 	float speed;
+	float viewDistance;
+
+	float FOV;
+	float aspectRatio;
+	float nearZ;
+	float farZ;
 
 	float pickingDistance;
 	XMVECTOR direction;
@@ -31,8 +40,16 @@ public:
 	Camera();
 	Camera(float FOV, float aspectRatio, float nearZ, float farZ, float rotationSpeed, float speed, XMFLOAT3 position, XMFLOAT3 rotation = { 0,0,0 }, XMFLOAT3 scale = { 1,1,1 });
 
+	float GetNearZ() const { return this->nearZ; };
+	float GetFarZ() const { return this->farZ; };
+	float GetRatio() const { return this->aspectRatio; };
+	float GetFov() const { return this->FOV; };
+	XMVECTOR GetFRightVector() const { return this->frustRight; };
+	XMVECTOR GetUpVector() const { return this->up; };
+	XMVECTOR GetFForwardVector() const { return this->frustForward; };
 	XMMATRIX GetViewMatrix() const { return this->viewMatrix; };
 	XMMATRIX GetPerspectiveMatrix() const { return this->perspectiveMatrix; };
+	float getViewDistance();
 
 	Type type() const override { return Type::CAMERA; };
 

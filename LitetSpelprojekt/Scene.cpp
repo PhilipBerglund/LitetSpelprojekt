@@ -23,17 +23,27 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	}
     
 	Importer::LoadScene("Models/Streets.mff");
-	for (int i = 0; i < Importer::Data::scenes.size(); ++i)
+	for (auto& noShadowMesh : Importer::Data::GetMeshes(Importer::Data::scenes.size()-1))
 	{
-		for (auto& noShadowMesh : Importer::Data::GetMeshes(i))
-		{
-			auto noShadowModel = std::make_shared<Model>(noShadowMesh);
-			nonShadowModels.insert(std::make_pair(noShadowModel->GetName(), noShadowModel));
-		}
+		auto noShadowModel = std::make_shared<Model>(noShadowMesh);
+		nonShadowModels.insert(std::make_pair(noShadowModel->GetName(), noShadowModel));
 	}
 	
 	Importer::Initialize(Graphics::GetDevice());
-    
+
+	//QuadTree Setup
+	QTSquare QTbounds;
+	QTbounds.h = 600;
+	QTbounds.w = 600;
+	QTbounds.xPos = 0;
+	QTbounds.zPos = 0;
+	SetupQuadTree(this->tree, QTbounds, 5);
+	for (auto& mod : models)
+	{
+		this->tree->InsertModel(mod.second);
+	}
+	this->frust.Update(this->camera);
+   
 	bounds = Bounds("Models/BBoxes.mff");
 
 	AddRainParticleSystem(3000, 150, 200);
@@ -95,20 +105,17 @@ void Scene::Reset(InGameUI& ui)
 
 void Scene::Update(InGameUI& ui, float dt)
 {
+	this->ClearQTModels();
 	XMFLOAT3 lastPosition = camera.GetPosition();
 	camera.Update(dt);
+	this->frust.Update(this->camera);
+	QTIntersect(this->frust, this->tree, this->QTModels);
 
 	for (auto& box : bounds.boxes)
 	{
 		if (box.Intersects(camera.boundingsphere))
 		{
 			camera.SetPosition(lastPosition);
-			/*XMVECTOR direction = { camera.GetPosition().x - box.Center.x, 0.0f,
-									camera.GetPosition().z - box.Center.z };
-			direction = XMVector3Normalize(direction);
-			XMFLOAT3 dir;
-			XMStoreFloat3(&dir, direction);
-			camera.PushBack(dir, dt);*/
 			break;
 		}
 	}
@@ -122,6 +129,8 @@ void Scene::Update(InGameUI& ui, float dt)
 	scenario.Update(*this, ui, camera);
   
 	shaderData.Update(camera, *lights[0]);
+
+	Print("NrOfModels: " + std::to_string(this->QTModels.size()));
 }
 
 void Scene::Render()

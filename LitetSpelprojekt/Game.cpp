@@ -47,7 +47,8 @@ void Game::Render(float dt)
 		inGameUI.Render(dt);
 		break;
 
-	case GameState::END:
+	case GameState::END_WIN: case GameState::END_LOSS:
+		mainMenu.Render();
 		break;
 	}
 

@@ -251,7 +251,7 @@ void WindowInitializer::OnEvent()
 		Window::EnableCursor();
 		break;
 
-	case GameState::MAINMENU: case GameState::END:
+	case GameState::MAINMENU: case GameState::END_WIN: case GameState::END_LOSS:
 		Window::EnableCursor();
 		break;
 	}

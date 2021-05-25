@@ -105,6 +105,15 @@ void Scenario::SetRandomizedLocations()
 
 void Scenario::Update(Scene& scene, InGameUI& ui, Camera& camera)
 {
+	static std::string lastSuspect;
+
+	//IF CONVICED
+	if (ui.Convict() && lastSuspect == murderer)
+		GameSettings::SetState(GameState::END_WIN);
+
+	if (ui.Convict() && lastSuspect != murderer)
+		GameSettings::SetState(GameState::END_LOSS);
+
 	if (GameSettings::GetState() != GameState::INGAME)
 		return;
 
@@ -147,6 +156,8 @@ void Scenario::Update(Scene& scene, InGameUI& ui, Camera& camera)
 
 			if (Event::GetCurrentEvent() == EventType::LEFTCLICK)
 			{
+				lastSuspect = suspect.name;
+
 				if (suspect.fullyKnown)
 					ui.chatOverlay.SetUp(suspect.name, suspect.information.info);
 				else

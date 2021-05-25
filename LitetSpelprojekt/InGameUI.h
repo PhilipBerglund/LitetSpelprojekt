@@ -44,6 +44,7 @@ private:
 	PauseMenu pauseMenu;
 
 	bool gotNewInformation = false;
+	bool convict = false;
 private:
 	void SwitchJournalState()
 	{
@@ -89,6 +90,9 @@ private:
 
 	void DeactivateChatOverlay()
 	{
+		if (chatOverlay.Convict())
+			this->convict = true;
+
 		chatOverlay.Deactivate();
 		Event::DispatchEvent(EventType::STATECHANGE);
 		GameSettings::SetState(GameState::INGAME);
@@ -98,7 +102,7 @@ private:
 			newInformationNotation->SetVisibility(true);
 			newInformationNotation->SetOpacity(1.0f);
 		}
-		
+
 		gotNewInformation = false;
 		SetCursorType(CursorType::CROSS);
 	}
@@ -241,6 +245,8 @@ public:
 		newInformationNotation->SetOpacity(1.0f);
 		brushOpacity = 0.0f;
 		drawOverlay = false;
+		convict = false;
+		bool gotNewInformation = false;
 	}
 
 	void Render(float dt)
@@ -326,6 +332,8 @@ public:
 		if (currentEvent == EventType::MOUSEMOVE)
 			cursor.SetPosition((float)pos.first, (float)pos.second + 30);
 	}
+
+	bool Convict() { return this->convict; }
 
 	void ShowNotification()
 	{

@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "SoundHandler.h"
 
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.0015f, 50.0f, { 0, 15, 0 })
@@ -42,6 +43,9 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	AddLight();
 	lights[0]->SetRotation({ 0.0f,-10.0f,10.0f });
 	AddShadowMap(Window::GetWidth(), Window::GetHeight());
+	soundHandler.Initialize();
+	soundHandler.AddAudio(L"../Audio/JessicaWoolfBackgroundMusic.wav");
+	soundHandler.StartAudioEngine();
 
 	scenario = Scenario(*this);
 }
@@ -82,7 +86,7 @@ void Scene::AddLight()
 	gameObjects.push_back(light);
 }
 
-void Scene::AddShadowMap(UINT width, UINT height)
+void Scene::AddShadowMap(float width, float height)
 {
 	auto shadowMap = std::make_shared<ShadowMap>(width, height);
 	shadowMaps.push_back(shadowMap);

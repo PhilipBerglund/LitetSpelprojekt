@@ -12,6 +12,7 @@
 #include "ShadowMap.h"
 #include "ShadowMapShader.h"
 #include "Bounds.h"
+#include "SoundHandler.h"
 
 class Scene
 {
@@ -30,6 +31,9 @@ private:
 	std::vector<std::shared_ptr<ShadowMap>> shadowMaps;
 	std::map<std::string, std::shared_ptr<Model>> nonShadowModels;
 
+	//AUDIO
+	SoundHandler soundHandler;
+
 	//SHADERS
 	ShaderData shaderData;
 	ParticleShader GSRainShader;
@@ -37,12 +41,11 @@ private:
 	RegularShader regularShader;
 	ShadowMapShader ShadowMapShader;
 
-	//void AddParticleSystem(XMFLOAT3 bounds, XMFLOAT3 center, float velocity, float velocityVariation, int particlesPerSecond, int maxParticles, float size);
 	void AddRainParticleSystem(UINT maxParticles, float minVelocity, float maxVelocity);
 	void AddSmokeParticleSystem(UINT maxParticles, float minVelocity, float maxVelocity, XMFLOAT4 starPos, float maxParticleRange);
 	void AddModel(std::shared_ptr<Model> model);
 	void AddLight();
-	void AddShadowMap(UINT width, UINT height);
+	void AddShadowMap(float width, float height);
 public:
 	Scene() = default;
 	Scene(UINT windowWidth, UINT windowHeight, HWND window);

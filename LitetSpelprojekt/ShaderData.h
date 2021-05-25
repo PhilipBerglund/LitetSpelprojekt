@@ -7,7 +7,7 @@
 #include <directXmath.h>
 using namespace DirectX;
 
-#define MAX_JOINTS 5
+#define MAX_JOINTS 12
 
 class ShaderData
 {

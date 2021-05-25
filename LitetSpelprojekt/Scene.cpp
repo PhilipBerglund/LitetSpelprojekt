@@ -1,7 +1,7 @@
 #include "Scene.h"
 
-Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
-	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.0015f, 50.0f, { 0, 15, 0 })
+Scene::Scene(UINT windowWidth, UINT windowHeight, HWND window)
+	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.0015f, 50.0f, { 76, 15, 111 })
 {
 	Importer::LoadScene("Models/Office.mff");
 	Importer::LoadScene("Models/Bar.mff");
@@ -30,6 +30,7 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	}
 	
 	Importer::Initialize(Graphics::GetDevice());
+	scenario = Scenario(*this);
 
 	//QuadTree Setup
 	QTSquare QTbounds;
@@ -37,7 +38,7 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	QTbounds.w = 600;
 	QTbounds.xPos = 0;
 	QTbounds.zPos = 0;
-	SetupQuadTree(this->tree, QTbounds, 20);
+	SetupQuadTree(this->tree, QTbounds, 500);
 	for (auto& mod : models)
 	{
 		this->tree->InsertModel(mod.second);
@@ -53,7 +54,6 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	lights[0]->SetRotation({ 0.0f,-10.0f,10.0f });
 	AddShadowMap(Window::GetWidth(), Window::GetHeight());
 
-	scenario = Scenario(*this);
 }
 
 void Scene::AddRainParticleSystem(UINT maxParticles, float minVelocity, float maxVelocity)
@@ -80,8 +80,8 @@ void Scene::AddModel(std::shared_ptr<Model> model)
 
 	if (dupes != 0)
 		model->SetName(model->GetName() + std::to_string(dupes));
-
-	nonShadowModels.insert(std::make_pair(model->GetName(), model));
+	models.insert(std::make_pair(model->GetName(), model));
+	//nonShadowModels.insert(std::make_pair(model->GetName(), model));
 }
 
 void Scene::AddLight()
@@ -130,7 +130,7 @@ void Scene::Update(InGameUI& ui, float dt)
   
 	shaderData.Update(camera, *lights[0]);
 
-	Print("NrOfModels: " + std::to_string(this->QTModels.size()));
+	//Print("NrOfModels: " + std::to_string(this->QTModels.size()));
 }
 
 void Scene::Render()

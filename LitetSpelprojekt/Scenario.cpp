@@ -57,6 +57,32 @@ Scenario::Scenario(Scene& scene)
 	scene.AddModel(testSuspect2.model);
 	suspects.push_back(testSuspect2);
 
+	
+
+	// --------- CLUES ----------
+
+	// --- Chalk Outline --- 
+	Clue chalkOutline("Models/ChalkOutLine.mff", { -125, 1, -90});
+	chalkOutline.information = "This is where Mayor Rock was murdered last night...\n  I should look around.";
+	chalkOutline.model->SetScale({ 1.2, 1.2f,1.2f });
+	//chalkOutline.model->SetRotation({ 0.0f, 0, 0.0f });
+	chalkOutline.model->Update(Graphics::GetDeviceContext());
+	scene.AddModel(chalkOutline.model);
+	clues.push_back(chalkOutline);
+
+	// --- Shoe Print(s) --- 
+	Clue leftShoePrint("Models/ShoePrints.mff", { -135.0f, 0.0f, -135.0f});
+	leftShoePrint.information = "A trail of shoeprints. I wonder...";
+
+	scene.AddModel(leftShoePrint.model);
+	clues.push_back(leftShoePrint);
+
+	// --- Hair -- 
+	Clue hair("Models/HairBlack.mff", { -129.0f, 1.0f, -66.0f });
+	hair.information = "What is this? A cluster of black hair?";
+	scene.AddModel(hair.model);
+	clues.push_back(hair);
+
 	Clue clue("Models/TestClue.mff", {-20, 10, 40});
 	clue.information = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
 	scene.AddModel(clue.model);

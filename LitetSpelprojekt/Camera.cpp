@@ -28,6 +28,7 @@ Camera::Camera()
 Camera::Camera(float FOV, float aspectRatio, float nearZ, float farZ, float rotationSpeed, float speed, XMFLOAT3 position, XMFLOAT3 rotation, XMFLOAT3 scale)
 	:GameObject(position, rotation, scale), pitch(0), yaw(0), rotationSpeed(rotationSpeed), speed(speed)
 {
+	
 	Event::Bind(this, EventType::W_DOWN);
 	Event::Bind(this, EventType::A_DOWN);
 	Event::Bind(this, EventType::S_DOWN);
@@ -36,7 +37,7 @@ Camera::Camera(float FOV, float aspectRatio, float nearZ, float farZ, float rota
 	Event::Bind(this, EventType::RESET);
 
 	this->up = { 0,1,0 };
-	this->forward = { 0,0,1 };
+	this->forward = { 0, 0, 1 };
 	this->right = { 1,0,0 };
 	this->viewMatrix = XMMatrixLookAtLH(XMLoadFloat3(&transform.position), forward, up);
 	this->viewDistance = farZ;
@@ -215,6 +216,6 @@ void Camera::Update(float dt)
 	this->frustForward = lookAtVec;
 	this->frustRight = XMVector3Cross(up, lookAtVec);
 
-	//Print("Character X-pos: " + std::to_string(transform.position.x) + "\nCharacter Z-Pos: " + std::to_string(transform.position.z));
+	Print("X-pos: " + std::to_string(transform.position.x) + "  Z-Pos: " + std::to_string(transform.position.z) + "\n");
 
 }

@@ -174,9 +174,12 @@ public:
 	void Draw()
 	{
 		background.Draw();
+
+		#ifdef _DEBUG
 		converseButton.DrawBounds();
 		confrontButton.DrawBounds();
-		
+		#endif
+
 		if (converseArrows.visible)
 			converseArrows.Draw();
 

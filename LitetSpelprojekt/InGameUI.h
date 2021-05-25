@@ -93,18 +93,21 @@ private:
 		if (chatOverlay.Convict())
 			this->convict = true;
 
-		chatOverlay.Deactivate();
-		Event::DispatchEvent(EventType::STATECHANGE);
-		GameSettings::SetState(GameState::INGAME);
-
+		else
+		{
+			Event::DispatchEvent(EventType::STATECHANGE);
+			GameSettings::SetState(GameState::INGAME);
+			SetCursorType(CursorType::CROSS);
+		}
+		
 		if (gotNewInformation)
 		{
 			newInformationNotation->SetVisibility(true);
 			newInformationNotation->SetOpacity(1.0f);
+			gotNewInformation = false;
 		}
 
-		gotNewInformation = false;
-		SetCursorType(CursorType::CROSS);
+		chatOverlay.Deactivate();
 	}
 
 	void DeactivateClueOverlay()

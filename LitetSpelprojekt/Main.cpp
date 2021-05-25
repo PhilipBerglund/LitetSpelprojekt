@@ -15,7 +15,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	UINT WIDTH = GetSystemMetrics(SM_CXSCREEN);
 	UINT HEIGHT = GetSystemMetrics(SM_CYSCREEN);
 
-	bool windowed = true;
+	bool windowed = false;
 
 	if (windowed)
 	{

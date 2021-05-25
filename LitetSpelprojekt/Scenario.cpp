@@ -7,8 +7,6 @@
 Clue::Clue(std::string path, XMFLOAT3 position)
 {
 	Importer::LoadScene(path);
-	information = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
-
 	Mesh mesh = Importer::Data::GetMeshAt(Importer::Data::scenes.size() - 1, 0);
 	model = std::make_shared<Model>(mesh);
 	model->SetPosition(position);
@@ -23,7 +21,7 @@ Suspect::Suspect(std::string path, XMFLOAT3 position)
 	model->SetScale({2.5f,2.5f,2.5f});
 	model->SetPosition(position);
 	model->Update(Graphics::GetDeviceContext());
-	model->boundingbox.Center.y += 10;
+	model->boundingbox.Center.y += 15;
 }
 
 Scenario::Scenario(Scene& scene)
@@ -60,14 +58,28 @@ Scenario::Scenario(Scene& scene)
 	suspects.push_back(testSuspect2);
 
 	Clue clue("Models/TestClue.mff", {-20, 10, 40});
+	clue.information = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
 	scene.AddModel(clue.model);
 	clues.push_back(clue);
 
 	Clue clue2("Models/TestClue.mff", { -50, 10, -40 });
+	clue2.information = "Ooga booga.";
 	scene.AddModel(clue2.model);
 	clues.push_back(clue2);
 
 	Importer::Initialize(Graphics::GetDevice());
+}
+
+void Scenario::Reset()
+{
+	identifiedSuspects = 0;
+	foundClues = 0;
+
+	for (auto& clue : clues)
+		clue.isFound = false;
+
+	for (auto& suspect : suspects)
+		suspect.fullyKnown = false;
 }
 
 void Scenario::InitializeClueLocations()
@@ -91,24 +103,21 @@ void Scenario::SetRandomizedLocations()
 	}
 }
 
-//bool Scenario::TempLoadClues(std::string path)
-//{
-//	Clue clue("");
-//	clue.model = std::make_shared<Model>();
-//
-//	//if (!clue.model->Initialize(Graphics::GetDevice(), path))
-//	//{
-//	//	Error("FAILED TO INITIALIZE CLUE");
-//	//	return false;
-//	//}
-//
-//	clues.push_back(clue);
-//
-//	return true;
-//}
-
 void Scenario::Update(Scene& scene, InGameUI& ui, Camera& camera)
 {
+	static std::string lastSuspect;
+
+	//IF CONVICED
+	if (ui.Convict())
+	{
+		if (lastSuspect != murderer)
+			GameSettings::SetState(GameState::END_LOSS);
+		else
+			GameSettings::SetState(GameState::END_WIN);
+
+		Event::DispatchEvent(EventType::STATECHANGE);
+	}
+
 	if (GameSettings::GetState() != GameState::INGAME)
 		return;
 
@@ -151,6 +160,8 @@ void Scenario::Update(Scene& scene, InGameUI& ui, Camera& camera)
 
 			if (Event::GetCurrentEvent() == EventType::LEFTCLICK)
 			{
+				lastSuspect = suspect.name;
+
 				if (suspect.fullyKnown)
 					ui.chatOverlay.SetUp(suspect.name, suspect.information.info);
 				else

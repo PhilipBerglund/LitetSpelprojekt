@@ -55,6 +55,7 @@ class Scenario
 private:
 	int identifiedSuspects = 0;
 	int foundClues = 0;
+	std::string murderer = "B";
 public:
 	std::vector<Clue> clues;
 	std::vector<Suspect> suspects;
@@ -62,6 +63,7 @@ public:
 
 	Scenario() = default;
 	Scenario(Scene& scene);
+	void Reset();
 	void InitializeClueLocations();
 	void SetRandomizedLocations();
 	void Update(Scene& scene, InGameUI& ui, Camera& camera);

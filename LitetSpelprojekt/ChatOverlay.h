@@ -174,9 +174,12 @@ public:
 	void Draw()
 	{
 		background.Draw();
+
+		#ifdef _DEBUG
 		converseButton.DrawBounds();
 		confrontButton.DrawBounds();
-		
+		#endif
+
 		if (converseArrows.visible)
 			converseArrows.Draw();
 
@@ -307,6 +310,7 @@ private:
 
 	bool done = false;
 	bool active = false;
+	bool convict = false;
 private:
 	void OnEvent()
 	{
@@ -319,6 +323,7 @@ private:
 
 	void Reset()
 	{
+		convict = false;
 		active = false;
 		done = false;
 		choiceWin.Reset();
@@ -359,7 +364,7 @@ public:
 			if (confirmWin.GetChoice() == ConfirmWindow::Choice::YES)
 			{
 				Reset();
-				GameSettings::SetState(GameState::END);
+				convict = true;
 				done = true;
 			}
 
@@ -414,6 +419,8 @@ public:
 	bool IsActive() const { return this->active; }
 	void Activate() { this->active = true; }
 	void Deactivate() { Reset(); }
+
+	bool Convict() { return this->convict; }
 
 	bool ShowCursor() 
 	{ 

@@ -3,13 +3,13 @@
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.0015f, 50.0f, { 0, 15, 0 })
 {
-	Importer::LoadScene("Models/Office.mff");
-	Importer::LoadScene("Models/Bar.mff");
-	Importer::LoadScene("Models/Hotel.mff");
-	Importer::LoadScene("Models/Restaurant.mff");
-	Importer::LoadScene("Models/Park.mff");
-	Importer::LoadScene("Models/Objects.mff");
-	Importer::LoadScene("Models/Houses.mff");
+	//Importer::LoadScene("Models/Office.mff");
+	//Importer::LoadScene("Models/Bar.mff");
+	//Importer::LoadScene("Models/Hotel.mff");
+	//Importer::LoadScene("Models/Restaurant.mff");
+	//Importer::LoadScene("Models/Park.mff");
+	//Importer::LoadScene("Models/Objects.mff");
+	//Importer::LoadScene("Models/Houses.mff");
 
 	Importer::Initialize(Graphics::GetDevice());
 
@@ -45,7 +45,6 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 
 	scenario = Scenario(*this);
 }
-
 
 void Scene::AddRainParticleSystem(UINT maxParticles, float minVelocity, float maxVelocity)
 {
@@ -86,6 +85,12 @@ void Scene::AddShadowMap(UINT width, UINT height)
 {
 	auto shadowMap = std::make_shared<ShadowMap>(width, height);
 	shadowMaps.push_back(shadowMap);
+}
+
+void Scene::Reset(InGameUI& ui)
+{
+	ui.Reset();
+	scenario.Reset();
 }
 
 void Scene::Update(InGameUI& ui, float dt)

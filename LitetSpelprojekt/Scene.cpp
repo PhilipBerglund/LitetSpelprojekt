@@ -36,8 +36,8 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	QTbounds.h = 600;
 	QTbounds.w = 600;
 	QTbounds.xPos = 0;
-	QTbounds.zPos = 0;
-	SetupQuadTree(this->tree, QTbounds, 20);
+	QTbounds.zPos = -45;
+	SetupQuadTree(this->tree, QTbounds, 10);
 	for (auto& mod : models)
 	{
 		this->tree->InsertModel(mod.second);
@@ -130,7 +130,7 @@ void Scene::Update(InGameUI& ui, float dt)
   
 	shaderData.Update(camera, *lights[0]);
 
-	Print("NrOfModels: " + std::to_string(this->QTModels.size()));
+	/*Print("NrOfModels: " + std::to_string(this->QTModels.size()));*/
 }
 
 void Scene::Render()

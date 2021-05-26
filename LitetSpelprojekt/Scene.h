@@ -13,6 +13,7 @@
 #include "ShadowMapShader.h"
 #include "Bounds.h"
 #include "SoundHandler.h"
+#include "QuadTree.h"
 
 class Scene
 {
@@ -21,10 +22,12 @@ private:
 	Scenario scenario;
 	Bounds bounds;
 	Camera camera;
+	QuadTree* tree;
+	QTFrustum frust;
 
 	std::map<std::string, std::shared_ptr<Model>> models;
+	std::vector<std::shared_ptr<Model>> QTModels;
 	std::vector<std::shared_ptr<Light>> lights;
-	//std::vector<std::shared_ptr<Model>> models;
 	std::vector<std::shared_ptr<GameObject>> gameObjects;
 	std::vector<std::shared_ptr<RainSystem>> rainSystem;
 	std::vector<std::shared_ptr<SmokeSystem>> smokeSystem;
@@ -49,11 +52,14 @@ private:
 public:
 	Scene() = default;
 	Scene(UINT windowWidth, UINT windowHeight, HWND window);
-
+	
+	void Reset(InGameUI& ui);
 	void Update(InGameUI& ui, float dt);
 	void Render();
 	void RenderShadowMap();
+	void ClearQTModels()															{ this->QTModels.clear(); }
 
+	const std::vector<std::shared_ptr<Model>>& GetQTModels() const					{ return this->QTModels; }
 	const std::vector<std::shared_ptr<Light>>& GetLights() const					{ return this->lights; }
 	const std::map<std::string, std::shared_ptr<Model>>& GetModels() const			{ return this->models; }
 	const std::map<std::string, std::shared_ptr<Model>>& GetNoShadowModels() const	{ return this->nonShadowModels; }

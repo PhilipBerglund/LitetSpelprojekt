@@ -1,9 +1,21 @@
 #include "Game.h"
 
+
+
 Game::Game(HWND window, UINT windowWidth, UINT windowHeight)
 	:scene(windowWidth,windowHeight, window)
 {
-	//scene = Scene(windowWidth, windowHeight, window);
+	Event::Bind(this, EventType::RESET);
+}
+
+void Game::Reset()
+{
+	scene.Reset(inGameUI);
+}
+
+void Game::OnEvent()
+{
+	Reset();
 }
 
 void Game::Render(float dt)
@@ -24,32 +36,19 @@ void Game::Render(float dt)
 		inGameUI.Render(dt);
 		break;
 	
-	case GameState::JOURNAL:
-		scene.RenderShadowMap();
-		scene.Render();
-		inGameUI.Render(dt);
-		break;
-
-	case GameState::PAUSED:
-		scene.RenderShadowMap();
+	case GameState::JOURNAL: case GameState::PAUSED:
 		scene.Render();
 		inGameUI.Render(dt);
 		break;
 	
-	case GameState::CHAT:
+	case GameState::CHAT: case GameState::CLUE:
 		scene.Update(inGameUI, dt);
 		scene.Render();
 		inGameUI.Render(dt);
 		break;
 
-	case GameState::CLUE:
-		scene.Update(inGameUI, dt);
-		scene.Render();
-		inGameUI.Render(dt);
-		break;
-
-	case GameState::END:
-		inGameUI.Render(dt);
+	case GameState::END_WIN: case GameState::END_LOSS:
+		mainMenu.Render();
 		break;
 	}
 

@@ -44,6 +44,7 @@ private:
 	PauseMenu pauseMenu;
 
 	bool gotNewInformation = false;
+	bool convict = false;
 private:
 	void SwitchJournalState()
 	{
@@ -89,18 +90,24 @@ private:
 
 	void DeactivateChatOverlay()
 	{
-		chatOverlay.Deactivate();
-		Event::DispatchEvent(EventType::STATECHANGE);
-		GameSettings::SetState(GameState::INGAME);
+		if (chatOverlay.Convict())
+			this->convict = true;
 
+		else
+		{
+			Event::DispatchEvent(EventType::STATECHANGE);
+			GameSettings::SetState(GameState::INGAME);
+			SetCursorType(CursorType::CROSS);
+		}
+		
 		if (gotNewInformation)
 		{
 			newInformationNotation->SetVisibility(true);
 			newInformationNotation->SetOpacity(1.0f);
+			gotNewInformation = false;
 		}
-		
-		gotNewInformation = false;
-		SetCursorType(CursorType::CROSS);
+
+		chatOverlay.Deactivate();
 	}
 
 	void DeactivateClueOverlay()
@@ -109,13 +116,6 @@ private:
 		Event::DispatchEvent(EventType::STATECHANGE);
 		GameSettings::SetState(GameState::INGAME);
 		SetCursorType(CursorType::CROSS);
-	}
-
-	void Reset()
-	{
-		newInformationNotation->SetOpacity(1.0f);
-		brushOpacity = 0.0f;
-		drawOverlay = false;
 	}
 
 	void DrawOverlay(float dt)
@@ -167,7 +167,6 @@ public:
 		Event::Bind(this, EventType::E_DOWN);
 		Event::Bind(this, EventType::MOUSEMOVE);
 		Event::Bind(this, EventType::ESC);
-		Event::Bind(this, EventType::RESET);
 
 		D2D1_SIZE_F winSize = Graphics::Get2DRenderTarget().GetSize();
 		pauseOverlay = { 0, 0, winSize.width, winSize.height };
@@ -208,7 +207,7 @@ public:
 			return;
 		}
 
-		//REGULAR
+		//REGULARjournal.Reset()
 		hr = Graphics::GetWriteFactory().CreateTextFormat(font.c_str(), nullptr, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, fontSize, L"", &textFormat);
 		if FAILED(hr)
 		{
@@ -242,6 +241,16 @@ public:
 
 		dtText = Text(L"", true, { Window::GetWidth() - 50, 0 }, 100);
 	};
+
+	void Reset()
+	{
+		journal.Reset();
+		newInformationNotation->SetOpacity(1.0f);
+		brushOpacity = 0.0f;
+		drawOverlay = false;
+		convict = false;
+		bool gotNewInformation = false;
+	}
 
 	void Render(float dt)
 	{
@@ -323,12 +332,11 @@ public:
 			}
 		}
 
-		if (currentEvent == EventType::RESET)
-			Reset();
-
 		if (currentEvent == EventType::MOUSEMOVE)
 			cursor.SetPosition((float)pos.first, (float)pos.second + 30);
 	}
+
+	bool Convict() { return this->convict; }
 
 	void ShowNotification()
 	{

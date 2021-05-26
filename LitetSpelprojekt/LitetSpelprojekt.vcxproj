@@ -164,6 +164,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ParticleShader.cpp" />
+    <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="RainSystem.cpp" />
     <ClCompile Include="RegularShader.cpp" />
     <ClCompile Include="Scenario.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ParticleShader.h" />
+    <ClInclude Include="QuadTree.h" />
     <ClInclude Include="RainSystem.h" />
     <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="RegularShader.h" />

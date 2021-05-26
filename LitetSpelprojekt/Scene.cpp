@@ -4,13 +4,13 @@
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.0015f, 50.0f, { 0, 15, 0 })
 {
-	//Importer::LoadScene("Models/Office.mff");
-	//Importer::LoadScene("Models/Bar.mff");
-	//Importer::LoadScene("Models/Hotel.mff");
-	//Importer::LoadScene("Models/Restaurant.mff");
-	//Importer::LoadScene("Models/Park.mff");
-	//Importer::LoadScene("Models/Objects.mff");
-	//Importer::LoadScene("Models/Houses.mff");
+	Importer::LoadScene("Models/Office.mff");
+	Importer::LoadScene("Models/Bar.mff");
+	Importer::LoadScene("Models/Hotel.mff");
+	Importer::LoadScene("Models/Restaurant.mff");
+	Importer::LoadScene("Models/Park.mff");
+	Importer::LoadScene("Models/OutsideObjects.mff");
+	Importer::LoadScene("Models/Houses.mff");
 
 	Importer::Initialize(Graphics::GetDevice());
 
@@ -38,7 +38,7 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	QTbounds.w = 600;
 	QTbounds.xPos = 0;
 	QTbounds.zPos = -45;
-	SetupQuadTree(this->tree, QTbounds, 10);
+	SetupQuadTree(this->tree, QTbounds, 500);
 	for (auto& mod : models)
 	{
 		this->tree->InsertModel(mod.second);

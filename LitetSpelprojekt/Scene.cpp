@@ -1,15 +1,16 @@
 #include "Scene.h"
+#include "SoundHandler.h"
 
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.0015f, 50.0f, { 0, 15, 0 })
 {
-	Importer::LoadScene("Models/Office.mff");
-	Importer::LoadScene("Models/Bar.mff");
-	Importer::LoadScene("Models/Hotel.mff");
-	Importer::LoadScene("Models/Restaurant.mff");
-	Importer::LoadScene("Models/Park.mff");
-	Importer::LoadScene("Models/Objects.mff");
-	Importer::LoadScene("Models/Houses.mff");
+	//Importer::LoadScene("Models/Office.mff");
+	//Importer::LoadScene("Models/Bar.mff");
+	//Importer::LoadScene("Models/Hotel.mff");
+	//Importer::LoadScene("Models/Restaurant.mff");
+	//Importer::LoadScene("Models/Park.mff");
+	//Importer::LoadScene("Models/Objects.mff");
+	//Importer::LoadScene("Models/Houses.mff");
 
 	Importer::Initialize(Graphics::GetDevice());
 
@@ -52,6 +53,9 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	AddLight();
 	lights[0]->SetRotation({ 0.0f,-10.0f,10.0f });
 	AddShadowMap(Window::GetWidth(), Window::GetHeight());
+	soundHandler.AddAudio(L"Audio/JessicaWoolfBackgroundMusic.wav");
+	soundHandler.SetVolume(0.5f);
+	soundHandler.StartAudio();
 
 	scenario = Scenario(*this);
 }
@@ -91,7 +95,7 @@ void Scene::AddLight()
 	gameObjects.push_back(light);
 }
 
-void Scene::AddShadowMap(UINT width, UINT height)
+void Scene::AddShadowMap(float width, float height)
 {
 	auto shadowMap = std::make_shared<ShadowMap>(width, height);
 	shadowMaps.push_back(shadowMap);

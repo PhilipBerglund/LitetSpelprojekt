@@ -47,6 +47,8 @@ void SoundHandler::AddAudio(std::wstring fileName)
 	LPCWSTR strFileName = fileName.c_str();
 #endif
 
+	Initialize();
+
 	HANDLE hFile = CreateFile(strFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
 	if (INVALID_HANDLE_VALUE == hFile)
 		ERROR("INVALID HANDLE VALUE");
@@ -60,9 +62,8 @@ void SoundHandler::AddAudio(std::wstring fileName)
 	DWORD fileType;
 	ReadChunkData(hFile, &fileType, sizeof(DWORD), audioChunkPosition);
 	if (fileType != fourccWAVE)
-	{
-		ERROR("FAILED TO CREATE AUDIO");
-	}
+		ERROR("This isn't WAVE file!\n");
+	else ERROR("WAVE format!\n");
 
 	FindChunk(hFile, fourccFMT, audioChunkSize, audioChunkPosition);
 	ReadChunkData(hFile, &wfx, audioChunkSize, audioChunkPosition);
@@ -76,12 +77,16 @@ void SoundHandler::AddAudio(std::wstring fileName)
 	audioBuffer.Flags = XAUDIO2_END_OF_STREAM;
 
 	HRESULT hr;
-	if (FAILED(hr = pXAudio2->CreateSourceVoice(&sourceVoice, (WAVEFORMATEX*)&wfx)))
+	if (FAILED(hr = pXAudio2->CreateSourceVoice(&sourceVoice, (WAVEFORMATEX*)&wfx, 0, XAUDIO2_DEFAULT_FREQ_RATIO, NULL,NULL,NULL)))
 	{
 		ERROR("FAILED TO CREATE SOURCE VOICE");
 	}
+}
 
-	if (FAILED(hr = sourceVoice->SubmitSourceBuffer(&audioBuffer,nullptr)))
+void SoundHandler::StartAudio()
+{
+	HRESULT hr;
+	if (FAILED(hr = sourceVoice->SubmitSourceBuffer(&audioBuffer, nullptr)))
 	{
 		ERROR("FAILED TO SUBMIT SOURCE BUFFER");
 	}
@@ -90,6 +95,11 @@ void SoundHandler::AddAudio(std::wstring fileName)
 	{
 		ERROR("FAILED TO START SOURCE VOICE");
 	}
+}
+
+void SoundHandler::SetVolume(float volume)
+{
+	sourceVoice->SetVolume(volume);
 }
 
 void SoundHandler::DestroyAudio()

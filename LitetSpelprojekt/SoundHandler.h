@@ -18,12 +18,14 @@ private:
 	//Enum för "tag" - första som None(default)
 
 public:
+	SoundHandler() = default;
 	void Initialize();
 	void AddSourceVoiceDetails(XAUDIO2_VOICE_DETAILS voiceDetails);
 	void StartAudioEngine();
 	void StopAudioEngine();
 	void AddAudio(std::wstring fileName);
 	void StartAudio();
+	void SetVolume(float volume);
 
 	void DestroyAudio();
 };

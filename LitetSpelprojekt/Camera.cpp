@@ -217,5 +217,4 @@ void Camera::Update(float dt)
 	this->frustRight = XMVector3Cross(up, lookAtVec);
 
 	Print("X-pos: " + std::to_string(transform.position.x) + "  Z-Pos: " + std::to_string(transform.position.z) + "\n");
-
 }

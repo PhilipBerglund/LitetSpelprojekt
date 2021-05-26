@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "SoundHandler.h"
 
 Scene::Scene(UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.0015f, 50.0f, { 76, 15, 111 })
@@ -8,7 +9,7 @@ Scene::Scene(UINT windowWidth, UINT windowHeight, HWND window)
 	Importer::LoadScene("Models/Hotel.mff");
 	Importer::LoadScene("Models/Restaurant.mff");
 	Importer::LoadScene("Models/Park.mff");
-	Importer::LoadScene("Models/Objects.mff");
+	Importer::LoadScene("Models/OutsideObjects.mff");
 	Importer::LoadScene("Models/Houses.mff");
 
 	Importer::Initialize(Graphics::GetDevice());
@@ -37,8 +38,8 @@ Scene::Scene(UINT windowWidth, UINT windowHeight, HWND window)
 	QTbounds.h = 600;
 	QTbounds.w = 600;
 	QTbounds.xPos = 0;
-	QTbounds.zPos = 0;
-	SetupQuadTree(this->tree, QTbounds, 500);
+	QTbounds.zPos = -45;
+	SetupQuadTree(this->tree, QTbounds, 200);
 	for (auto& mod : models)
 	{
 		this->tree->InsertModel(mod.second);
@@ -53,6 +54,9 @@ Scene::Scene(UINT windowWidth, UINT windowHeight, HWND window)
 	AddLight();
 	lights[0]->SetRotation({ 0.0f,-10.0f,10.0f });
 	AddShadowMap(Window::GetWidth(), Window::GetHeight());
+	soundHandler.AddAudio(L"Audio/JessicaWoolfBackgroundMusic.wav");
+	soundHandler.SetVolume(0.5f);
+	soundHandler.StartAudio();
 
 }
 
@@ -91,7 +95,7 @@ void Scene::AddLight()
 	gameObjects.push_back(light);
 }
 
-void Scene::AddShadowMap(UINT width, UINT height)
+void Scene::AddShadowMap(float width, float height)
 {
 	auto shadowMap = std::make_shared<ShadowMap>(width, height);
 	shadowMaps.push_back(shadowMap);
@@ -129,7 +133,6 @@ void Scene::Update(InGameUI& ui, float dt)
 	scenario.Update(*this, ui, camera);
   
 	shaderData.Update(camera, *lights[0]);
-
 	//Print("NrOfModels: " + std::to_string(this->QTModels.size()));
 }
 

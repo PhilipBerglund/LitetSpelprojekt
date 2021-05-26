@@ -152,8 +152,8 @@ bool QTFrustum::Contains(QTSquare bounds)
 
 void QTFrustum::Update(Camera cam)
 {
-	//if (!active)
-	//	return;
+	/*if (!active)
+		return;*/
 
 
 	this->pos = cam.GetPosition();
@@ -173,7 +173,7 @@ void QTFrustum::Update(Camera cam)
 	float nearH = XMScalarCos(cam.GetFov()) / XMScalarSin(cam.GetFov());
 	float nearW = nearH * cam.GetRatio();
 
-	float farH = 2 * ((XMScalarCos(cam.GetFov() / 2)) / (XMScalarSin(cam.GetFov() / 2))) * farZ;
+	float farH = 2 * ((XMScalarSin(cam.GetFov() / 2)) / (XMScalarCos(cam.GetFov() / 2))) * farZ;
 	float farW = farH * cam.GetRatio();
  
 
@@ -198,15 +198,15 @@ void QTFrustum::Update(Camera cam)
 
 	XMStoreFloat3(&this->planes[2].normal, rightPlaneNormal);
 	XMStoreFloat3(&this->planes[3].normal, leftPlaneNormal);
-
+	
 }
 
 void QTFrustum::OnEvent()
 {
 
-	//if (active)
-	//	active = false;
-	//else
-	//	active = true;
+	/*if (active)
+		active = false;
+	else
+		active = true;*/
 
 }

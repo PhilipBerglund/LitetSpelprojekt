@@ -88,6 +88,9 @@
     <ClCompile Include="ShaderData.cpp">
       <Filter>Shaders\Classes</Filter>
     </ClCompile>
+    <ClCompile Include="AudioChunks.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSettings.h" />

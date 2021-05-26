@@ -26,22 +26,21 @@ Suspect::Suspect(std::string path, XMFLOAT3 position)
 
 Scenario::Scenario(Scene& scene)
 {
-	Suspect testSuspect("Models/TestSuspect.mff", {50, 0, -30});
-	testSuspect.name = "A";
-	testSuspect.age = 55;
-	testSuspect.height = 180;
-	testSuspect.shoeSize = 45;
-	testSuspect.information.info = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
-	testSuspect.information.connections[0] = "B";
-	testSuspect.information.numConnections = 1;
-	testSuspect.information.rumours[0] = "According to A, B looked sketchy last night";
-	testSuspect.information.valueable = true;
-	testSuspect.characteristics[0] = "Likes cats.";
-	testSuspect.characteristics[1] = "monke";
-	testSuspect.characteristics[2] = "mmmmmmmm, monke";
-
-	scene.AddModel(testSuspect.model);
-	suspects.push_back(testSuspect);
+	//Suspect testSuspect("Models/TestSuspect.mff", {50, 0, -30});
+	//testSuspect.name = "A";
+	//testSuspect.age = 55;
+	//testSuspect.height = 180;
+	//testSuspect.shoeSize = 45;
+	//testSuspect.information.info = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+	//testSuspect.information.connections[0] = "B";
+	//testSuspect.information.numConnections = 1;
+	//testSuspect.information.rumours[0] = "According to A, B looked sketchy last night";
+	//testSuspect.information.valueable = true;
+	//testSuspect.characteristics[0] = "Likes cats.";
+	//testSuspect.characteristics[1] = "monke";
+	//testSuspect.characteristics[2] = "mmmmmmmm, monke";
+	//scene.AddModel(testSuspect.model);
+	//suspects.push_back(testSuspect);
 
 	Suspect testSuspect2("Models/TestSuspect.mff", { 50, 0, -20 });
 	testSuspect2.name = "B";
@@ -57,7 +56,6 @@ Scenario::Scenario(Scene& scene)
 	scene.AddModel(testSuspect2.model);
 	suspects.push_back(testSuspect2);
 
-	
 
 	// --------- CLUES ----------
 
@@ -83,15 +81,59 @@ Scenario::Scenario(Scene& scene)
 	scene.AddModel(hair.model);
 	clues.push_back(hair);
 
-	Clue clue("Models/TestClue.mff", {-20, 10, 40});
-	clue.information = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
-	scene.AddModel(clue.model);
-	clues.push_back(clue);
+	// --------- NPCs ----------
 
-	Clue clue2("Models/TestClue.mff", { -50, 10, -40 });
-	clue2.information = "Ooga booga.";
-	scene.AddModel(clue2.model);
-	clues.push_back(clue2);
+	// --- Inside the bar ---
+
+	// --- Fabian Voltaire (bartender) ---
+	Suspect bartender("Models/Bartender.mff", { -172, 17, -22 });
+	bartender.name = "Fabian Voltaire";
+	bartender.age = 34;
+	bartender.height = 180;
+	bartender.shoeSize = 45;
+	bartender.information.info = "You're asking me if I saw something last night? I didn't see anything I'll tell you, but Franklin over there by the pool table, he's the towns know-it-all. He might know something...";
+	bartender.information.connections[0] = "Franklin Pickett";
+	bartender.information.numConnections = 1;
+	bartender.information.rumours[0] = "The towns know-it-all.";
+	bartender.information.valueable = false;
+	bartender.characteristics[0] = "Loves gin and tonic.";
+	bartender.characteristics[1] = "Tries hard to be liked";
+//	bartender.characteristics[2] = "mmmmmmmm, monke";
+	bartender.model->SetScale({ 1.35f, 1.35f, 1.35f });
+	//chalkOutline.model->SetRotation({ 0.0f, 0, 0.0f });
+	bartender.model->Update(Graphics::GetDeviceContext());
+	scene.AddModel(bartender.model);
+	suspects.push_back(bartender);
+
+	// --- Franklin Pickett (know-it-all) ---
+	Suspect knowItAll("Models/KnowItAll.mff", { -213, 17, 54 });
+	knowItAll.name = "Franklin Pickett";
+	knowItAll.age = 50;
+	knowItAll.height = 173;
+	knowItAll.shoeSize = 39;
+	knowItAll.information.info = "";
+	knowItAll.information.connections[0] = "Fabian Voltaire";
+	knowItAll.information.numConnections = 1;
+	knowItAll.information.rumours[0] = "According to Franklin, Voltaire isn't all that liked by the towns inhabitants.";
+	knowItAll.information.valueable = true;
+	knowItAll.characteristics[0] = "Black Hair";
+	knowItAll.characteristics[1] = "Not very talkative";
+	knowItAll.characteristics[2] = "Tiny shoes";
+	knowItAll.model->SetScale({ 1.35f, 1.35f, 1.35f });
+	//chalkOutline.model->SetRotation({ 0.0f, 0, 0.0f });
+	knowItAll.model->Update(Graphics::GetDeviceContext());
+	scene.AddModel(knowItAll.model);
+	suspects.push_back(knowItAll);
+
+	//Clue clue("Models/TestClue.mff", {-20, 10, 40});
+	//clue.information = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+	//scene.AddModel(clue.model);
+	//clues.push_back(clue);
+
+	//Clue clue2("Models/TestClue.mff", { -50, 10, -40 });
+	//clue2.information = "Ooga booga.";
+	//scene.AddModel(clue2.model);
+	//clues.push_back(clue2);
 
 	Importer::Initialize(Graphics::GetDevice());
 }

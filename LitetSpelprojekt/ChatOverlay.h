@@ -47,7 +47,7 @@ public:
 		Event::Bind(this, EventType::BUTTONUP);
 
 		background = Image(L"UI/ChatBase.png", 1.0f, true, { Window::GetWidth() / 2.0f, Window::GetHeight() - 170 });
-		name = Text(L"", true, { Window::GetWidth() / 2.0f - 400, Window::GetHeight() - 250 }, 100);
+		name = Text(L"", true, { Window::GetWidth() / 2.0f - 400, Window::GetHeight() - 250 }, 200);
 		text = Text(L"", true, { Window::GetWidth() / 2.0f, Window::GetHeight() - 200 }, 800);
 	}
 

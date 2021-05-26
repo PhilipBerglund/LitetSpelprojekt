@@ -47,7 +47,10 @@ struct Transform
 struct KeyFrame
 {
 	unsigned int timeStamp;
-	Transform transform;
+	float matrix[16] = { 1.0f, 0.0f, 0.0f, 0.0f,
+						 0.0f, 1.0f, 0.0f, 0.0f,
+						 0.0f, 0.0f, 1.0f, 0.0f,
+						 0.0f, 0.0f, 0.0f, 1.0f };
 };
 
 struct Animation

@@ -140,7 +140,7 @@ Model::Model(const Mesh& mesh)
             XMVECTOR rotation = { 0,0,0 };
             XMVECTOR translation = { 0,0,0 };
 
-            GetJointMatrix(skeleton, 0, i, matrix /* scale, translation, rotation*/);
+            GetJointMatrix(skeleton, 0, i, matrix);
         }
         Print("");
     }
@@ -152,47 +152,47 @@ void Model::GetJointMatrix(Skeleton& skeleton, int jointID, int keyFrame, XMMATR
 
     if (skeleton.joints[jointID].animation.keyFrameCount > 0)
     {
-        auto transform = skeleton.joints[jointID].animation.keyFrames[keyFrame].transform;
-        matrix *= TransformToMatrix(transform.translation, transform.rotation, transform.scale);
+        //auto transform = skeleton.joints[jointID].animation.keyFrames[keyFrame].transform;
+        matrix *= ArrayToMatrix(skeleton.joints[jointID].animation.keyFrames[keyFrame].matrix); //TransformToMatrix(transform.translation, transform.rotation, transform.scale);
         XMStoreFloat4x4(&mat, XMMatrixTranspose(matrix * FloatArrToMatrix(skeleton.joints[jointID].inverseBP)));
     }
 
     else  
         XMStoreFloat4x4(&mat, XMMatrixTranspose(matrix * FloatArrToMatrix(skeleton.joints[jointID].inverseBP)));
-   
+    
+    //XMStoreFloat4x4(&mat, XMMatrixIdentity());
+    //XMStoreFloat4x4(&mat, ArrayToMatrix(skeleton.joints[jointID].inverseBP));
     jointAnim[jointID].insert(std::pair<int, XMFLOAT4X4>(keyFrame, mat));
-    Print(std::to_string(jointID));
     for (int childID : skeleton.joints[jointID].childIDs)
         GetJointMatrix(skeleton, childID, keyFrame, matrix);
 }
-
-void Model::GetJointMatrix(Skeleton& skeleton, int jointID, int keyFrame, XMVECTOR& scale, XMVECTOR& translation, XMVECTOR& rotation)
-{
-    XMFLOAT4X4 mat;
-
-    if (skeleton.joints[jointID].animation.keyFrameCount > 0)
-    {
-        auto transform = skeleton.joints[jointID].animation.keyFrames[keyFrame].transform;
-        scale *= FloatArrToVec(transform.scale); 
-        translation += FloatArrToVec(transform.translation);
-        rotation += FloatArrToVec(transform.rotation);
-
-       XMMATRIX matrix = VecsToMatrix(scale, rotation, translation);
-        //matrix = TransformToMatrix(transform.translation, transform.rotation, transform.scale);
-        XMStoreFloat4x4(&mat, XMMatrixTranspose(matrix * FloatArrToMatrix(skeleton.joints[jointID].inverseBP)));
-    }
-
-    else
-    {
-        XMMATRIX matrix = VecsToMatrix(scale, rotation, translation);
-        XMStoreFloat4x4(&mat, XMMatrixTranspose(matrix * FloatArrToMatrix(skeleton.joints[jointID].inverseBP)));
-    }
-
-    jointAnim[jointID].insert(std::pair<int, XMFLOAT4X4>(keyFrame, mat));
-    Print(std::to_string(jointID));
-    for (int childID : skeleton.joints[jointID].childIDs)
-        GetJointMatrix(skeleton, childID, keyFrame, scale, translation, rotation);
-}
+//
+//void Model::GetJointMatrix(Skeleton& skeleton, int jointID, int keyFrame, XMVECTOR& scale, XMVECTOR& translation, XMVECTOR& rotation)
+//{
+//    XMFLOAT4X4 mat;
+//
+//    if (skeleton.joints[jointID].animation.keyFrameCount > 0)
+//    {
+//        auto transform = skeleton.joints[jointID].animation.keyFrames[keyFrame].transform;
+//        scale *= FloatArrToVec(transform.scale); 
+//        translation += FloatArrToVec(transform.translation);
+//        rotation += FloatArrToVec(transform.rotation);
+//
+//        XMMATRIX matrix = VecsToMatrix(scale, rotation, translation);
+//        XMStoreFloat4x4(&mat, XMMatrixTranspose(FloatArrToMatrix(skeleton.joints[jointID].inverseBP) * matrix));
+//    }
+//
+//    else
+//    {
+//        XMMATRIX matrix = VecsToMatrix(scale, rotation, translation);
+//        XMStoreFloat4x4(&mat, XMMatrixTranspose(FloatArrToMatrix(skeleton.joints[jointID].inverseBP) * matrix));
+//    }
+//
+//    jointAnim[jointID].insert(std::pair<int, XMFLOAT4X4>(keyFrame, mat));
+//    Print(std::to_string(jointID));
+//    for (int childID : skeleton.joints[jointID].childIDs)
+//        GetJointMatrix(skeleton, childID, keyFrame, scale, translation, rotation);
+//}
 
 Model::Model()
     :worldMatrix(XMMatrixIdentity())

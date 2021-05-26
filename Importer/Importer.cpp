@@ -241,9 +241,10 @@ namespace Importer
 		void Read(KeyFrame& keyFrame)
 		{
 			Read(keyFrame.timeStamp);
-			ReadVector(keyFrame.transform.translation, 3);
-			ReadVector(keyFrame.transform.rotation, 4);
-			ReadVector(keyFrame.transform.scale, 3);
+			ReadVector(keyFrame.matrix, 16);
+			//ReadVector(keyFrame.transform.translation, 3);
+			//ReadVector(keyFrame.transform.rotation, 4);
+			//ReadVector(keyFrame.transform.scale, 3);
 		}
 
 		void Read(Animation& animation)

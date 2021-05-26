@@ -22,8 +22,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 		WIDTH = 1680;
 		HEIGHT = 1050;
 
-		//WIDTH = 1024;
-		//HEIGHT = 576;
+		WIDTH = 1024;
+		HEIGHT = 576;
 	}
 	
 	LPCWSTR windowTitle = L"Jessica Woolf: Murder Mysteries";

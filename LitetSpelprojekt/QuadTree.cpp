@@ -152,8 +152,8 @@ bool QTFrustum::Contains(QTSquare bounds)
 
 void QTFrustum::Update(Camera cam)
 {
-	if (!active)
-		return;
+	/*if (!active)
+		return;*/
 
 
 	this->pos = cam.GetPosition();
@@ -198,15 +198,15 @@ void QTFrustum::Update(Camera cam)
 
 	XMStoreFloat3(&this->planes[2].normal, rightPlaneNormal);
 	XMStoreFloat3(&this->planes[3].normal, leftPlaneNormal);
-
+	
 }
 
 void QTFrustum::OnEvent()
 {
 
-	if (active)
+	/*if (active)
 		active = false;
 	else
-		active = true;
+		active = true;*/
 
 }

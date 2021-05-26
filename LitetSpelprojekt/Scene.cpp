@@ -38,7 +38,7 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	QTbounds.w = 600;
 	QTbounds.xPos = 0;
 	QTbounds.zPos = -45;
-	SetupQuadTree(this->tree, QTbounds, 500);
+	SetupQuadTree(this->tree, QTbounds, 200);
 	for (auto& mod : models)
 	{
 		this->tree->InsertModel(mod.second);

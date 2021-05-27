@@ -18,7 +18,7 @@ private:
 	XMMATRIX worldMatrix;
 	std::vector<std::map<int, XMFLOAT4X4>> jointAnim;
 
-	void GetJointMatrix(Skeleton& skeleton, int jointID, int keyFrame, XMMATRIX& matrix);
+	void GetJointMatrix(Skeleton& skeleton, int jointID, int keyFrame, XMMATRIX matrix);
 	void GetJointMatrix(Skeleton& skeleton, int jointID, int keyFrame, XMVECTOR& scale, XMVECTOR& translation, XMVECTOR& rotation);
 
 public:

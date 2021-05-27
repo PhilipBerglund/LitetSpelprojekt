@@ -146,19 +146,19 @@ Model::Model(const Mesh& mesh)
     }
 }
 
-void Model::GetJointMatrix(Skeleton& skeleton, int jointID, int keyFrame, XMMATRIX& matrix)
+void Model::GetJointMatrix(Skeleton& skeleton, int jointID, int keyFrame, XMMATRIX matrix)
 {
     XMFLOAT4X4 mat;
-
+    XMMATRIX finalMat;
     if (skeleton.joints[jointID].animation.keyFrameCount > 0)
     {
         //auto transform = skeleton.joints[jointID].animation.keyFrames[keyFrame].transform;
-        matrix *= ArrayToMatrix(skeleton.joints[jointID].animation.keyFrames[keyFrame].matrix); //TransformToMatrix(transform.translation, transform.rotation, transform.scale);
-        XMStoreFloat4x4(&mat, XMMatrixTranspose(matrix * FloatArrToMatrix(skeleton.joints[jointID].inverseBP)));
+        matrix = ArrayToMatrix(skeleton.joints[jointID].animation.keyFrames[keyFrame].matrix) * matrix; //TransformToMatrix(transform.translation, transform.rotation, transform.scale);
+        XMStoreFloat4x4(&mat, XMMatrixTranspose(matrix) * XMMatrixTranspose(FloatArrToMatrix(skeleton.joints[jointID].inverseBP)));
     }
 
     else  
-        XMStoreFloat4x4(&mat, XMMatrixTranspose(matrix * FloatArrToMatrix(skeleton.joints[jointID].inverseBP)));
+        XMStoreFloat4x4(&mat, XMMatrixTranspose(matrix) * XMMatrixTranspose(FloatArrToMatrix(skeleton.joints[jointID].inverseBP)));
     
     //XMStoreFloat4x4(&mat, XMMatrixIdentity());
     //XMStoreFloat4x4(&mat, ArrayToMatrix(skeleton.joints[jointID].inverseBP));

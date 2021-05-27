@@ -38,7 +38,9 @@ VertexShaderOutput main(VertexShaderInput input)
 {
 	VertexShaderOutput output;
 
-    float4x4 boneTX = { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    //float4x4 boneTX = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+    float4x4 boneTX = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
     for (int i = 0; i < 4; ++i)
     {
         if (input.boneIDs[i] == -1 || input.weights[i] == 0)

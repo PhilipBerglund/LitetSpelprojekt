@@ -60,7 +60,7 @@ Scenario::Scenario(Scene& scene)
 	// --------- CLUES ----------
 
 	// --- Chalk Outline --- 
-	Clue chalkOutline("Models/ChalkOutLine.mff", { -125, 1, -90});
+	Clue chalkOutline("Models/ChalkOutLine.mff", { -110, 1, -90});
 	chalkOutline.information = "This is where Mayor Rock was murdered last night...\n  I should look around.";
 	chalkOutline.model->SetScale({ 1.2, 1.2f,1.2f });
 	//chalkOutline.model->SetRotation({ 0.0f, 0, 0.0f });
@@ -71,7 +71,8 @@ Scenario::Scenario(Scene& scene)
 	// --- Shoe Print(s) --- 
 	Clue leftShoePrint("Models/ShoePrints.mff", { -135.0f, 0.0f, -135.0f});
 	leftShoePrint.information = "A trail of rather large shoeprints. I wonder...";
-
+	leftShoePrint.model->SetScale({ 0.9f, 0.9f, 0.9f });
+	leftShoePrint.model->Update(Graphics::GetDeviceContext());
 	scene.AddModel(leftShoePrint.model);
 	clues.push_back(leftShoePrint);
 
@@ -92,10 +93,10 @@ Scenario::Scenario(Scene& scene)
 	// --- Inside the bar ---
 
 	// --- Fabian Voltaire (bartender) ---
-	Suspect bartender("Models/Bartender.mff", { -172, 17, -22 });
+	Suspect bartender("Models/Bartender1.mff", { -172, 16, -22 });
 	bartender.name = "Fabian Voltaire";
 	bartender.age = 34;
-	bartender.height = 180;
+	bartender.height = 160;
 	bartender.shoeSize = 45;
 	bartender.information.info = "You're asking me if I saw something last night? I didn't see anything I'll tell you, but Franklin over there by the pool table, he's the towns know-it-all. He might know something...";
 	bartender.information.connections[0] = "Franklin Pickett";
@@ -117,7 +118,7 @@ Scenario::Scenario(Scene& scene)
 	knowItAll.age = 50;
 	knowItAll.height = 173;
 	knowItAll.shoeSize = 39;
-	knowItAll.information.info = "They say I know things. Who murdered Mayor Rock is one of the few things I don't know, but one thing I know for sure is that people around here don't like the bartender Voltaire very much.";
+	knowItAll.information.info = "They say I know things. Who murdered Mayor Rock is one of the few things I don't know, but one thing I know for sure is that people around here don't like the bartender Voltaire all that much";
 	knowItAll.information.connections[0] = "Fabian Voltaire";
 	knowItAll.information.numConnections = 1;
 	knowItAll.information.rumours[0] = "According to Franklin, Voltaire isn't all that liked by the towns inhabitants.";
@@ -130,6 +131,53 @@ Scenario::Scenario(Scene& scene)
 	knowItAll.model->Update(Graphics::GetDeviceContext());
 	scene.AddModel(knowItAll.model);
 	suspects.push_back(knowItAll);
+
+
+	// --- Inside the Hotel --- 
+	
+	// --- Receptionist (Sally Bennett) ---
+	//Suspect receptionist("Models/Receptionist.mff", { -116.0f, 0, -120.0f });
+	Suspect receptionist("Models/Receptionist.mff", { -115.0f, 15, -125.0f});
+
+	receptionist.name = "Sally Bennett";
+	receptionist.age = 28;
+	receptionist.height = 178;
+	receptionist.shoeSize = 38;
+	receptionist.information.info = "I WANT MOWHAWK";
+	receptionist.information.connections[0] = "Franklin Pickett";
+	receptionist.information.numConnections = 1;
+	receptionist.information.rumours[0] = "The towns know-it-all.";
+	receptionist.information.valueable = true;
+	receptionist.characteristics[0] = "Brown hair";
+	receptionist.characteristics[1] = "Likeable";
+	receptionist.characteristics[2] = "Small feet";
+	receptionist.model->SetScale({ 2.0f, 2.0f, 2.0f});
+	receptionist.model->Update(Graphics::GetDeviceContext());
+	scene.AddModel(receptionist.model);
+	suspects.push_back(receptionist);
+
+
+	// --- At the park --- 
+
+	// --- Mayor Rock --- 
+	Suspect mayor("Models/Mayor.mff", { 144, 13.75, -108.5f });
+	mayor.name = "Mayor August Rock";
+	mayor.age = 62;
+	mayor.height = 171;
+	mayor.shoeSize = 44;
+	mayor.information.info = "I WANT BIGGER STATUE";
+	mayor.information.connections[0] = "Franklin Pickett";
+	mayor.information.numConnections = 1;
+	mayor.information.rumours[0] = "The towns know-it-all.";
+	mayor.information.valueable = true;
+	mayor.characteristics[0] = "Gray hair";
+	mayor.characteristics[1] = "Large";
+	mayor.characteristics[2] = "Rich";
+	mayor.model->SetScale({ 1.5f, 1.5f, 1.5f });
+
+	mayor.model->Update(Graphics::GetDeviceContext());
+	scene.AddModel(mayor.model);
+	suspects.push_back(mayor);
 
 	//Clue clue("Models/TestClue.mff", {-20, 10, 40});
 	//clue.information = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";

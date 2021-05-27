@@ -81,6 +81,12 @@ Scenario::Scenario(Scene& scene)
 	scene.AddModel(hair.model);
 	clues.push_back(hair);
 
+	// --- Revolver ---
+	Clue revolver("Models/Revolver.mff", { 100.0f, 5.0f, -186.0f });
+	revolver.information = "A revolver!? Who in their right mind would toss a weapon in the garbage bin?";
+	scene.AddModel(revolver.model);
+	clues.push_back(revolver);
+
 	// --------- NPCs ----------
 
 	// --- Inside the bar ---
@@ -111,7 +117,7 @@ Scenario::Scenario(Scene& scene)
 	knowItAll.age = 50;
 	knowItAll.height = 173;
 	knowItAll.shoeSize = 39;
-	knowItAll.information.info = "Voltaire told you I know things, did he? Well he's right about that. One thing I know for sure is that people around here don't like him very much.";
+	knowItAll.information.info = "They say I know things. Who murdered Mayor Rock is one of the few things I don't know, but one thing I know for sure is that people around here don't like the bartender Voltaire very much.";
 	knowItAll.information.connections[0] = "Fabian Voltaire";
 	knowItAll.information.numConnections = 1;
 	knowItAll.information.rumours[0] = "According to Franklin, Voltaire isn't all that liked by the towns inhabitants.";

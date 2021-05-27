@@ -49,8 +49,8 @@ Scene::Scene(UINT windowWidth, UINT windowHeight, HWND window)
 	bounds = Bounds("Models/BBoxes.mff");
 
 	AddRainParticleSystem(3000, 150, 200);
-	AddSmokeParticleSystem(200, 5, 10, { 25.0f, 10.0f, 40.0f, 1.0f }, 60);
-	AddSmokeParticleSystem(400, 5, 10, { -112.0f, 120.0f, 10.0f, 1.0f }, 200);
+	AddSmokeParticleSystem(200, 5, 10, { 23.5f, 5.0f, -40.0f, 1.0f }, 60);
+	AddSmokeParticleSystem(400, 5, 10, { -110.0f, 110.0f, -8.5f, 1.0f }, 200);
 	AddLight();
 	lights[0]->SetRotation({ 0.0f,-10.0f,10.0f });
 	AddShadowMap(Window::GetWidth(), Window::GetHeight());

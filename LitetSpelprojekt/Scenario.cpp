@@ -70,7 +70,7 @@ Scenario::Scenario(Scene& scene)
 
 	// --- Shoe Print(s) --- 
 	Clue leftShoePrint("Models/ShoePrints.mff", { -135.0f, 0.0f, -135.0f});
-	leftShoePrint.information = "A trail of shoeprints. I wonder...";
+	leftShoePrint.information = "A trail of rather large shoeprints. I wonder...";
 
 	scene.AddModel(leftShoePrint.model);
 	clues.push_back(leftShoePrint);
@@ -95,10 +95,10 @@ Scenario::Scenario(Scene& scene)
 	bartender.information.connections[0] = "Franklin Pickett";
 	bartender.information.numConnections = 1;
 	bartender.information.rumours[0] = "The towns know-it-all.";
-	bartender.information.valueable = false;
-	bartender.characteristics[0] = "Loves gin and tonic.";
-	bartender.characteristics[1] = "Tries hard to be liked";
-//	bartender.characteristics[2] = "mmmmmmmm, monke";
+	bartender.information.valueable = true;
+	bartender.characteristics[0] = "Blonde hair";
+	bartender.characteristics[1] = "Unlikeabale";
+	bartender.characteristics[2] = "Large feet";
 	bartender.model->SetScale({ 1.35f, 1.35f, 1.35f });
 	//chalkOutline.model->SetRotation({ 0.0f, 0, 0.0f });
 	bartender.model->Update(Graphics::GetDeviceContext());
@@ -106,17 +106,17 @@ Scenario::Scenario(Scene& scene)
 	suspects.push_back(bartender);
 
 	// --- Franklin Pickett (know-it-all) ---
-	Suspect knowItAll("Models/KnowItAll.mff", { -213, 17, 54 });
+	Suspect knowItAll("Models/KnowItAll.mff", { -196, 14, 54});
 	knowItAll.name = "Franklin Pickett";
 	knowItAll.age = 50;
 	knowItAll.height = 173;
 	knowItAll.shoeSize = 39;
-	knowItAll.information.info = "";
+	knowItAll.information.info = "Voltaire told you I know things, did he? Well he's right about that. One thing I know for sure is that people around here don't like him very much.";
 	knowItAll.information.connections[0] = "Fabian Voltaire";
 	knowItAll.information.numConnections = 1;
 	knowItAll.information.rumours[0] = "According to Franklin, Voltaire isn't all that liked by the towns inhabitants.";
 	knowItAll.information.valueable = true;
-	knowItAll.characteristics[0] = "Black Hair";
+	knowItAll.characteristics[0] = "Black hair";
 	knowItAll.characteristics[1] = "Not very talkative";
 	knowItAll.characteristics[2] = "Tiny shoes";
 	knowItAll.model->SetScale({ 1.35f, 1.35f, 1.35f });

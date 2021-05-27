@@ -55,7 +55,7 @@ class Scenario
 private:
 	int identifiedSuspects = 0;
 	int foundClues = 0;
-	std::string murderer = "B";
+	std::string murderer = "Fabian Voltaire";
 public:
 	std::vector<Clue> clues;
 	std::vector<Suspect> suspects;

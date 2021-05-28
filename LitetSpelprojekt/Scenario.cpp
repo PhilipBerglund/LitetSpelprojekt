@@ -179,6 +179,27 @@ Scenario::Scenario(Scene& scene)
 	scene.AddModel(mayor.model);
 	suspects.push_back(mayor);
 
+
+	// --- Civilians ---
+	
+	// --- Claudette Tasse ---
+	Suspect claudette("Models/FemaleCivilian.mff", { 213.0f, 15.7, 54.0f });
+	claudette.name = "Claudette Tasse";
+	claudette.age = 23;
+	claudette.height = 165;
+	claudette.shoeSize = 36;
+	claudette.information.info = "Bonjour!";
+	claudette.information.rumours[0] = "Working for the french maffia";
+	claudette.information.valueable = false;
+	claudette.characteristics[0] = "Brown hair";
+	claudette.characteristics[1] = "Small";
+	claudette.characteristics[2] = "French";
+	claudette.model->SetScale({ 1.5f, 1.5f, 1.5f });
+
+	claudette.model->Update(Graphics::GetDeviceContext());
+	scene.AddModel(claudette.model);
+	suspects.push_back(claudette);
+
 	//Clue clue("Models/TestClue.mff", {-20, 10, 40});
 	//clue.information = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
 	//scene.AddModel(clue.model);

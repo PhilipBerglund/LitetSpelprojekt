@@ -56,7 +56,7 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	lights[0]->SetRotation({ 0.0f,-10.0f,10.0f });
 	AddShadowMap(Window::GetWidth(), Window::GetHeight());
 	soundHandler.AddAudio(L"Audio/JessicaWoolfBackgroundMusic.wav");
-	soundHandler.SetVolume(0.5f);
+	soundHandler.SetVolume(0.3f);
 	soundHandler.StartAudio();
 
 }

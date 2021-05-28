@@ -179,6 +179,25 @@ Scenario::Scenario(Scene& scene)
 	scene.AddModel(mayor.model);
 	suspects.push_back(mayor);
 
+	Suspect marketMan("Models/StandingMan.mff", { -95.0f, 18.0f, 152.0f });
+	marketMan.name = "Josh Wicker";
+	marketMan.age = 36;
+	marketMan.height = 185;
+	marketMan.shoeSize = 45;
+	marketMan.information.info = "Business is not going so well.";
+	marketMan.information.connections[0] = "Franklin Pickett";
+	marketMan.information.numConnections = 1;
+	marketMan.information.rumours[0] = "Sells random stuff at the market.";
+	marketMan.information.valueable = true;
+	marketMan.characteristics[0] = "Mustache";
+	marketMan.characteristics[1] = "Large feet";
+	marketMan.characteristics[2] = "Likes guns";
+	marketMan.model->SetScale({ 1.3f, 1.3f, 1.3f });
+
+	marketMan.model->Update(Graphics::GetDeviceContext());
+	scene.AddModel(marketMan.model);
+	suspects.push_back(marketMan);
+
 	//Clue clue("Models/TestClue.mff", {-20, 10, 40});
 	//clue.information = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
 	//scene.AddModel(clue.model);

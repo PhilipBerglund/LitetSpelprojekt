@@ -389,11 +389,16 @@ public:
 					page.rumorsHeading = Text(L"Rumours:", true, page.rumorsHeading.position, 500);
 
 				for (int i = 0; i < 3; ++i)
+				{
+					if (page.rumors[i].GetText() == newRumour)
+						break; 
+
 					if (page.rumors[i].GetText() == L"")
 					{
 						page.rumors[i] = Text(newRumour, true, page.rumors[i].position, 500);
 						break;
-					}		
+					}
+				}			
 			}	
 		}	
 	}

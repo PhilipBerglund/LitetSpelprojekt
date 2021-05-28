@@ -300,9 +300,13 @@ void Scenario::Update(Scene& scene, InGameUI& ui, Camera& camera)
 						for (int i = 0; i < suspect.information.numConnections; ++i)
 						{
 							if (!ui.journal.HasSuspect(suspect.information.connections[i]))
+							{
 								ui.journal.AddSuspect(identifiedSuspects, suspect.information.connections[i]);
-
+								identifiedSuspects++;
+							}
+								
 							ui.journal.AddRumour(suspect.information.connections[i], suspect.information.rumours[i]);
+							ui.ShowNotification();
 						}
 					}
 
@@ -313,6 +317,18 @@ void Scenario::Update(Scene& scene, InGameUI& ui, Camera& camera)
 				{
 					ui.journal.UpdateSuspect(suspect.name, suspect.characteristics[0], suspect.characteristics[1], suspect.characteristics[2], suspect.age, suspect.height, suspect.shoeSize);
 					suspect.fullyKnown = true;
+
+					if (suspect.information.numConnections > 0)
+					{
+						for (int i = 0; i < suspect.information.numConnections; ++i)
+						{
+							if (!ui.journal.HasSuspect(suspect.information.connections[i]))
+								ui.journal.AddSuspect(identifiedSuspects, suspect.information.connections[i]);
+
+							ui.journal.AddRumour(suspect.information.connections[i], suspect.information.rumours[i]);
+						}
+					}
+
 					ui.ShowNotification();
 				}
 			}

@@ -180,7 +180,7 @@ Scenario::Scenario(Scene& scene)
 	suspects.push_back(mayor);
 
 
-	Suspect marketMan("Models/StandingMan.mff", { -95.0f, 18.0f, 152.0f });
+	Suspect marketMan("Models/StandingMan.mff", { -95.0f, 17.5f, 152.0f });
 	marketMan.name = "Josh Wicker";
 	marketMan.age = 36;
 	marketMan.height = 185;

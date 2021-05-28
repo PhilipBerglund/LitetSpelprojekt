@@ -5,6 +5,7 @@
 #include "Graphics.h"
 #include "Camera.h"
 #include "ShaderData.h"
+#include "Bounds.h"
 
 using namespace DirectX;
 
@@ -41,6 +42,6 @@ public:
 	void SetEmitPos(const XMFLOAT3& emitPos);
 	void SetEmitDir(const XMFLOAT3& emitDir);
 	void Reset();
-	void Update(float dt);
+	void Update(const Bounds& bounds, float dt);
 	bool UpdateBuffer(Particle* particle);
 };

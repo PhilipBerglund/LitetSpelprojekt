@@ -46,16 +46,19 @@ public:
 	static void BeginFrame();
 	static void EndFrame() { swapChain->Present(0, 0); };
 
-	static ID3D11Device& GetDevice()				{ return *device.Get(); };
-	static ID3D11DeviceContext& GetDeviceContext()	{ return *context.Get(); };
-	static ID3D11RenderTargetView** GetRenderTargetView() { return rtv.GetAddressOf(); };
-	static ID3D11DepthStencilView* GetDepthStencilView() { return dsView.Get(); };
-	static D3D11_VIEWPORT& GetViewport() { return viewport; };
-	static IDXGISwapChain& GetSwapChain()			{ return *swapChain.Get(); };
-	static IDXGISurface& GetSurface()				{ return *surface.Get(); };
-	static ID3D11SamplerState** GetWrapSampler()	{ return wrapSampler.GetAddressOf(); }
+	static void EnableOpacity() { context->OMSetBlendState(alphaBlendState.Get(), nullptr, 0xffffffff); }
+	static void DisableOpacity() { context->OMSetBlendState(noAlphaBlendState.Get(), nullptr, 0xffffffff); }
+
+	static ID3D11Device& GetDevice()						{ return *device.Get(); };
+	static ID3D11DeviceContext& GetDeviceContext()			{ return *context.Get(); };
+	static ID3D11RenderTargetView** GetRenderTargetView()	{ return rtv.GetAddressOf(); };
+	static ID3D11DepthStencilView* GetDepthStencilView()	{ return dsView.Get(); };
+	static D3D11_VIEWPORT& GetViewport()					{ return viewport; };
+	static IDXGISwapChain& GetSwapChain()					{ return *swapChain.Get(); };
+	static IDXGISurface& GetSurface()						{ return *surface.Get(); };
+	static ID3D11SamplerState** GetWrapSampler()			{ return wrapSampler.GetAddressOf(); }
 	
-	static IDWriteFactory& GetWriteFactory()		{ return *writeFactory.Get(); };
-	static ID2D1Factory& GetFactory()				{ return *factory.Get(); };
-	static ID2D1RenderTarget& Get2DRenderTarget()	{ return *renderTarget.Get(); };
+	static IDWriteFactory& GetWriteFactory()				{ return *writeFactory.Get(); };
+	static ID2D1Factory& GetFactory()						{ return *factory.Get(); };
+	static ID2D1RenderTarget& Get2DRenderTarget()			{ return *renderTarget.Get(); };
 };

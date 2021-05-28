@@ -42,19 +42,19 @@ Scenario::Scenario(Scene& scene)
 	//scene.AddModel(testSuspect.model);
 	//suspects.push_back(testSuspect);
 
-	Suspect testSuspect2("Models/TestSuspect.mff", { 50, 0, -20 });
-	testSuspect2.name = "B";
-	testSuspect2.age = 28;
-	testSuspect2.height = 167;
-	testSuspect2.shoeSize = 38;
-	testSuspect2.information.info = ". . .";
-	testSuspect2.information.valueable = false;
-	testSuspect2.characteristics[0] = "Does not like A.";
-	testSuspect2.characteristics[1] = "monkeeeeh";
-	testSuspect2.characteristics[2] = "mmmmmmmmhHHHHHHHHH, monke XDDDDDDD";
+	//Suspect testSuspect2("Models/TestSuspect.mff", { 50, 0, -20 });
+	//testSuspect2.name = "B";
+	//testSuspect2.age = 28;
+	//testSuspect2.height = 167;
+	//testSuspect2.shoeSize = 38;
+	//testSuspect2.information.info = ". . .";
+	//testSuspect2.information.valueable = false;
+	//testSuspect2.characteristics[0] = "Does not like A.";
+	//testSuspect2.characteristics[1] = "monkeeeeh";
+	//testSuspect2.characteristics[2] = "mmmmmmmmhHHHHHHHHH, monke XDDDDDDD";
 
-	scene.AddModel(testSuspect2.model);
-	suspects.push_back(testSuspect2);
+	//scene.AddModel(testSuspect2.model);
+	//suspects.push_back(testSuspect2);
 
 
 	// --------- CLUES ----------
@@ -118,7 +118,7 @@ Scenario::Scenario(Scene& scene)
 	knowItAll.age = 50;
 	knowItAll.height = 173;
 	knowItAll.shoeSize = 39;
-	knowItAll.information.info = "They say I know things. Who murdered Mayor Rock is one of the few things I don't know, but one thing I know for sure is that people around here don't like the bartender Voltaire all that much";
+	knowItAll.information.info = "They say I know things. Who murdered Mayor Rock is one of the few things I don't know, but one thing I know for sure is that I'm the only one who comes here, if you know what I mean.";
 	knowItAll.information.connections[0] = "Fabian Voltaire";
 	knowItAll.information.numConnections = 1;
 	knowItAll.information.rumours[0] = "According to Franklin, Voltaire isn't all that liked by the towns inhabitants.";
@@ -143,10 +143,10 @@ Scenario::Scenario(Scene& scene)
 	receptionist.age = 28;
 	receptionist.height = 178;
 	receptionist.shoeSize = 38;
-	receptionist.information.info = "I WANT MOWHAWK";
-	receptionist.information.connections[0] = "Franklin Pickett";
+	receptionist.information.info = "Poor X, he loved this town. Looks like I'll be the one running this hotel from now. For the record, I was out with Mr. Wicker last night.";
+	receptionist.information.connections[0] = "Mr. Wicker";
 	receptionist.information.numConnections = 1;
-	receptionist.information.rumours[0] = "The towns know-it-all.";
+	receptionist.information.rumours[0] = "According to Sally, they were together last night.";
 	receptionist.information.valueable = true;
 	receptionist.characteristics[0] = "Brown hair";
 	receptionist.characteristics[1] = "Likeable";
@@ -161,7 +161,7 @@ Scenario::Scenario(Scene& scene)
 
 	// --- Mayor Rock --- 
 	Suspect mayor("Models/Mayor.mff", { 144, 13.75, -108.5f });
-	mayor.name = "Mayor August Rock";
+	mayor.name = "Mayor A. Rock";
 	mayor.age = 62;
 	mayor.height = 171;
 	mayor.shoeSize = 44;
@@ -181,14 +181,14 @@ Scenario::Scenario(Scene& scene)
 
 
 	Suspect marketMan("Models/StandingMan.mff", { -95.0f, 17.5f, 152.0f });
-	marketMan.name = "Josh Wicker";
+	marketMan.name = "Mr. Wicker";
 	marketMan.age = 36;
 	marketMan.height = 185;
 	marketMan.shoeSize = 45;
-	marketMan.information.info = "Business is not going so well.";
-	marketMan.information.connections[0] = "Franklin Pickett";
+	marketMan.information.info = "Business is not doing so well, since you are here, want to buy something? Fabian Voltair is my favorite customer. If you're wondering where I was last night, I was at the shooting range like I am every night.";
+	marketMan.information.connections[0] = "Fabian Voltaire";
 	marketMan.information.numConnections = 1;
-	marketMan.information.rumours[0] = "Sells random stuff at the market.";
+	marketMan.information.rumours[0] = "Fabian is Mr. Wicker's favorite customer";
 	marketMan.information.valueable = true;
 	marketMan.characteristics[0] = "Mustache";
 	marketMan.characteristics[1] = "Large feet";
@@ -208,7 +208,7 @@ Scenario::Scenario(Scene& scene)
 	claudette.age = 23;
 	claudette.height = 165;
 	claudette.shoeSize = 36;
-	claudette.information.info = "Bonjour!";
+	claudette.information.info = "Too bad the Hotel won't get expanded now that X is dead. It was said to become twice the size. It's a beautiful hotel.";
 	claudette.information.rumours[0] = "Working for the french maffia";
 	claudette.information.valueable = false;
 	claudette.characteristics[0] = "Brown hair";

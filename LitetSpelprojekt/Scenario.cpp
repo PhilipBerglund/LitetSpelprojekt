@@ -179,6 +179,27 @@ Scenario::Scenario(Scene& scene)
 	scene.AddModel(mayor.model);
 	suspects.push_back(mayor);
 
+	// --- Timothy Cooke --- 
+	Suspect boy("Models/Boy.mff", { 38, 18, -180 });
+	boy.name = "Timothy Cooke";
+	boy.age = 18;
+	boy.height = 181;
+	boy.shoeSize = 42;
+	boy.information.info = "lasdasdjkij";
+	boy.information.connections[0] = "Franklin Pickett";
+	boy.information.numConnections = 1;
+	boy.information.rumours[0] = "The towns know-it-all.";
+	boy.information.valueable = true;
+	boy.characteristics[0] = "Smoker";
+	boy.characteristics[1] = "Impatient";
+	boy.characteristics[2] = "Cocky";
+	boy.model->SetScale({ 1.5f, 1.5f, 1.5f });
+
+	boy.model->Update(Graphics::GetDeviceContext());
+	scene.AddModel(boy.model);
+	suspects.push_back(boy);
+
+	/// --- At the market --- 
 
 	Suspect marketMan("Models/StandingMan.mff", { -95.0f, 17.5f, 152.0f });
 	marketMan.name = "Mr. Wicker";
@@ -219,6 +240,31 @@ Scenario::Scenario(Scene& scene)
 	claudette.model->Update(Graphics::GetDeviceContext());
 	scene.AddModel(claudette.model);
 	suspects.push_back(claudette);
+
+
+
+	// --- At the Restaurant --- 
+	 
+	// --- Tess Singer ---
+	Suspect singer("Models/Burlesque.mff", { 139, 20, 156 });
+	singer.name = "Tess Singer";
+	singer.age = 31;
+	singer.height = 170;
+	singer.shoeSize = 38;
+	singer.information.info = "Bla BLA BLA";
+	singer.information.connections[0] = "Fabian Voltaire";
+	singer.information.rumours[0] = "Voltaire is happy to keep his bar";
+	singer.information.valueable = true;
+	singer.characteristics[0] = "Brown hair";
+	singer.characteristics[1] = "Small";
+	singer.characteristics[2] = "French";
+	singer.model->SetScale({ 1.5f, 1.5f, 1.5f });
+
+	singer.model->Update(Graphics::GetDeviceContext());
+	scene.AddModel(singer.model);
+	suspects.push_back(singer);
+
+
 
 
 	//Clue clue("Models/TestClue.mff", {-20, 10, 40});

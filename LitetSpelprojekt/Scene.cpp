@@ -5,13 +5,13 @@
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.0015f, 50.0f, { 0, 17, 0 })
 {
-	Importer::LoadScene("Models/Office.mff");
-	Importer::LoadScene("Models/Bar.mff");
-	Importer::LoadScene("Models/Hotel.mff");
-	Importer::LoadScene("Models/Restaurant.mff");
-	Importer::LoadScene("Models/Park.mff");
-	Importer::LoadScene("Models/OutsideObjects.mff");
-	Importer::LoadScene("Models/Houses.mff");
+	//Importer::LoadScene("Models/Office.mff");
+	//Importer::LoadScene("Models/Bar.mff");
+	//Importer::LoadScene("Models/Hotel.mff");
+	//Importer::LoadScene("Models/Restaurant.mff");
+	//Importer::LoadScene("Models/Park.mff");
+	//Importer::LoadScene("Models/OutsideObjects.mff");
+	//Importer::LoadScene("Models/Houses.mff");
 
 	Importer::Initialize(Graphics::GetDevice());
 
@@ -48,6 +48,7 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	this->frust.Update(this->camera);
    
 	bounds = Bounds("Models/BBoxes.mff");
+	//rainBounds = Bounds("Models/BBoxes.mff");
 
 	AddRainParticleSystem(3000, 150, 200);
 	AddSmokeParticleSystem(200, 5, 10, { 23.5f, 5.0f, -40.0f, 1.0f }, 60);
@@ -55,10 +56,10 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	AddLight();
 	lights[0]->SetRotation({ 0.0f,-10.0f,10.0f });
 	AddShadowMap(Window::GetWidth(), Window::GetHeight());
+
 	soundHandler.AddAudio(L"Audio/JessicaWoolfBackgroundMusic.wav");
 	soundHandler.SetVolume(0.3f);
 	soundHandler.StartAudio();
-
 }
 
 void Scene::AddRainParticleSystem(UINT maxParticles, float minVelocity, float maxVelocity)
@@ -126,7 +127,7 @@ void Scene::Update(InGameUI& ui, float dt)
 	}
 
 	for (auto& particleSystem : rainSystem)
-		particleSystem->Update(dt);
+		particleSystem->Update(rainBounds, dt);
 
 	for (auto& particleSystem : smokeSystem)
 		particleSystem->Update(dt);
@@ -140,9 +141,13 @@ void Scene::Update(InGameUI& ui, float dt)
 void Scene::Render()
 {
 	RenderShadowMap();
+
 	GSRainShader.RenderRain(shaderData, *this);
-	GSSmokeShader.RenderSmoke(shaderData, *this);
 	regularShader.Render(shaderData, *this);
+
+	Graphics::EnableOpacity();
+	GSSmokeShader.RenderSmoke(shaderData, *this);
+	Graphics::DisableOpacity();
 }
 
 void Scene::RenderShadowMap()

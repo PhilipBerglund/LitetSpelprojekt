@@ -17,8 +17,10 @@ struct PS_INPUT
 
 float4 main(PS_INPUT input) : SV_TARGET
 {
+    float4 color = { 113.0f / 255.0f, 112.0f / 255.0f, 110.0f / 255.0f, 0.5f };
     //float opacity = 1.0f - smoothstep(0.0f, 0.0f, age)
-    return float4(113.0f / 255.0f, 112.0f / 255.0f, 110.0f / 255.0f, 1.0f);
+    return color;
+    
     input.normal = normalize(input.normal);
     
     float3 toEye = eyePos - input.position;

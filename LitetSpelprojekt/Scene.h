@@ -21,6 +21,7 @@ class Scene
 private:
 	Scenario scenario;
 	Bounds bounds;
+	Bounds rainBounds;
 	Camera camera;
 	QuadTree* tree;
 	QTFrustum frust;

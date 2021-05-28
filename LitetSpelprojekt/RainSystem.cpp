@@ -84,18 +84,21 @@ void RainSystem::Reset()
 	this->age = 0.0f;
 }
 
-void RainSystem::Update(float dt)
+void RainSystem::Update(const Bounds& bounds, float dt)
 {
 	for (int i = 0; i < maxParticles; i++)
 	{
 		particles[i].position.y -= dt * velocity;
+
 		if (particles[i].position.y <= 0)
-		{
 			particles[i].position.y = 200;
-		}
+
+		for (auto& box : bounds.boxes)
+			if (box.Contains(XMLoadFloat4(&particles[i].position)) == CONTAINS)
+				particles[i].position.y = 200;
 	}
+
 	UpdateBuffer(particles);
-	
 }
 
 bool RainSystem::UpdateBuffer(Particle* particles)

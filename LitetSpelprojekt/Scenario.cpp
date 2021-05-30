@@ -121,7 +121,7 @@ Scenario::Scenario(Scene& scene)
 	knowItAll.information.info = "They say I know things. Who murdered Mayor Rock is one of the few things I don't know, but one thing I know for sure is that I'm the only one who comes here, if you know what I mean.";
 	knowItAll.information.connections[0] = "Fabian Voltaire";
 	knowItAll.information.numConnections = 1;
-	knowItAll.information.rumours[0] = "According to Franklin, Voltaire isn't all that liked by the towns inhabitants.";
+	knowItAll.information.rumours[0] = "Isn't all that liked by the towns inhabitants.";
 	knowItAll.information.valueable = true;
 	knowItAll.characteristics[0] = "Black hair";
 	knowItAll.characteristics[1] = "Not very talkative";
@@ -201,6 +201,7 @@ Scenario::Scenario(Scene& scene)
 
 	/// --- At the market --- 
 
+	// --- John Wick --- 
 	Suspect marketMan("Models/StandingMan.mff", { -95.0f, 17.5f, 152.0f });
 	marketMan.name = "Mr. Wicker";
 	marketMan.age = 36;
@@ -215,10 +216,12 @@ Scenario::Scenario(Scene& scene)
 	marketMan.characteristics[1] = "Large feet";
 	marketMan.characteristics[2] = "Likes guns";
 	marketMan.model->SetScale({ 1.3f, 1.3f, 1.3f });
-
 	marketMan.model->Update(Graphics::GetDeviceContext());
 	scene.AddModel(marketMan.model);
 	suspects.push_back(marketMan);
+
+	// --- Old Lady ---
+	Suspect lady("Models/Lady.mff")
 
 
 	// --- Civilians ---
@@ -257,7 +260,7 @@ Scenario::Scenario(Scene& scene)
 	singer.information.connections[1] = "Fabian Voltaire";
 	singer.information.numConnections = 2;
 	singer.information.rumours[0] = "Happy that the bar isn't going anywhere.";
-	singer.information.rumours[1] = "Gets to keep his bar now that the hotel wont be expanding.";
+	singer.information.rumours[1] = "Can keep his bar because of the murder.";
 	singer.information.valueable = true;
 	singer.characteristics[0] = "Red hair";
 	singer.characteristics[1] = "Energetic";
@@ -266,6 +269,8 @@ Scenario::Scenario(Scene& scene)
 	singer.model->Update(Graphics::GetDeviceContext());
 	scene.AddModel(singer.model);
 	suspects.push_back(singer);
+
+
 
 	Importer::Initialize(Graphics::GetDevice());
 }

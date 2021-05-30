@@ -53,9 +53,9 @@ struct Page
 
 		rumorsHeading.position = { leftBorder - rumorsHeading.GetSize() * fontSize, startHeight + 430 };
 
-		rumors[0].position = { leftBorder - rumors[0].GetSize() * fontSize - 20, startHeight + 470 };
-		rumors[1].position = { leftBorder - rumors[1].GetSize() * fontSize - 20, startHeight + 500 };
-		rumors[2].position = { leftBorder - rumors[2].GetSize() * fontSize - 20, startHeight + 530 };
+		rumors[0].position = { leftBorder - rumors[0].GetSize() * fontSize, startHeight + 470 };
+		rumors[1].position = { leftBorder - rumors[1].GetSize() * fontSize, startHeight + 510 };
+		rumors[2].position = { leftBorder - rumors[2].GetSize() * fontSize, startHeight + 550 };
 	};
 
 	void Move(float x, float y = 0)

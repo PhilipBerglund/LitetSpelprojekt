@@ -165,10 +165,10 @@ Scenario::Scenario(Scene& scene)
 	mayor.age = 62;
 	mayor.height = 171;
 	mayor.shoeSize = 44;
-	mayor.information.info = "I WANT BIGGER STATUE";
-	mayor.information.connections[0] = "Franklin Pickett";
+	mayor.information.info = "That bastard had it coming. Sooner or later someone would have killed him. The new girl, Claudette, keeps staring at me from the restaurant. Should I be concerned?";
+	mayor.information.connections[0] = "Claudette Tasse";
 	mayor.information.numConnections = 1;
-	mayor.information.rumours[0] = "The towns know-it-all.";
+	mayor.information.rumours[0] = "Watching the Mayor quite alot.";
 	mayor.information.valueable = true;
 	mayor.characteristics[0] = "Gray hair";
 	mayor.characteristics[1] = "Large";
@@ -185,10 +185,10 @@ Scenario::Scenario(Scene& scene)
 	boy.age = 18;
 	boy.height = 181;
 	boy.shoeSize = 42;
-	boy.information.info = "lasdasdjkij";
-	boy.information.connections[0] = "Franklin Pickett";
+	boy.information.info = "That Sally wench sure is thrifty that she worked at the hotel when all of this happened... she really is cruisin' for a bruisin' for getting all that sweet money.";
+	boy.information.connections[0] = "Sally Bennett";
 	boy.information.numConnections = 1;
-	boy.information.rumours[0] = "The towns know-it-all.";
+	boy.information.rumours[0] = "Benefits from the death of x.";
 	boy.information.valueable = true;
 	boy.characteristics[0] = "Smoker";
 	boy.characteristics[1] = "Impatient";
@@ -206,7 +206,7 @@ Scenario::Scenario(Scene& scene)
 	marketMan.age = 36;
 	marketMan.height = 185;
 	marketMan.shoeSize = 45;
-	marketMan.information.info = "Business is not doing so well, since you are here, want to buy something? Fabian Voltair is my favorite customer. If you're wondering where I was last night, I was at the shooting range like I am every night.";
+	marketMan.information.info = "Business is not doing so well, since you are here, want to buy something? Fabian Voltair is my favorite customer. If you're wondering where I was last night, I was at the shooting range like I am every night. Usually with Voltaire, but he never showed up.";
 	marketMan.information.connections[0] = "Fabian Voltaire";
 	marketMan.information.numConnections = 1;
 	marketMan.information.rumours[0] = "Fabian is Mr. Wicker's favorite customer";
@@ -229,9 +229,11 @@ Scenario::Scenario(Scene& scene)
 	claudette.age = 23;
 	claudette.height = 165;
 	claudette.shoeSize = 36;
-	claudette.information.info = "Too bad the Hotel won't get expanded now that X is dead. It was said to become twice the size. It's a beautiful hotel.";
-	claudette.information.rumours[0] = "Working for the french maffia";
-	claudette.information.valueable = false;
+	claudette.information.info = "It's been two weeks since I moved here and there has already been a murder... I hope this was the last. See Mayor Rock over there? He looks awfully happy considering someone was murdered in his town last night...";
+	claudette.information.connections[0] = "Mayor A. Rock";
+	claudette.information.numConnections = 1;
+	claudette.information.rumours[0] = "The Mayor seems awfully happy.";
+	claudette.information.valueable = true;
 	claudette.characteristics[0] = "Brown hair";
 	claudette.characteristics[1] = "Small";
 	claudette.characteristics[2] = "French";
@@ -242,7 +244,6 @@ Scenario::Scenario(Scene& scene)
 	suspects.push_back(claudette);
 
 
-
 	// --- At the Restaurant --- 
 	 
 	// --- Tess Singer ---
@@ -251,31 +252,20 @@ Scenario::Scenario(Scene& scene)
 	singer.age = 31;
 	singer.height = 170;
 	singer.shoeSize = 38;
-	singer.information.info = "Bla BLA BLA";
-	singer.information.connections[0] = "Fabian Voltaire";
-	singer.information.rumours[0] = "Voltaire is happy to keep his bar";
+	singer.information.info = "I was looking forward to perform at the bigger and better 'Private Lion', now I'm stuck performing here... I guess the drunk at 'The Golden Rooster' are happy.";
+	singer.information.connections[0] = "Franklin Pickett";
+	singer.information.connections[1] = "Fabian Voltaire";
+	singer.information.numConnections = 2;
+	singer.information.rumours[0] = "Happy that the bar isn't going anywhere.";
+	singer.information.rumours[1] = "Gets to keep his bar now that the hotel wont be expanding.";
 	singer.information.valueable = true;
-	singer.characteristics[0] = "Brown hair";
-	singer.characteristics[1] = "Small";
-	singer.characteristics[2] = "French";
+	singer.characteristics[0] = "Red hair";
+	singer.characteristics[1] = "Energetic";
+	singer.characteristics[2] = "Loves to perform at big theaters";
 	singer.model->SetScale({ 1.5f, 1.5f, 1.5f });
-
 	singer.model->Update(Graphics::GetDeviceContext());
 	scene.AddModel(singer.model);
 	suspects.push_back(singer);
-
-
-
-
-	//Clue clue("Models/TestClue.mff", {-20, 10, 40});
-	//clue.information = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
-	//scene.AddModel(clue.model);
-	//clues.push_back(clue);
-
-	//Clue clue2("Models/TestClue.mff", { -50, 10, -40 });
-	//clue2.information = "Ooga booga.";
-	//scene.AddModel(clue2.model);
-	//clues.push_back(clue2);
 
 	Importer::Initialize(Graphics::GetDevice());
 }

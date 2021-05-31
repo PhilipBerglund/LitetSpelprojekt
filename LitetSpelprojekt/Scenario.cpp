@@ -26,42 +26,11 @@ Suspect::Suspect(std::string path, XMFLOAT3 position)
 
 Scenario::Scenario(Scene& scene)
 {
-	//Suspect testSuspect("Models/TestSuspect.mff", {50, 0, -30});
-	//testSuspect.name = "A";
-	//testSuspect.age = 55;
-	//testSuspect.height = 180;
-	//testSuspect.shoeSize = 45;
-	//testSuspect.information.info = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
-	//testSuspect.information.connections[0] = "B";
-	//testSuspect.information.numConnections = 1;
-	//testSuspect.information.rumours[0] = "According to A, B looked sketchy last night";
-	//testSuspect.information.valueable = true;
-	//testSuspect.characteristics[0] = "Likes cats.";
-	//testSuspect.characteristics[1] = "monke";
-	//testSuspect.characteristics[2] = "mmmmmmmm, monke";
-	//scene.AddModel(testSuspect.model);
-	//suspects.push_back(testSuspect);
-
-	//Suspect testSuspect2("Models/TestSuspect.mff", { 50, 0, -20 });
-	//testSuspect2.name = "B";
-	//testSuspect2.age = 28;
-	//testSuspect2.height = 167;
-	//testSuspect2.shoeSize = 38;
-	//testSuspect2.information.info = ". . .";
-	//testSuspect2.information.valueable = false;
-	//testSuspect2.characteristics[0] = "Does not like A.";
-	//testSuspect2.characteristics[1] = "monkeeeeh";
-	//testSuspect2.characteristics[2] = "mmmmmmmmhHHHHHHHHH, monke XDDDDDDD";
-
-	//scene.AddModel(testSuspect2.model);
-	//suspects.push_back(testSuspect2);
-
-
 	// --------- CLUES ----------
 
 	// --- Chalk Outline --- 
 	Clue chalkOutline("Models/ChalkOutLine.mff", { -110, 1, -90});
-	chalkOutline.information = "This is where Mayor Rock was murdered last night...\n  I should look around.";
+	chalkOutline.information = "This is where the Hotel Director Lloyd was murdered last night...\n  I should look around.";
 	chalkOutline.model->SetScale({ 1.2, 1.2f,1.2f });
 	//chalkOutline.model->SetRotation({ 0.0f, 0, 0.0f });
 	chalkOutline.model->Update(Graphics::GetDeviceContext());
@@ -88,6 +57,42 @@ Scenario::Scenario(Scene& scene)
 	scene.AddModel(revolver.model);
 	clues.push_back(revolver);
 
+	// --- Revlolver shells in the bar
+	
+
+	// --- Anonymous notes --- 
+
+		// -- Bar -- //
+	
+		// -- Park -- //
+
+		// -- Hotel -- //
+	Clue noteNoRegrets("Models/NoteNoRegrets.mff", { -116.0f,1.0f,-103.0f });
+	noteNoRegrets.information = "'I don't regret what I did!'";
+	noteNoRegrets.model->SetScale({ 0.5f,0.5f,0.5f });
+	noteNoRegrets.model->Update(Graphics::GetDeviceContext());
+	scene.AddModel(noteNoRegrets.model);
+	clues.push_back(noteNoRegrets);
+
+		// -- Resturaunt -- // -- Fixa texten Sophia
+	Clue newsPaper("Models/NewsPaper.mff", { 223.0f,8.7f,75.0f });
+	newsPaper.information = "'Hotel Owner buys bar'";
+	newsPaper.model->SetScale({ 0.2f,0.2f,0.2f });
+	newsPaper.model->Update(Graphics::GetDeviceContext());
+	scene.AddModel(newsPaper.model);
+	clues.push_back(newsPaper);
+
+		// -- Market -- By Mr-Wicker//
+	Clue noteNeedHelp("Models/NoteNeedHelp.mff", { -97.2f,1.0f,109.0f, });
+	noteNeedHelp.information = "'I need your help, you are the only one I can talk to - a friend'";
+	noteNeedHelp.model->SetScale({ 0.5f,0.5f,0.5f });
+	noteNeedHelp.model->Update(Graphics::GetDeviceContext());
+	scene.AddModel(noteNeedHelp.model);
+	clues.push_back(noteNeedHelp);
+
+		// -- Office -- //
+
+
 	// --------- NPCs ----------
 
 	// --- Inside the bar ---
@@ -101,7 +106,7 @@ Scenario::Scenario(Scene& scene)
 	bartender.information.info = "You're asking me if I saw something last night? I didn't see anything I'll tell you, but Franklin over there by the pool table, he's the towns know-it-all. He might know something...";
 	bartender.information.connections[0] = "Franklin Pickett";
 	bartender.information.numConnections = 1;
-	bartender.information.rumours[0] = "The towns know-it-all.";
+	bartender.information.rumours[0] = "The towns know-it-all. - Fabian";
 	bartender.information.valueable = true;
 	bartender.characteristics[0] = "Blonde hair";
 	bartender.characteristics[1] = "Unlikeabale";
@@ -121,7 +126,7 @@ Scenario::Scenario(Scene& scene)
 	knowItAll.information.info = "They say I know things. Who murdered Mayor Rock is one of the few things I don't know, but one thing I know for sure is that I'm the only one who comes here, if you know what I mean.";
 	knowItAll.information.connections[0] = "Fabian Voltaire";
 	knowItAll.information.numConnections = 1;
-	knowItAll.information.rumours[0] = "Isn't all that liked by the towns inhabitants.";
+	knowItAll.information.rumours[0] = "Isn't liked by the locals. - Franklin";
 	knowItAll.information.valueable = true;
 	knowItAll.characteristics[0] = "Black hair";
 	knowItAll.characteristics[1] = "Not very talkative";
@@ -143,10 +148,10 @@ Scenario::Scenario(Scene& scene)
 	receptionist.age = 28;
 	receptionist.height = 178;
 	receptionist.shoeSize = 38;
-	receptionist.information.info = "Poor X, he loved this town. Looks like I'll be the one running this hotel from now. For the record, I was out with Mr. Wicker last night.";
+	receptionist.information.info = "Poor Lloyd, he loved this town. Looks like I'll be the one running this hotel from now. For the record, I was out with Mr. Wicker last night.";
 	receptionist.information.connections[0] = "Mr. Wicker";
 	receptionist.information.numConnections = 1;
-	receptionist.information.rumours[0] = "According to Sally, they were together last night.";
+	receptionist.information.rumours[0] = "Sally said they were together last night.";
 	receptionist.information.valueable = true;
 	receptionist.characteristics[0] = "Brown hair";
 	receptionist.characteristics[1] = "Likeable";
@@ -168,7 +173,7 @@ Scenario::Scenario(Scene& scene)
 	mayor.information.info = "That bastard had it coming. Sooner or later someone would have killed him. The new girl, Claudette, keeps staring at me from the restaurant. Should I be concerned?";
 	mayor.information.connections[0] = "Claudette Tasse";
 	mayor.information.numConnections = 1;
-	mayor.information.rumours[0] = "Watching the Mayor quite alot.";
+	mayor.information.rumours[0] = "Watches the Mayor quite alot. - Mayor";
 	mayor.information.valueable = true;
 	mayor.characteristics[0] = "Gray hair";
 	mayor.characteristics[1] = "Large";
@@ -188,7 +193,7 @@ Scenario::Scenario(Scene& scene)
 	boy.information.info = "That Sally wench sure is thrifty that she worked at the hotel when all of this happened... she really is cruisin' for a bruisin' for getting all that sweet money.";
 	boy.information.connections[0] = "Sally Bennett";
 	boy.information.numConnections = 1;
-	boy.information.rumours[0] = "Benefits from the death of x.";
+	boy.information.rumours[0] = "Benefits from the death of Lloyd. - Timothy";
 	boy.information.valueable = true;
 	boy.characteristics[0] = "Smoker";
 	boy.characteristics[1] = "Impatient";
@@ -221,8 +226,25 @@ Scenario::Scenario(Scene& scene)
 	suspects.push_back(marketMan);
 
 	// --- Old Lady ---
-	Suspect lady("Models/Lady.mff")
-
+	Suspect lady("Models/OldLady.mff", { 5.0f, 17.0f, 148.0f});
+	lady.name = "Olga Morozov";
+	lady.age = 79;
+	lady.height = 153;
+	lady.shoeSize = 37;
+	lady.information.info = "Oh... This is so awful. I hear rumors about it being Sally but it cannot be her! She's so truthful and kind, she would never hurt a fly. The grumpy bartender on the other hand...";
+	lady.information.connections[0] = "Sally Bennett";
+	lady.information.connections[1] = "Fabian Voltaire";
+	lady.information.numConnections = 2;
+	lady.information.rumours[0] = "Most honest person in town. - Olga";
+	lady.information.rumours[1] = "Grumpy -- Olga";
+	lady.information.valueable = true;
+	lady.characteristics[0] = "Old and slow";
+	lady.characteristics[1] = "Collects matryoshka dolls";
+	lady.characteristics[2] = "The town grandma";
+	lady.model->SetScale({ 1.4f, 1.4f, 1.4f });
+	lady.model->Update(Graphics::GetDeviceContext());
+	scene.AddModel(lady.model);
+	suspects.push_back(lady);
 
 	// --- Civilians ---
 	
@@ -235,7 +257,7 @@ Scenario::Scenario(Scene& scene)
 	claudette.information.info = "It's been two weeks since I moved here and there has already been a murder... I hope this was the last. See Mayor Rock over there? He looks awfully happy considering someone was murdered in his town last night...";
 	claudette.information.connections[0] = "Mayor A. Rock";
 	claudette.information.numConnections = 1;
-	claudette.information.rumours[0] = "The Mayor seems awfully happy.";
+	claudette.information.rumours[0] = "The Mayor seems awfully happy. - Claudette";
 	claudette.information.valueable = true;
 	claudette.characteristics[0] = "Brown hair";
 	claudette.characteristics[1] = "Small";
@@ -245,7 +267,6 @@ Scenario::Scenario(Scene& scene)
 	claudette.model->Update(Graphics::GetDeviceContext());
 	scene.AddModel(claudette.model);
 	suspects.push_back(claudette);
-
 
 	// --- At the Restaurant --- 
 	 
@@ -259,8 +280,8 @@ Scenario::Scenario(Scene& scene)
 	singer.information.connections[0] = "Franklin Pickett";
 	singer.information.connections[1] = "Fabian Voltaire";
 	singer.information.numConnections = 2;
-	singer.information.rumours[0] = "Happy that the bar isn't going anywhere.";
-	singer.information.rumours[1] = "Can keep his bar because of the murder.";
+	singer.information.rumours[0] = "Happy that the bar stays. - Tess";
+	singer.information.rumours[1] = "Can keep his bar because of the murder. - Tess";
 	singer.information.valueable = true;
 	singer.characteristics[0] = "Red hair";
 	singer.characteristics[1] = "Energetic";

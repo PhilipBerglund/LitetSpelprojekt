@@ -26,7 +26,7 @@ Camera::Camera()
 }
 
 Camera::Camera(float FOV, float aspectRatio, float nearZ, float farZ, float rotationSpeed, float speed, XMFLOAT3 position, XMFLOAT3 rotation, XMFLOAT3 scale)
-	:GameObject(position, rotation, scale), pitch(0), yaw(0), rotationSpeed(rotationSpeed), speed(speed)
+	:GameObject(position, rotation, scale), pitch(0), yaw(90 * XM_PI / 180), rotationSpeed(rotationSpeed), speed(speed)
 {
 	
 	Event::Bind(this, EventType::W_DOWN);

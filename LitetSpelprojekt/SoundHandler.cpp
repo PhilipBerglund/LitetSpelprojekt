@@ -75,6 +75,7 @@ void SoundHandler::AddAudio(std::wstring fileName)
 	audioBuffer.AudioBytes = audioChunkSize;
 	audioBuffer.pAudioData = dataBuffer;
 	audioBuffer.Flags = XAUDIO2_END_OF_STREAM;
+	audioBuffer.LoopCount = XAUDIO2_MAX_LOOP_COUNT;
 
 	HRESULT hr;
 	if (FAILED(hr = pXAudio2->CreateSourceVoice(&sourceVoice, (WAVEFORMATEX*)&wfx, 0, XAUDIO2_DEFAULT_FREQ_RATIO, NULL,NULL,NULL)))

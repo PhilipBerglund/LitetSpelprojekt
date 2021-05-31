@@ -30,7 +30,7 @@ Scenario::Scenario(Scene& scene)
 
 	// --- Chalk Outline --- 
 	Clue chalkOutline("Models/ChalkOutLine.mff", { -110, 1, -90});
-	chalkOutline.information = "This is where the Hotel Director Lloyd was murdered last night...\n  I should look around.";
+	chalkOutline.information = "This is where the Hotel Director Lloyd was murdered last night...\n  I should ask around.";
 	chalkOutline.model->SetScale({ 1.2, 1.2f,1.2f });
 	//chalkOutline.model->SetRotation({ 0.0f, 0, 0.0f });
 	chalkOutline.model->Update(Graphics::GetDeviceContext());
@@ -39,7 +39,7 @@ Scenario::Scenario(Scene& scene)
 
 	// --- Shoe Print(s) --- 
 	Clue leftShoePrint("Models/ShoePrints.mff", { -135.0f, 0.0f, -135.0f});
-	leftShoePrint.information = "A trail of rather large shoeprints. I wonder...";
+	leftShoePrint.information = "A trail of shoeprints. I wonder...";
 	leftShoePrint.model->SetScale({ 0.9f, 0.9f, 0.9f });
 	leftShoePrint.model->Update(Graphics::GetDeviceContext());
 	scene.AddModel(leftShoePrint.model);
@@ -68,7 +68,7 @@ Scenario::Scenario(Scene& scene)
 
 		// -- Hotel -- //
 	Clue noteNoRegrets("Models/NoteNoRegrets.mff", { -116.0f,1.0f,-103.0f });
-	noteNoRegrets.information = "'I don't regret what I did!'";
+	noteNoRegrets.information = "Is this a note from the murderer? It reads: 'I don't regret what I did! Lloyd had it coming.'";
 	noteNoRegrets.model->SetScale({ 0.5f,0.5f,0.5f });
 	noteNoRegrets.model->Update(Graphics::GetDeviceContext());
 	scene.AddModel(noteNoRegrets.model);
@@ -76,7 +76,7 @@ Scenario::Scenario(Scene& scene)
 
 		// -- Resturaunt -- // -- Fixa texten Sophia
 	Clue newsPaper("Models/NewsPaper.mff", { 223.0f,8.7f,75.0f });
-	newsPaper.information = "'Hotel Owner buys bar'";
+	newsPaper.information = "The newspapers headline says; 'Hotel Owner buys 'The Golden Rooster''";
 	newsPaper.model->SetScale({ 0.2f,0.2f,0.2f });
 	newsPaper.model->Update(Graphics::GetDeviceContext());
 	scene.AddModel(newsPaper.model);
@@ -170,7 +170,7 @@ Scenario::Scenario(Scene& scene)
 	mayor.age = 62;
 	mayor.height = 171;
 	mayor.shoeSize = 44;
-	mayor.information.info = "That bastard had it coming. Sooner or later someone would have killed him. The new girl, Claudette, keeps staring at me from the restaurant. Should I be concerned?";
+	mayor.information.info = "That bastard Lloyd had it coming. Sooner or later someone would have killed him. The new girl, Claudette, keeps staring at me from the restaurant. Should I be concerned?";
 	mayor.information.connections[0] = "Claudette Tasse";
 	mayor.information.numConnections = 1;
 	mayor.information.rumours[0] = "Watches the Mayor quite alot. - Mayor";
@@ -190,13 +190,13 @@ Scenario::Scenario(Scene& scene)
 	boy.age = 18;
 	boy.height = 181;
 	boy.shoeSize = 42;
-	boy.information.info = "That Sally wench sure is thrifty that she worked at the hotel when all of this happened... she really is cruisin' for a bruisin' for getting all that sweet money.";
+	boy.information.info = "That Sally girl sure is thrifty that she worked at the hotel when all of this happened... I'm a bit jealous of all that sweet money she's gonna get from running that lousy hotel in his place.";
 	boy.information.connections[0] = "Sally Bennett";
 	boy.information.numConnections = 1;
 	boy.information.rumours[0] = "Benefits from the death of Lloyd. - Timothy";
 	boy.information.valueable = true;
 	boy.characteristics[0] = "Smoker";
-	boy.characteristics[1] = "Impatient";
+	boy.characteristics[1] = "Jealous";
 	boy.characteristics[2] = "Cocky";
 	boy.model->SetScale({ 1.5f, 1.5f, 1.5f });
 
@@ -212,7 +212,7 @@ Scenario::Scenario(Scene& scene)
 	marketMan.age = 36;
 	marketMan.height = 185;
 	marketMan.shoeSize = 45;
-	marketMan.information.info = "Business is not doing so well, since you are here, want to buy something? Fabian Voltair is my favorite customer. If you're wondering where I was last night, I was at the shooting range like I am every night. Usually with Voltaire, but he never showed up.";
+	marketMan.information.info = "Business is not doing so well, since you are here, want to buy something? If you're wondering where I was last night, I was at the shooting range like I am every night. Usually with Voltaire, but he never showed up.";
 	marketMan.information.connections[0] = "Fabian Voltaire";
 	marketMan.information.numConnections = 1;
 	marketMan.information.rumours[0] = "Fabian is Mr. Wicker's favorite customer";
@@ -254,7 +254,7 @@ Scenario::Scenario(Scene& scene)
 	claudette.age = 23;
 	claudette.height = 165;
 	claudette.shoeSize = 36;
-	claudette.information.info = "It's been two weeks since I moved here and there has already been a murder... I hope this was the last. See Mayor Rock over there? He looks awfully happy considering someone was murdered in his town last night...";
+	claudette.information.info = "It's been two weeks since I moved here and there has already been a murder... I hope this was a one time occurrence. See Mayor Rock over there? He looks awfully happy considering someone was murdered in his town last night...";
 	claudette.information.connections[0] = "Mayor A. Rock";
 	claudette.information.numConnections = 1;
 	claudette.information.rumours[0] = "The Mayor seems awfully happy. - Claudette";
@@ -276,7 +276,7 @@ Scenario::Scenario(Scene& scene)
 	singer.age = 31;
 	singer.height = 170;
 	singer.shoeSize = 38;
-	singer.information.info = "I was looking forward to perform at the bigger and better 'Private Lion', now I'm stuck performing here... I guess the drunk at 'The Golden Rooster' are happy.";
+	singer.information.info = "I was looking forward to perform at the bigger and better 'Private Lion', now I'm stuck performing here... I guess the drunk at 'The Golden Rooster' is happy.";
 	singer.information.connections[0] = "Franklin Pickett";
 	singer.information.connections[1] = "Fabian Voltaire";
 	singer.information.numConnections = 2;

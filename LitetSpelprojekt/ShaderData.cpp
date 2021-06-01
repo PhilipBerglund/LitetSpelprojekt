@@ -29,15 +29,15 @@ ShaderData::ShaderData()
 
 	//-----RAIN PARTICLE SYSTEM-----
 	//SHADERS
-	std::string vs_path = "../x64/Debug/RainVertexShader.cso";
+	std::string vs_path = "./RainVertexShader.cso";
 	if (!LoadVertexShader(rainVS, vs_path, byteCode))
 		return;
 
-	std::string ps_path = "../x64/Debug/RainPixelShader.cso";
+	std::string ps_path = "./RainPixelShader.cso";
 	if (!LoadPixelShader(rainPS, ps_path))
 		return;
 
-	std::string gs_path = "../x64/Debug/RainGeometryShader.cso";
+	std::string gs_path = "./RainGeometryShader.cso";
 	if (!LoadGeometryShader(rainGS, gs_path))
 		return;
 
@@ -56,20 +56,20 @@ ShaderData::ShaderData()
 	}
 
 	//LOAD TEXTURE
-	LoadTexture("RainParticle.png");
+	/*LoadTexture("RainParticle.png");*/
 	//---------------------------------------//
 
 	//-----SMOKE PARTICLE SYSTEM-----
 	//SHADERS
-	vs_path = "../x64/Debug/SmokeVertexShader.cso";
+	vs_path = "./SmokeVertexShader.cso";
 	if (!LoadVertexShader(smokeVS, vs_path, byteCode))
 		return;
 
-	ps_path = "../x64/Debug/SmokePixelShader.cso";
+	ps_path = "./SmokePixelShader.cso";
 	if (!LoadPixelShader(smokePS, ps_path))
 		return;
 
-	gs_path = "../x64/Debug/SmokeGeometryShader.cso";
+	gs_path = "./SmokeGeometryShader.cso";
 	if (!LoadGeometryShader(smokeGS, gs_path))
 		return;
 
@@ -90,7 +90,7 @@ ShaderData::ShaderData()
 	//-----SHADOW MAP-----
 	//SHADERS
 	byteCode = "";
-	vs_path = "../x64/Debug/ShadowMapVertexShader.cso";
+	vs_path = "./ShadowMapVertexShader.cso";
 	if (!LoadVertexShader(shadowMapVS, vs_path, byteCode))
 		return;
 
@@ -120,19 +120,19 @@ ShaderData::ShaderData()
 	
 	//-----REGULAR-----
 	//SHADERS
-	vs_path = "../x64/Debug/VertexShader.cso";
+	vs_path = "./VertexShader.cso";
 	if (!LoadVertexShader(regularVertexShader, vs_path, byteCode))
 		return;
 
-	ps_path = "../x64/Debug/PixelShader.cso";
+	ps_path = "./PixelShader.cso";
 	if (!LoadPixelShader(regularPixelShader, ps_path))
 		return;
 
-	ps_path = "../x64/Debug/TexturePixelShader.cso";
+	ps_path = "./TexturePixelShader.cso";
 	if (!LoadPixelShader(regularTexturePixelShader, ps_path))
 		return;
 
-	ps_path = "../x64/Debug/ColorPixelShader.cso";
+	ps_path = "./ColorPixelShader.cso";
 	if (!LoadPixelShader(regularColorPixelShader, ps_path))
 		return;
 

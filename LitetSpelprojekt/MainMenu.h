@@ -3,7 +3,7 @@
 #include "Window.h"
 #include "Event.h"
 #include "GameSettings.h"
-#include "UI.h"
+#include "./UI.h"
 
 class MainMenu
 {
@@ -58,11 +58,11 @@ public:
 		creditsButton = Button(true, { center.x, center.y + 260 }, 215.0f, 50.0f);
 		exitButton = Button(true, { center.x - 5, center.y + 380 }, 110.0f, 50.0f);
 
-		mainButtonArrows.push_back(Image(L"UI/PlayArrows.png", 1.0f, false, playButton.position));
-		mainButtonArrows.push_back(Image(L"UI/OptionsArrows.png", 1.0f, false, optionsButton.position));
-		mainButtonArrows.push_back(Image(L"UI/HelpArrows.png", 1.0f, false, helpButton.position));
-		mainButtonArrows.push_back(Image(L"UI/CreditsArrows.png", 1.0f, false, creditsButton.position));
-		mainButtonArrows.push_back(Image(L"UI/ExitArrows.png", 1.0f, false, exitButton.position));
+		mainButtonArrows.push_back(Image(L"./UI/PlayArrows.png", 1.0f, false, playButton.position));
+		mainButtonArrows.push_back(Image(L"./UI/OptionsArrows.png", 1.0f, false, optionsButton.position));
+		mainButtonArrows.push_back(Image(L"./UI/HelpArrows.png", 1.0f, false, helpButton.position));
+		mainButtonArrows.push_back(Image(L"./UI/CreditsArrows.png", 1.0f, false, creditsButton.position));
+		mainButtonArrows.push_back(Image(L"./UI/ExitArrows.png", 1.0f, false, exitButton.position));
 
 		mainButtons.push_back(playButton);
 		mainButtons.push_back(optionsButton);
@@ -70,26 +70,26 @@ public:
 		mainButtons.push_back(creditsButton);
 		mainButtons.push_back(exitButton);
 
-		mainBackground = Image(L"UI/MainMenu.png", 1.0f, true, center);
+		mainBackground = Image(L"./UI/MainMenu.png", 1.0f, true, center);
 
 		//HELP
-		helpBackground = Image(L"UI/HowToPlayMenu.png", 1.0f, true, center);
+		helpBackground = Image(L"./UI/HowToPlayMenu.png", 1.0f, true, center);
 
 		//CREDITS
-		creditsBackground = Image(L"UI/CreditsMenu.png", 1.0f, true, center);
+		creditsBackground = Image(L"./UI/CreditsMenu.png", 1.0f, true, center);
 
 		backButton = Button(true, { Window::GetWidth() - 150, Window::GetHeight() - 80 }, 100.0f, 50.0f);
-		backButtonArrows = Image(L"UI/ExitArrows.png", 1.0f, true, backButton.position);
+		backButtonArrows = Image(L"./UI/ExitArrows.png", 1.0f, true, backButton.position);
 
 		//END
-		endWinBackground = Image(L"UI/MissionComplete.png", 1.0f, true, center);
-		endLossBackground = Image(L"UI/MissionFailed.png", 1.0f, true, center);
+		endWinBackground = Image(L"./UI/MissionComplete.png", 1.0f, true, center);
+		endLossBackground = Image(L"./UI/MissionFailed.png", 1.0f, true, center);
 
 		returnMainMenuButton = Button(true, { center.x - 8, center.y + 160 }, 360, 40);
-		returnMainMenuButtonArrows = Image(L"UI/ReturnToMainMenuArrows.png", 1.0f, true, returnMainMenuButton.position);
+		returnMainMenuButtonArrows = Image(L"./UI/ReturnToMainMenuArrows.png", 1.0f, true, returnMainMenuButton.position);
 		
 		//ALWAYS
-		cursor = Image(L"UI/RegularCursor.png", 1.0f, true, { (float)Window::GetMousePos().first, (float)Window::GetMousePos().second + 30 });
+		cursor = Image(L"./UI/RegularCursor.png", 1.0f, true, { (float)Window::GetMousePos().first, (float)Window::GetMousePos().second + 30 });
 	};
 
 	void Render()

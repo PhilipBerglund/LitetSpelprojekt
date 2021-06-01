@@ -91,6 +91,7 @@
     <ClCompile Include="AudioChunks.cpp">
       <Filter>Audio</Filter>
     </ClCompile>
+    <ClCompile Include="QuadTree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSettings.h" />
@@ -201,6 +202,7 @@
     <ClInclude Include="ClueInfoOverlay.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="QuadTree.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="UI">

@@ -7,15 +7,18 @@
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
+
 	AllocConsole();
 	(void)freopen("conin$", "r", stdin);
 	(void)freopen("conout$", "w", stdout);
 	(void)freopen("conout$", "w", stderr);
 
+	//std::cin.get();
+
 	UINT WIDTH = GetSystemMetrics(SM_CXSCREEN);
 	UINT HEIGHT = GetSystemMetrics(SM_CYSCREEN);
 
-	bool windowed = false;
+	bool windowed = true;
 
 	if (windowed)
 	{

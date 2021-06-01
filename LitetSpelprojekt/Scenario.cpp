@@ -236,7 +236,7 @@ Scenario::Scenario(Scene& scene)
 	suspects.push_back(marketMan);
 
 	// --- Old Lady ---
-	Suspect lady("Models/OldLady.mff", { 5.0f, 17.0f, 148.0f});
+	Suspect lady("Models/OldLady.mff", { 5.0f, 14.0f, 148.0f});
 	lady.name = "Olga Morozov";
 	lady.age = 79;
 	lady.height = 153;

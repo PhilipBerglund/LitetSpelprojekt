@@ -57,8 +57,13 @@ Scenario::Scenario(Scene& scene)
 	scene.AddModel(revolver.model);
 	clues.push_back(revolver);
 
-	// --- Revlolver shells in the bar
-	
+	// --- Revolver shells in the bar
+	Clue revolverShells("Models/ShellBox.mff", { -160.0f, 5.0f, 0.0f });
+	revolverShells.information = "This looks like revolver shells, and some are missing from the box.";
+	revolverShells.model->SetScale({ 0.4f, 0.4f, 0.4f });
+	revolverShells.model->Update(Graphics::GetDeviceContext());
+	scene.AddModel(revolverShells.model);
+	clues.push_back(revolverShells);
 
 	// --- Anonymous notes --- 
 

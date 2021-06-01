@@ -236,7 +236,7 @@ namespace Importer
 				vertexBuffer.vertices.emplace_back(vertex);
 			}
 
-			Read(vertexBuffer.attributeCount);
+			//Read(vertexBuffer.attributeCount);
 
 			vertexBuffer.sceneID = Data::scenes.size();
 			scene.vertexBuffers.emplace_back(vertexBuffer);

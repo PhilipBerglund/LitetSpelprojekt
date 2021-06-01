@@ -133,7 +133,7 @@ Scenario::Scenario(Scene& scene)
 	knowItAll.age = 50;
 	knowItAll.height = 173;
 	knowItAll.shoeSize = 39;
-	knowItAll.information.info = "They say I know things. Who murdered Mayor Rock is one of the few things I don't know, but one thing I know for sure is that I'm the only one who comes here, if you know what I mean.";
+	knowItAll.information.info = "They say I know things. Who murdered Lloyd is one of the few things I don't know, but one thing I know for sure is that I'm the only one who comes here, if you know what I mean.";
 	knowItAll.information.connections[0] = "Fabian Voltaire";
 	knowItAll.information.numConnections = 1;
 	knowItAll.information.rumours[0] = "Isn't liked by the locals. - Franklin";

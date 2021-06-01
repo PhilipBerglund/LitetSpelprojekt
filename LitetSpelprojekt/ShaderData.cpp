@@ -29,15 +29,15 @@ ShaderData::ShaderData()
 
 	//-----RAIN PARTICLE SYSTEM-----
 	//SHADERS
-	std::string vs_path = "./RainVertexShader.cso";
+	std::string vs_path = "./Shaders/RainVertexShader.cso";
 	if (!LoadVertexShader(rainVS, vs_path, byteCode))
 		return;
 
-	std::string ps_path = "./RainPixelShader.cso";
+	std::string ps_path = "./Shaders/RainPixelShader.cso";
 	if (!LoadPixelShader(rainPS, ps_path))
 		return;
 
-	std::string gs_path = "./RainGeometryShader.cso";
+	std::string gs_path = "./Shaders/RainGeometryShader.cso";
 	if (!LoadGeometryShader(rainGS, gs_path))
 		return;
 
@@ -61,15 +61,15 @@ ShaderData::ShaderData()
 
 	//-----SMOKE PARTICLE SYSTEM-----
 	//SHADERS
-	vs_path = "./SmokeVertexShader.cso";
+	vs_path = "./Shaders/SmokeVertexShader.cso";
 	if (!LoadVertexShader(smokeVS, vs_path, byteCode))
 		return;
 
-	ps_path = "./SmokePixelShader.cso";
+	ps_path = "./Shaders/SmokePixelShader.cso";
 	if (!LoadPixelShader(smokePS, ps_path))
 		return;
 
-	gs_path = "./SmokeGeometryShader.cso";
+	gs_path = "./Shaders/SmokeGeometryShader.cso";
 	if (!LoadGeometryShader(smokeGS, gs_path))
 		return;
 
@@ -90,7 +90,7 @@ ShaderData::ShaderData()
 	//-----SHADOW MAP-----
 	//SHADERS
 	byteCode = "";
-	vs_path = "./ShadowMapVertexShader.cso";
+	vs_path = "./Shaders/ShadowMapVertexShader.cso";
 	if (!LoadVertexShader(shadowMapVS, vs_path, byteCode))
 		return;
 
@@ -120,19 +120,19 @@ ShaderData::ShaderData()
 	
 	//-----REGULAR-----
 	//SHADERS
-	vs_path = "./VertexShader.cso";
+	vs_path = "./Shaders/VertexShader.cso";
 	if (!LoadVertexShader(regularVertexShader, vs_path, byteCode))
 		return;
 
-	ps_path = "./PixelShader.cso";
+	ps_path = "./Shaders/PixelShader.cso";
 	if (!LoadPixelShader(regularPixelShader, ps_path))
 		return;
 
-	ps_path = "./TexturePixelShader.cso";
+	ps_path = "./Shaders/TexturePixelShader.cso";
 	if (!LoadPixelShader(regularTexturePixelShader, ps_path))
 		return;
 
-	ps_path = "./ColorPixelShader.cso";
+	ps_path = "./Shaders/ColorPixelShader.cso";
 	if (!LoadPixelShader(regularColorPixelShader, ps_path))
 		return;
 

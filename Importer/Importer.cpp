@@ -206,9 +206,9 @@ namespace Importer
 			}
 
 			//ATTRIBUTES
-			Read(mesh.attributeCount);
-			for (int i = 0; i < mesh.attributeCount; ++i)
-				ReadAttribute(mesh);
+			//Read(mesh.attributeCount);
+			//for (int i = 0; i < mesh.attributeCount; ++i)
+			//	ReadAttribute(mesh);
 
 			mesh.sceneID = Data::scenes.size();
 			scene.meshes.emplace_back(mesh);
@@ -274,9 +274,9 @@ namespace Importer
 			material.sceneID = Data::scenes.size();
 
 			//ATTRIBUTES
-			Read(material.attributeCount);
-			for (int i = 0; i < material.attributeCount; ++i)
-				ReadAttribute(material);
+			//Read(material.attributeCount);
+			//for (int i = 0; i < material.attributeCount; ++i)
+			//	ReadAttribute(material);
 
 			scene.materials.emplace_back(material);
 		}

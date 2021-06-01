@@ -6,16 +6,12 @@ SmokeSystem::SmokeSystem(UINT maxParticles, float minVelocity, float maxVelocity
 	this->velocity = Random::Real(minVelocity, maxVelocity);
 	this->maxParticles = maxParticles;
 	particles = new Particle[maxParticles];
-	
 
 	if (!particles)
-	{
 		return;
-	}
 
 	for (int i = 0; i < maxParticles; i++)
 	{
-		//dir = (Random::Real(-1.0f, 1.0f), Random::Real(-1.0f, 1.0f), 0.0f);
 		float x, z;
 		this->angle = Random::Real(-0.7f, 0.7f);
 		this->length = Random::Real(-0.7f, 0.7f);
@@ -51,15 +47,11 @@ SmokeSystem::SmokeSystem(UINT maxParticles, float minVelocity, float maxVelocity
 	HRESULT hr = Graphics::GetDevice().CreateBuffer(&vBDesc, &vertexData, &GSParticleVB);
 	if FAILED(hr)
 	{
-		Print("FAILED TO CREATE BUFFER");
+		Error("FAILED TO CREATE BUFFER");
 		return;
 	}
 
 	UpdateBuffer(particles);
-}
-
-SmokeSystem::~SmokeSystem()
-{
 }
 
 void SmokeSystem::SetEyePos(const XMFLOAT3& eyePos)

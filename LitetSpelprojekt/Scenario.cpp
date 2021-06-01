@@ -329,7 +329,7 @@ void Scenario::SetRandomizedLocations()
 	}
 }
 
-void Scenario::Update(Scene& scene, InGameUI& ui, Camera& camera)
+void Scenario::Update(Scene& scene, InGameUI& ui, PlayerCamera& camera)
 {
 	static std::string lastSuspect;
 

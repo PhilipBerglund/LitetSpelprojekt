@@ -67,19 +67,9 @@ void RegularShader::UpdatePerMesh(ShaderData& data, Model& model)
 	material.diffuse[1] = modelMat.diffuse[1];
 	material.diffuse[2] = modelMat.diffuse[2];
 
-	material.opacity = modelMat.opacity;
-
 	material.ambient[0] = modelMat.ambient[0];
 	material.ambient[1] = modelMat.ambient[1];
 	material.ambient[2] = modelMat.ambient[2];
-
-	material.shininess = modelMat.shininess;
-
-	material.emissive[0] = modelMat.emissive[0];
-	material.emissive[1] = modelMat.emissive[1];
-	material.emissive[2] = modelMat.emissive[2];
-
-	material.reflectivity = modelMat.reflectivity;
 
 	material.specular[0] = modelMat.specular[0];
 	material.specular[1] = modelMat.specular[1];

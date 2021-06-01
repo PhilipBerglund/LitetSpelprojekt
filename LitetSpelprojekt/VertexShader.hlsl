@@ -5,8 +5,8 @@ struct VertexShaderInput
 	float2 uv : UV;
     float3 tangent : TANGENT;
     float3 binormal : BINORMAL;
-    float3 weights : WEIGHTS;
-    float4 boneIDs : BONEIDS;
+    float4 weights : WEIGHTS;
+    int4 boneIDs : BONEIDS;
 };
 
 struct VertexShaderOutput

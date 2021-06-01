@@ -22,13 +22,13 @@ private:
 	Scenario scenario;
 	Bounds bounds;
 	Bounds rainBounds;
-	Camera camera;
+	PlayerCamera camera;
 	QuadTree* tree;
 	QTFrustum frust;
 
 	std::map<std::string, std::shared_ptr<Model>> models;
 	std::vector<std::shared_ptr<Model>> QTModels;
-	std::vector<std::shared_ptr<Light>> lights;
+	std::vector<std::shared_ptr<ShadowLight>> lights;
 	std::vector<std::shared_ptr<GameObject>> gameObjects;
 	std::vector<std::shared_ptr<RainSystem>> rainSystem;
 	std::vector<std::shared_ptr<SmokeSystem>> smokeSystem;
@@ -61,10 +61,10 @@ public:
 	void ClearQTModels()															{ this->QTModels.clear(); }
 
 	const std::vector<std::shared_ptr<Model>>& GetQTModels() const					{ return this->QTModels; }
-	const std::vector<std::shared_ptr<Light>>& GetLights() const					{ return this->lights; }
+	const std::vector<std::shared_ptr<ShadowLight>>& GetLights() const				{ return this->lights; }
 	const std::map<std::string, std::shared_ptr<Model>>& GetModels() const			{ return this->models; }
 	const std::map<std::string, std::shared_ptr<Model>>& GetNoShadowModels() const	{ return this->nonShadowModels; }
 	const std::vector<std::shared_ptr<RainSystem>>& GetRainSystem() const			{ return this->rainSystem; }
 	const std::vector<std::shared_ptr<SmokeSystem>>& GetSmokeSystem() const			{ return this->smokeSystem; }
-	const Camera& GetCamera() const													{ return this->camera; }
+	const PlayerCamera& GetCamera() const											{ return this->camera; }
 };

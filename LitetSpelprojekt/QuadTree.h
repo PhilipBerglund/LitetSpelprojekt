@@ -12,7 +12,6 @@ struct QTPoint
 
 struct QTSquare
 {
-
 	float xPos;
 	float zPos;
 	float w;
@@ -25,7 +24,6 @@ struct QTSquare
 			p.z <= this->zPos + this->h &&
 			p.z >= this->zPos - this->h);
 	};
-
 };
 
 struct Plane
@@ -34,30 +32,23 @@ struct Plane
 	XMFLOAT3 normal;
 };
 
-class QTFrustum
+struct QTFrustum
 {
-public:
-	
 	Plane planes[4];
 	XMFLOAT3 pos;
 	XMMATRIX viewMatrix;
 
 	QTFrustum();
 	bool Contains(QTSquare bounds);
-	void Update(Camera cam);
+	void Update(PlayerCamera cam);
 	void OnEvent();
 
 	bool active = true;
 };
 
-
-class QuadTree
+struct QuadTree
 {
-
-public:
-
 	int capacity;
-
 
 	QuadTree* TopR = nullptr;
 	QuadTree* TopL = nullptr;
@@ -68,15 +59,12 @@ public:
 	QTSquare boundary;
 	bool divided = false;
 
-public:
-
 	QuadTree();
 	QuadTree(QTSquare bounds, int cap);
 	void InsertModel(std::shared_ptr<Model> model);
 	void Divide();
 	void DeleteQuadTree();
 };
-
 
 inline void QTIntersect(QTFrustum frust, QuadTree* tree, std::vector<std::shared_ptr<Model>> &foundModels)
 {
@@ -97,10 +85,7 @@ inline void QTIntersect(QTFrustum frust, QuadTree* tree, std::vector<std::shared
 	}
 };
 
-
-
 inline void SetupQuadTree(QuadTree* &QTree, QTSquare bounds, int capacity)
 {
 	QTree = new QuadTree(bounds, capacity);
 };
-

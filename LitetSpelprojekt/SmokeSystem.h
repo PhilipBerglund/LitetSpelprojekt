@@ -25,13 +25,11 @@ private:
 	bool isFirstRun;
 	float gameTime;
 	float timeStep;
-	//float age;
 
 	float maxParticleRange;
 	float angle;
 	float length;
 	XMFLOAT4 origin;
-
 
 	Particle* particles;
 	ComPtr<ID3D11Buffer> GSParticleVB;
@@ -41,7 +39,6 @@ private:
 public:
 	SmokeSystem() = default;
 	SmokeSystem(UINT maxParticles, float minVelocity, float maxVelocity, XMFLOAT4 startPosition, float maxParticleRange);
-	~SmokeSystem();
 
 	//float GetAge()const { return age; }
 	void SetEyePos(const XMFLOAT3& eyePos);

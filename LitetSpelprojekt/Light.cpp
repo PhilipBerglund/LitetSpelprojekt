@@ -1,6 +1,6 @@
 #include "Light.h"
 
-Light::Light()
+ShadowLight::ShadowLight()
 {
     attributes.ambient = { 1,1,1,1 };
     attributes.diffuse = { 1,1,1,1 };
@@ -15,7 +15,7 @@ Light::Light()
     perspectiveMatrix = XMMatrixPerspectiveFovLH(XM_PIDIV4, (float)1024 / float(476), 0.1, 100);
 }
 
-Light::Light(XMFLOAT4 ambient, XMFLOAT4 diffuse, float FOV, float aspectRatio, float nearZ, float farZ, XMFLOAT3 position, XMFLOAT3 rotation, XMFLOAT3 scale)
+ShadowLight::ShadowLight(XMFLOAT4 ambient, XMFLOAT4 diffuse, float FOV, float aspectRatio, float nearZ, float farZ, XMFLOAT3 position, XMFLOAT3 rotation, XMFLOAT3 scale)
     :GameObject(position, rotation, scale)
 {
     attributes.ambient = ambient;

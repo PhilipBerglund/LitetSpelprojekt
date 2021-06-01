@@ -143,6 +143,7 @@
   <ItemGroup>
     <ClInclude Include="DataTypes.h" />
     <ClInclude Include="Importer.h" />
+    <ClInclude Include="Print.h" />
     <ClInclude Include="TempTimer.h" />
   </ItemGroup>
   <ItemGroup>

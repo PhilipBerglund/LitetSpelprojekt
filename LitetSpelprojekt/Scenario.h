@@ -66,5 +66,5 @@ public:
 	void Reset();
 	void InitializeClueLocations();
 	void SetRandomizedLocations();
-	void Update(Scene& scene, InGameUI& ui, Camera& camera);
+	void Update(Scene& scene, InGameUI& ui, PlayerCamera& camera);
 };

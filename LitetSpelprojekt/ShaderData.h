@@ -81,13 +81,11 @@ private:
 	struct MaterialCBuf
 	{
 		float diffuse[3] = { 0 };
-		float opacity = 0;
+		float pad1;
 		float ambient[3] = { 0 };
-		float shininess = 0;
-		float emissive[3] = { 0 };
-		float reflectivity = 0;
+		float pad2;
 		float specular[3] = { 0 };
-		float padding = 0;
+		float pad3;
 	};
 	ComPtr<ID3D11Buffer> regularMaterialBuffer;
 
@@ -110,5 +108,5 @@ private:
 	bool LoadTexture(std::string fileName);
 public:
 	ShaderData();
-	void Update(const Camera& camera, const Light& light);
+	void Update(const PlayerCamera& camera, const ShadowLight& light);
 };

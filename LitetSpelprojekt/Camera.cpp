@@ -4,7 +4,7 @@
 #include "GameSettings.h"
 #include "Print.h"
 
-Camera::Camera()
+PlayerCamera::PlayerCamera()
 	:pitch(0), yaw(0), rotationSpeed(0), speed(0)
 {
 	Event::Bind(this, EventType::W_DOWN);
@@ -25,7 +25,7 @@ Camera::Camera()
 	this->pickingDistance = 10.0f;
 }
 
-Camera::Camera(float FOV, float aspectRatio, float nearZ, float farZ, float rotationSpeed, float speed, XMFLOAT3 position, XMFLOAT3 rotation, XMFLOAT3 scale)
+PlayerCamera::PlayerCamera(float FOV, float aspectRatio, float nearZ, float farZ, float rotationSpeed, float speed, XMFLOAT3 position, XMFLOAT3 rotation, XMFLOAT3 scale)
 	:GameObject(position, rotation, scale), pitch(0), yaw(0), rotationSpeed(rotationSpeed), speed(speed)
 {
 	
@@ -57,12 +57,12 @@ Camera::Camera(float FOV, float aspectRatio, float nearZ, float farZ, float rota
 	this->frustRight = { 1,0,0 };
 }
 
-float Camera::getViewDistance()
+float PlayerCamera::getViewDistance()
 {
 	return this->viewDistance;
 }
 
-void Camera::MoveRight(float dt)
+void PlayerCamera::MoveRight(float dt)
 {
 	XMVECTOR forwardVec =	XMVector3Transform(forward,
 							XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0f) *
@@ -78,7 +78,7 @@ void Camera::MoveRight(float dt)
 	transform.position.z += rightFloat.z * dt * speed;
 }
 
-void Camera::MoveForward(float dt)
+void PlayerCamera::MoveForward(float dt)
 {
 	XMVECTOR forwardVec =	XMVector3Transform(forward,
 							XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0f) *
@@ -94,7 +94,7 @@ void Camera::MoveForward(float dt)
 	transform.position.z += forwardFloat.z * dt * speed;
 }
 
-void Camera::Rotate(float dx, float dy)
+void PlayerCamera::Rotate(float dx, float dy)
 {
 	yaw = (yaw + dx * rotationSpeed);
 	yaw = (float)fmod((double)yaw + XM_PI, XM_2PI);
@@ -105,23 +105,23 @@ void Camera::Rotate(float dx, float dy)
 	pitch = std::clamp(pitch + dy * rotationSpeed, 0.995f * -XM_PIDIV2, 0.995f * XM_PIDIV2);
 }
 
-void Camera::PushBack(XMFLOAT3 direction, float dt)
+void PlayerCamera::PushBack(XMFLOAT3 direction, float dt)
 {
 	transform.position.x += direction.x * dt;
 	transform.position.z += direction.z * dt;
 }
 
-bool Camera::CheckCollision(BoundingOrientedBox& other)
+bool PlayerCamera::CheckCollision(BoundingOrientedBox& other)
 {
 	return boundingsphere.Intersects(other);
 }
 
-bool Camera::CheckCollision(BoundingSphere& other)
+bool PlayerCamera::CheckCollision(BoundingSphere& other)
 {
 	return boundingsphere.Intersects(other);
 }
 
-bool Camera::CheckIntersection(BoundingOrientedBox& other)
+bool PlayerCamera::CheckIntersection(BoundingOrientedBox& other)
 {
 	XMFLOAT3 distVec = {	transform.position.x - other.Center.x,
 							transform.position.y - other.Center.y,
@@ -136,7 +136,7 @@ bool Camera::CheckIntersection(BoundingOrientedBox& other)
 	return false;
 }
 
-void Camera::OnEvent()
+void PlayerCamera::OnEvent()
 {
 	if (GameSettings::GetState() != GameState::INGAME)
 		return;
@@ -189,7 +189,7 @@ void Camera::OnEvent()
 	}
 }
 
-void Camera::Update(float dt)
+void PlayerCamera::Update(float dt)
 {
 	if (w)
 		MoveForward(dt);
@@ -215,6 +215,4 @@ void Camera::Update(float dt)
 
 	this->frustForward = lookAtVec;
 	this->frustRight = XMVector3Cross(up, lookAtVec);
-
-	Print("X-pos: " + std::to_string(transform.position.x) + "  Z-Pos: " + std::to_string(transform.position.z) + "\n");
 }

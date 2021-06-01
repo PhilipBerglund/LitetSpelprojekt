@@ -24,6 +24,9 @@
     <ClInclude Include="TempTimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Print.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Importer.cpp">

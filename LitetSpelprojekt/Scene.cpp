@@ -5,13 +5,15 @@
 Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.0015f, 50.0f, { 0, 17, 0 })
 {
-	Importer::LoadScene("Models/Office.mff");
-	Importer::LoadScene("Models/Bar.mff");
-	Importer::LoadScene("Models/Hotel.mff");
-	Importer::LoadScene("Models/Restaurant.mff");
-	Importer::LoadScene("Models/Park.mff");
-	Importer::LoadScene("Models/OutsideObjects.mff");
-	Importer::LoadScene("Models/Houses.mff");
+	Importer::LoadScene("Models/TestScene.mff");
+
+	////Importer::LoadScene("Models/Office.mff");
+	////Importer::LoadScene("Models/Bar.mff");
+	////Importer::LoadScene("Models/Hotel.mff");
+	////Importer::LoadScene("Models/Restaurant.mff");
+	////Importer::LoadScene("Models/Park.mff");
+	////Importer::LoadScene("Models/OutsideObjects.mff");
+	////Importer::LoadScene("Models/Houses.mff");
 
 	Importer::Initialize(Graphics::GetDevice());
 
@@ -24,15 +26,15 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 		}
 	}
     
-	Importer::LoadScene("Models/Streets.mff");
+	/*Importer::LoadScene("Models/Streets.mff");
 	for (auto& noShadowMesh : Importer::Data::GetMeshes(Importer::Data::scenes.size()-1))
 	{
 		auto noShadowModel = std::make_shared<Model>(noShadowMesh);
 		nonShadowModels.insert(std::make_pair(noShadowModel->GetName(), noShadowModel));
-	}
+	}*/
 	
 	Importer::Initialize(Graphics::GetDevice());
-	scenario = Scenario(*this);
+	//scenario = Scenario(*this);
 
 	//QuadTree Setup
 	QTSquare QTbounds;
@@ -47,7 +49,7 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	}
 	this->frust.Update(this->camera);
    
-	bounds = Bounds("Models/BBoxes.mff");
+	//bounds = Bounds("Models/BBoxes.mff");
 	//rainBounds = Bounds("Models/BBoxes.mff");
 
 	AddRainParticleSystem(3000, 150, 200);
@@ -92,7 +94,7 @@ void Scene::AddModel(std::shared_ptr<Model> model)
 
 void Scene::AddLight()
 {
-	auto light = std::make_shared<Light>();
+	auto light = std::make_shared<ShadowLight>();
 	lights.push_back(light);
 	gameObjects.push_back(light);
 }
@@ -117,14 +119,14 @@ void Scene::Update(InGameUI& ui, float dt)
 	this->frust.Update(this->camera);
 	QTIntersect(this->frust, this->tree, this->QTModels);
 
-	for (auto& box : bounds.boxes)
+	/*for (auto& box : bounds.boxes)
 	{
 		if (box.Intersects(camera.boundingsphere))
 		{
 			camera.SetPosition(lastPosition);
 			break;
 		}
-	}
+	}*/
 
 	for (auto& particleSystem : rainSystem)
 		particleSystem->Update(rainBounds, dt);
@@ -132,7 +134,7 @@ void Scene::Update(InGameUI& ui, float dt)
 	for (auto& particleSystem : smokeSystem)
 		particleSystem->Update(dt);
 
-	scenario.Update(*this, ui, camera);
+	//scenario.Update(*this, ui, camera);
   
 	shaderData.Update(camera, *lights[0]);
 	//Print("NrOfModels: " + std::to_string(this->QTModels.size()));

@@ -150,7 +150,7 @@ bool QTFrustum::Contains(QTSquare bounds)
 	return false;
 }
 
-void QTFrustum::Update(Camera cam)
+void QTFrustum::Update(PlayerCamera cam)
 {
 	/*if (!active)
 		return;*/

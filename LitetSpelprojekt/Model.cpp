@@ -18,14 +18,11 @@ Model::Model(const Mesh& mesh)
     transform.rotation = { mesh.rotation[0], mesh.rotation[1], mesh.rotation[2] };
     transform.scale = { mesh.scale[0], mesh.scale[1], mesh.scale[2] };
 
-    XMVECTOR quat = { mesh.rotation[0], mesh.rotation[1], mesh.rotation[2], mesh.rotation[3] };
-
     XMMATRIX translation = XMMatrixTranslationFromVector(XMLoadFloat3(&transform.position));
     XMMATRIX rotation = XMMatrixRotationRollPitchYawFromVector(XMLoadFloat3(&transform.rotation));
-    XMMATRIX quaternion = XMMatrixRotationQuaternion(quat);
     XMMATRIX scale = XMMatrixScalingFromVector(XMLoadFloat3(&transform.scale));
 
-    worldMatrix = scale * quaternion * translation;
+    worldMatrix = scale * rotation * translation;
 
     XMFLOAT4 orientation;
     XMStoreFloat4(&orientation, XMQuaternionIdentity());

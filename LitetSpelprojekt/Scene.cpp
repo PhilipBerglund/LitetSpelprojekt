@@ -6,13 +6,13 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	:camera(XM_PIDIV4, (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f, 0.0015f, 50.0f, { 0, 17, 0 })
 {
 
-	////Importer::LoadScene("Models/Office.mff");
+	Importer::LoadScene("Models/Office.mff");
 	Importer::LoadScene("Models/Bar.mff");
-	////Importer::LoadScene("Models/Hotel.mff");
-	////Importer::LoadScene("Models/Restaurant.mff");
+	Importer::LoadScene("Models/Hotel.mff");
+	Importer::LoadScene("Models/Restaurant.mff");
 	////Importer::LoadScene("Models/Park.mff");
-	////Importer::LoadScene("Models/OutsideObjects.mff");
-	////Importer::LoadScene("Models/Houses.mff");
+	Importer::LoadScene("Models/OutsideObjects.mff");
+	Importer::LoadScene("Models/Houses.mff");
 
 	Importer::Initialize(Graphics::GetDevice());
 
@@ -25,12 +25,12 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 		}
 	}
     
-	/*Importer::LoadScene("Models/Streets.mff");
+	Importer::LoadScene("Models/Streets.mff");
 	for (auto& noShadowMesh : Importer::Data::GetMeshes(Importer::Data::scenes.size()-1))
 	{
 		auto noShadowModel = std::make_shared<Model>(noShadowMesh);
 		nonShadowModels.insert(std::make_pair(noShadowModel->GetName(), noShadowModel));
-	}*/
+	}
 	
 	Importer::Initialize(Graphics::GetDevice());
 	//scenario = Scenario(*this);

@@ -58,9 +58,9 @@ Scenario::Scenario(Scene& scene)
 	clues.push_back(revolver);
 
 	// --- Revolver shells in the bar
-	Clue revolverShells("Models/ShellBox.mff", { -160.0f, 5.0f, 0.0f });
+	Clue revolverShells("Models/ShellBox.mff", { -162.0f, 5.0f, -32.0f });
 	revolverShells.information = "This looks like revolver shells, and some are missing from the box.";
-	revolverShells.model->SetScale({ 0.4f, 0.4f, 0.4f });
+	revolverShells.model->SetScale({ 0.3f, 0.3f, 0.3f });
 	revolverShells.model->Update(Graphics::GetDeviceContext());
 	scene.AddModel(revolverShells.model);
 	clues.push_back(revolverShells);
@@ -72,7 +72,7 @@ Scenario::Scenario(Scene& scene)
 		// -- Park -- //
 
 		// -- Hotel -- //
-	Clue noteNoRegrets("Models/NoteNoRegrets.mff", { -116.0f,1.0f,-103.0f });
+	Clue noteNoRegrets("Models/NoteNoRegrets.mff", { -116.0f, 1.0f, -103.0f });
 	noteNoRegrets.information = "Is this a note from the murderer? It reads: 'I don't regret what I did! Lloyd had it coming.'";
 	noteNoRegrets.model->SetScale({ 0.5f,0.5f,0.5f });
 	noteNoRegrets.model->Update(Graphics::GetDeviceContext());
@@ -80,7 +80,7 @@ Scenario::Scenario(Scene& scene)
 	clues.push_back(noteNoRegrets);
 
 		// -- Resturaunt -- // -- Fixa texten Sophia
-	Clue newsPaper("Models/NewsPaper.mff", { 223.0f,8.7f,75.0f });
+	Clue newsPaper("Models/NewsPaper.mff", { 223.0f, 8.7f, 75.0f });
 	newsPaper.information = "The newspapers headline says; 'Hotel Owner buys 'The Golden Rooster''";
 	newsPaper.model->SetScale({ 0.2f,0.2f,0.2f });
 	newsPaper.model->Update(Graphics::GetDeviceContext());
@@ -88,7 +88,7 @@ Scenario::Scenario(Scene& scene)
 	clues.push_back(newsPaper);
 
 		// -- Market -- By Mr-Wicker//
-	Clue noteNeedHelp("Models/NoteNeedHelp.mff", { -97.2f,1.0f,109.0f, });
+	Clue noteNeedHelp("Models/NoteNeedHelp.mff", { -97.2f, 1.0f, 109.0f, });
 	noteNeedHelp.information = "'I need your help, you are the only one I can talk to - a friend'";
 	noteNeedHelp.model->SetScale({ 0.5f,0.5f,0.5f });
 	noteNeedHelp.model->Update(Graphics::GetDeviceContext());
@@ -96,7 +96,12 @@ Scenario::Scenario(Scene& scene)
 	clues.push_back(noteNeedHelp);
 
 		// -- Office -- //
-
+	Clue prompt("Models/PromptPoster.mff", { 111.0f, 22.0f, 110.0f });
+	prompt.information = "A note saying they need me to solve the murder.";
+	prompt.model->SetScale({ 2.0f, 2.0f, 2.0f });
+	prompt.model->Update(Graphics::GetDeviceContext());
+	scene.AddModel(prompt.model);
+	clues.push_back(prompt);
 
 	// --------- NPCs ----------
 

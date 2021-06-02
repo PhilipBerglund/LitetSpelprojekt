@@ -669,6 +669,12 @@ struct SceneData
 		{
 			Print("\n--------- NEW MESH ---------");
 			mesh.PrintNode();
+
+			if (mesh.attributeCount != 0)
+				Print("\nAttributes: ");
+
+			for (auto& attribute : mesh.attributes)
+				attribute.PrintAttribute();
 		}
 			
 		//MATERIALS
@@ -677,6 +683,12 @@ struct SceneData
 		{
 			Print("\n--------- NEW MATERIAL ---------");
 			material.PrintNode();
+
+			if (material.attributeCount != 0)
+				Print("\nAttributes: ");
+
+			for (auto& attribute : material.attributes)
+				attribute.PrintAttribute();
 		}
 			
 		//VERTEX BUFFERS
@@ -693,6 +705,12 @@ struct SceneData
 		{
 			Print("\n--------- NEW SKELETON ---------");
 			skeleton.PrintNode();
+
+			if (skeleton.attributeCount != 0)
+				Print("\nAttributes: ");
+
+			for (auto& attribute : skeleton.attributes)
+				attribute.PrintAttribute();
 		}	
 
 		//CAMERAS
@@ -701,6 +719,12 @@ struct SceneData
 		{
 			Print("\n--------- NEW CAMERA ---------");
 			camera.PrintNode();
+
+			if (camera.attributeCount != 0)
+				Print("\nAttributes: ");
+
+			for (auto& attribute : camera.attributes)
+				attribute.PrintAttribute();
 		}
 			
 		//LIGHTS
@@ -709,6 +733,12 @@ struct SceneData
 		{
 			Print("\n--------- NEW LIGHT ---------");
 			light.PrintNode();
+
+			if (light.attributeCount != 0)
+				Print("\nAttributes: ");
+
+			for (auto& attribute : light.attributes)
+				attribute.PrintAttribute();
 		}
 
 		//GROUPS
@@ -717,6 +747,12 @@ struct SceneData
 		{
 			Print("\n--------- NEW GROUP ---------");
 			group.PrintNode();
+
+			if (group.attributeCount != 0)
+				Print("\nAttributes: ");
+
+			for (auto& attribute : group.attributes)
+				attribute.PrintAttribute();
 		}	
 	}
 };

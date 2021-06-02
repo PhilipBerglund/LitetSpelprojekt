@@ -12,8 +12,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	(void)freopen("conout$", "w", stdout);
 	(void)freopen("conout$", "w", stderr);
 
-	//std::cin.get();
-
 	UINT WIDTH = GetSystemMetrics(SM_CXSCREEN);
 	UINT HEIGHT = GetSystemMetrics(SM_CYSCREEN);
 
@@ -39,6 +37,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	Timer timer;
 	float dt = 0;
 
+	float FPS = 144.0f;
+	float tickInterval = 1000.0f / FPS;
+
 	MSG msg = {};
 
 	while (msg.message != WM_QUIT)
@@ -51,8 +52,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 			DispatchMessage(&msg);
 		}
 
-		if (msg.wParam == VK_RETURN)
+		if (msg.wParam == VK_DELETE)
 			break;
+
+		int timeToSleep = tickInterval - dt;
+
+		if (timeToSleep > 0)
+			Sleep(timeToSleep);
 
 		game->Render(dt);
 		dt = (float)timer.DeltaTime();

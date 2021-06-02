@@ -57,9 +57,11 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	lights[0]->SetRotation({ 0.0f,-10.0f,10.0f });
 	AddShadowMap(Window::GetWidth(), Window::GetHeight());
 
-	soundHandler.AddAudio(L"./Audio/JessicaWoolfBackgroundMusic.wav");
-	soundHandler.SetVolume(0.3f);
-	soundHandler.StartAudio();
+	SoundHandler::AddAudio(L"./Audio/JessicaWoolfBackgroundMusic.wav");
+	SoundHandler::StartAudio();
+	//soundHandler.AddAudio(L"./Audio/JessicaWoolfBackgroundMusic.wav");
+	//soundHandler.SetVolume(0.3f);
+	//soundHandler.StartAudio();
 }
 
 void Scene::AddRainParticleSystem(UINT maxParticles, float minVelocity, float maxVelocity)
@@ -107,6 +109,7 @@ void Scene::Reset(InGameUI& ui)
 {
 	ui.Reset();
 	scenario.Reset();
+	camera = Camera(XM_PIDIV4, (float)Window::GetWidth() / (float)Window::GetHeight(), 0.1f, 1000.0f, 0.0015f, 50.0f, { 68, 16, 110 });
 }
 
 void Scene::Update(InGameUI& ui, float dt)

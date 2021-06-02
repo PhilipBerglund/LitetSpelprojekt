@@ -36,7 +36,7 @@ private:
 	std::map<std::string, std::shared_ptr<Model>> nonShadowModels;
 
 	//AUDIO
-	SoundHandler soundHandler;
+	//SoundHandler soundHandler;
 
 	//SHADERS
 	ShaderData shaderData;

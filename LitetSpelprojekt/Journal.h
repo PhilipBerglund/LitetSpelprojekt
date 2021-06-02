@@ -12,6 +12,7 @@ struct Page
 	unsigned int ID = -1;
 
 	Image img;
+	Image profile;
 
 	Text name;
 	Text age;
@@ -38,7 +39,8 @@ struct Page
 		float leftBorder = winSize.x + 350;
 		float startHeight = 230;
 
-		img = Image(L"UI/Unknown.png", 1.3f, true, { winSize.x + 550, 350 });
+		img = Image(L"./UI/Unknown.png", 1.3f, true, { winSize.x + 550, 350 });
+		profile = Image(L"./UI/Unknown.png", 1.0f, false, img.position);
 
 		name.position = { leftBorder - name.GetSize() *  fontSize, startHeight };
 
@@ -48,14 +50,14 @@ struct Page
 
 		characteristicsHeading = Text(L"", true, {leftBorder - characteristicsHeading.GetSize() * fontSize, startHeight + 240}, 500);
 		characteristics[0].position = { leftBorder - characteristics[0].GetSize() * fontSize, startHeight + 280 };
-		characteristics[1].position = { leftBorder - characteristics[1].GetSize() * fontSize, startHeight + 310 };
-		characteristics[2].position = { leftBorder - characteristics[2].GetSize() * fontSize, startHeight + 340 };
+		characteristics[1].position = { leftBorder - characteristics[1].GetSize() * fontSize, startHeight + 320 };
+		characteristics[2].position = { leftBorder - characteristics[2].GetSize() * fontSize, startHeight + 360 };
 
 		rumorsHeading.position = { leftBorder - rumorsHeading.GetSize() * fontSize, startHeight + 430 };
 
-		rumors[0].position = { leftBorder - rumors[0].GetSize() * fontSize, startHeight + 470 };
-		rumors[1].position = { leftBorder - rumors[1].GetSize() * fontSize, startHeight + 510 };
-		rumors[2].position = { leftBorder - rumors[2].GetSize() * fontSize, startHeight + 550 };
+		rumors[0].position = { leftBorder - (rumors[0].GetSize() * fontSize), startHeight + 470 };
+		rumors[1].position = { leftBorder - (rumors[1].GetSize() * fontSize), startHeight + 520 };
+		rumors[2].position = { leftBorder - (rumors[2].GetSize() * fontSize), startHeight + 570 };
 	};
 
 	void Move(float x, float y = 0)
@@ -66,6 +68,7 @@ struct Page
 		shoesize.SetPosition(shoesize.position.x + x, shoesize.position.y);
 
 		img.SetPosition(img.position.x + x, img.position.y);
+		profile.SetPosition(profile.position.x + x, profile.position.y);
 
 		characteristicsHeading.SetPosition(characteristicsHeading.position.x + x, characteristicsHeading.position.y);
 		characteristics[0].SetPosition(characteristics[0].position.x + x, characteristics[0].position.y);
@@ -82,6 +85,9 @@ struct Page
 	void Draw(IDWriteTextFormat& format, ID2D1Brush& brush)
 	{
 		img.Draw();
+		if (profile.visible)
+			profile.Draw();
+
 		name.Draw(format, brush);
 		age.Draw(format, brush);
 		height.Draw(format, brush);
@@ -103,6 +109,7 @@ struct Slot
 	unsigned int ID = -1;
 	Button button;
 	Image image;
+	Image profile;
 	Text name;
 
 	Slot() = default;
@@ -110,6 +117,7 @@ struct Slot
 		:position(position), ID(ID)
 	{
 		image = Image(path, 1.0f, true, position);
+		profile = Image(L"./UI/Unknown.png", 1.0f, false, image.position);
 		name = Text(text, true, position, image.width + 50);
 		button = Button(true, position, image.width, image.height + 40);
 	}
@@ -119,12 +127,16 @@ struct Slot
 		position = { x, y };
 		image.SetPosition(x, y);
 		name.SetPosition(x, y + 80);
+		profile.SetPosition(x, y);
 		button.SetPosition(x, y + 20);
 	}
 
 	void Draw(IDWriteTextFormat& format, ID2D1Brush& brush)
 	{
 		image.Draw();
+		if (profile.visible)
+			profile.Draw();
+
 		name.Draw(format, brush);
 	}
 };
@@ -192,9 +204,9 @@ public:
 	{
 		Event::Bind(this, EventType::LEFTCLICK);
 
-		journalBase = Image(L"UI/Journal.png", 1.0f, false, { (float)Window::GetWidth() + 360, (float)Window::GetHeight() / 2 });
+		journalBase = Image(L"./UI/Journal.png", 1.0f, false, { (float)Window::GetWidth() + 360, (float)Window::GetHeight() / 2 });
 
-		exitCross = Image(L"UI/ExitCross.png", 1.0f, true, { journalBase.position.x - 240, journalBase.position.y - 340});
+		exitCross = Image(L"./UI/ExitCross.png", 1.0f, true, { journalBase.position.x - 240, journalBase.position.y - 340});
 		exitButton = Button(true, { exitCross.position.x - 10 ,exitCross.position.y }, 50, 40);
 
 		slotPositions[0] = { journalBase.position.x - 180, journalBase.position.y - 200 };
@@ -210,7 +222,7 @@ public:
 		slotPositions[8] = { journalBase.position.x + 220, journalBase.position.y + 250 };
 
 		for (unsigned int i = 0; i < 9; ++i)
-			slots[i] = Slot(L"Unknown", L"UI/Unknown.png", slotPositions[i], i);
+			slots[i] = Slot(L"Unknown", L"./UI/Unknown.png", slotPositions[i], i);
 
 		minX = (float)Window::GetWidth() - 350;
 		maxX = (float)Window::GetWidth() + 360;
@@ -229,7 +241,7 @@ public:
 	{
 		for (unsigned int i = 0; i < 9; ++i)
 		{
-			slots[i] = Slot(L"Unknown", L"UI/Unknown.png", slotPositions[i], i);
+			slots[i] = Slot(L"Unknown", L"./UI/Unknown.png", slotPositions[i], i);
 			pages[i] = Page();
 		}
 	}
@@ -340,6 +352,42 @@ public:
 		pages[ID].ID = ID;
 		pages[ID].name = Text(L"Name: " + temp, true, pages[ID].name.position, 500);
 
+		//IMAGE
+		if (age != 0)
+		{
+			LPCWSTR imgName = L"";
+
+			if (name == "Fabian Voltaire")
+				imgName = L"./UI/Fabian.png";
+
+			if (name == "Franklin Pickett")
+				imgName = L"./UI/Franklin.png";
+
+			if (name == "Sally Bennett")
+				imgName = L"./UI/Sally.png";
+
+			if (name == "Mayor A. Rock")
+				imgName = L"./UI/Mayor.png";
+
+			if (name == "Timothy Cooke")
+				imgName = L"./UI/Timothy.png";
+
+			if (name == "Mr. Wicker")
+				imgName = L"./UI/Wicker.png";
+
+			if (name == "Olga Morozov")
+				imgName = L"./UI/Olga.png";
+
+			if (name == "Claudette Tasse")
+				imgName = L"./UI/Claudette.png";
+
+			if (name == "Tess Singer")
+				imgName = L"./UI/Tess.png";
+
+			slots[ID].profile = Image(imgName, 1.2f, true, slots[ID].profile.position);
+			pages[ID].profile = Image(imgName, 1.55f, true, pages[ID].profile.position);
+		}
+
 		//AGE
 		if (age != 0)
 			pages[ID].age = Text(L"Age: " + std::to_wstring(age), true, pages[ID].age.position, 500);
@@ -395,7 +443,7 @@ public:
 
 					if (page.rumors[i].GetText() == L"")
 					{
-						page.rumors[i] = Text(newRumour, true, page.rumors[i].position, 500);
+						page.rumors[i] = Text(newRumour, true, { page.rumors[i].position.x + 100, page.rumors[i].position.y }, 700);
 						break;
 					}
 				}			
@@ -430,6 +478,39 @@ public:
 
 		std::wstring char3(characteristics3.begin(), characteristics3.end());
 		pages[ID].characteristics[2] = Text(char3, true, pages[ID].characteristics[2].position, 500);
+
+		//IMAGE
+		LPCWSTR imgName = L"";
+
+		if (name == "Fabian Voltaire")
+			imgName = L"./UI/Fabian.png";
+
+		if (name == "Franklin Pickett")
+			imgName = L"./UI/Franklin.png";
+
+		if (name == "Sally Bennett")
+			imgName = L"./UI/Sally.png";
+
+		if (name == "Mayor A. Rock")
+			imgName = L"./UI/Mayor.png";
+
+		if (name == "Timothy Cooke")
+			imgName = L"./UI/Timothy.png";
+
+		if (name == "Mr. Wicker")
+			imgName = L"./UI/Wicker.png";
+
+		if (name == "Olga Morozov")
+			imgName = L"./UI/Olga.png";
+
+		if (name == "Claudette Tasse")
+			imgName = L"./UI/Claudette.png";
+
+		if (name == "Tess Singer")
+			imgName = L"./UI/Tess.png";
+
+		slots[ID].profile = Image(imgName, 1.2f, true, slots[ID].profile.position);
+		pages[ID].profile = Image(imgName, 1.55f, true, pages[ID].profile.position);
 	}
 
 	bool HasSuspect(std::string name)

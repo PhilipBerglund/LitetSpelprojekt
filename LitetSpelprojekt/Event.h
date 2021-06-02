@@ -7,8 +7,10 @@ using X = void(*)(void*);
 enum class EventType
 {
 	RESET,
+	RESETCAMERA,
 	STATECHANGE,
 	LEFTCLICK,
+	LEFTUP,
 	MOUSEMOVE,
 	BUTTONDOWN,
 	BUTTONUP,
@@ -48,6 +50,10 @@ public:
 			reset.push_back(pair);
 			break;
 
+		case EventType::RESETCAMERA:
+			resetCamera.push_back(pair);
+			break;
+
 		case EventType::STATECHANGE:
 			stateChange.push_back(pair);
 			break;
@@ -58,6 +64,10 @@ public:
 
 		case EventType::LEFTCLICK:
 			leftClick.push_back(pair);
+			break;
+
+		case EventType::LEFTUP:
+			leftUp.push_back(pair);
 			break;
 
 		case EventType::MOUSEMOVE:
@@ -97,6 +107,11 @@ public:
 				(pair.first)(pair.second);
 			break;
 
+		case EventType::RESETCAMERA:
+			for (auto pair : resetCamera)
+				(pair.first)(pair.second);
+			break;
+
 		case EventType::STATECHANGE:
 			for (auto pair : stateChange)
 				(pair.first)(pair.second);
@@ -114,6 +129,11 @@ public:
 
 		case EventType::LEFTCLICK:
 			for (auto pair : leftClick)
+				(pair.first)(pair.second);
+			break;
+
+		case EventType::LEFTUP:
+			for (auto pair : leftUp)
 				(pair.first)(pair.second);
 			break;
 
@@ -183,9 +203,11 @@ private:
 	static EventType currentEvent;
 	static std::vector<std::pair<X, void*>> escape;
 	static std::vector<std::pair<X, void*>> reset;
+	static std::vector<std::pair<X, void*>> resetCamera;
 	static std::vector<std::pair<X, void*>> stateChange;
 	static std::vector<std::pair<X, void*>> buttonDown;
 	static std::vector<std::pair<X, void*>> leftClick;
+	static std::vector<std::pair<X, void*>> leftUp;
 	static std::vector<std::pair<X, void*>> mouseMove;
 	static std::vector<std::pair<X, void*>> W;
 	static std::vector<std::pair<X, void*>> A;

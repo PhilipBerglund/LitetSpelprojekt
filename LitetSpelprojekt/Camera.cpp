@@ -12,7 +12,7 @@ Camera::Camera()
 	Event::Bind(this, EventType::S_DOWN);
 	Event::Bind(this, EventType::D_DOWN);
 	Event::Bind(this, EventType::MOUSEMOVE);
-	Event::Bind(this, EventType::RESET);
+	Event::Bind(this, EventType::RESETCAMERA);
 
 	this->up = { 0,1,0 };
 	this->forward = { 0,0,1 };
@@ -34,7 +34,7 @@ Camera::Camera(float FOV, float aspectRatio, float nearZ, float farZ, float rota
 	Event::Bind(this, EventType::S_DOWN);
 	Event::Bind(this, EventType::D_DOWN);
 	Event::Bind(this, EventType::MOUSEMOVE);
-	Event::Bind(this, EventType::RESET);
+	Event::Bind(this, EventType::RESETCAMERA);
 
 	this->up = { 0,1,0 };
 	this->forward = { 0, 0, 1 };
@@ -138,18 +138,8 @@ bool Camera::CheckIntersection(BoundingOrientedBox& other)
 
 void Camera::OnEvent()
 {
-	if (GameSettings::GetState() != GameState::INGAME)
-		return;
-
 	switch(Event::GetCurrentEvent())
 	{
-	case EventType::RESET:
-		w = false;
-		a = false;
-		s = false;
-		d = false;
-		break;
-
 	case EventType::W_DOWN:
 		w = true;
 		break;
@@ -181,16 +171,23 @@ void Camera::OnEvent()
 	case EventType::D_UP:
 		d = false;
 		break;
+	}
 
-	case EventType::MOUSEMOVE:
+	if (GameSettings::GetState() != GameState::INGAME)
+		return;
+
+	if (Event::GetCurrentEvent() == EventType::MOUSEMOVE)
+	{
 		std::pair<float, float> delta = Window::GetRawInput().value();
 		Rotate(delta.first, delta.second);
-		break;
-	}
+	}		
 }
 
 void Camera::Update(float dt)
 {
+	if (GameSettings::GetState() != GameState::INGAME)
+		return;
+
 	if (w)
 		MoveForward(dt);
 
@@ -215,6 +212,4 @@ void Camera::Update(float dt)
 
 	this->frustForward = lookAtVec;
 	this->frustRight = XMVector3Cross(up, lookAtVec);
-
-	Print("X-pos: " + std::to_string(transform.position.x) + "  Z-Pos: " + std::to_string(transform.position.z) + "\n");
 }

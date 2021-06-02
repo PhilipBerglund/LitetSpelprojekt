@@ -1,6 +1,12 @@
 #include "SoundHandler.h"
 
 ComPtr<IXAudio2> SoundHandler::pXAudio2;
+IXAudio2MasteringVoice* SoundHandler::masterVoice = nullptr;
+WAVEFORMATEXTENSIBLE SoundHandler::wfx = { 0 };
+XAUDIO2_BUFFER SoundHandler::audioBuffer = { 0 };
+IXAudio2SourceVoice* SoundHandler::sourceVoice = nullptr;
+float SoundHandler::volume = 0.5f;
+bool SoundHandler::muted = false;
 
 void SoundHandler::Initialize()
 {
@@ -82,6 +88,8 @@ void SoundHandler::AddAudio(std::wstring fileName)
 	{
 		ERROR("FAILED TO CREATE SOURCE VOICE");
 	}
+
+	sourceVoice->SetVolume(volume);
 }
 
 void SoundHandler::StartAudio()
@@ -101,6 +109,13 @@ void SoundHandler::StartAudio()
 void SoundHandler::SetVolume(float volume)
 {
 	sourceVoice->SetVolume(volume);
+}
+
+float SoundHandler::GetVolume()
+{
+	float temp;
+	sourceVoice->GetVolume(&temp);
+	return temp;
 }
 
 void SoundHandler::DestroyAudio()

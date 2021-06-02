@@ -107,6 +107,10 @@ LRESULT Window::MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 	case WM_LBUTTONDOWN:
 		Event::DispatchEvent(EventType::LEFTCLICK);
 		break;
+
+	case WM_LBUTTONUP:
+		Event::DispatchEvent(EventType::LEFTUP);
+		break;
 	}
 
 	return DefWindowProc(hWnd, msg, wParam, lParam);

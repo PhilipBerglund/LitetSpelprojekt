@@ -2,7 +2,6 @@
 #include "Game.h"
 #include "Timer.h"
 
-//#include "SoundHandler.h"
 #include <utility>
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
@@ -24,9 +23,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	{
 		WIDTH = 1680;
 		HEIGHT = 1050;
-
-		//WIDTH = 1024;
-		//HEIGHT = 576;
 	}
 	
 	LPCWSTR windowTitle = L"Jessica Woolf: Murder Mysteries";
@@ -45,10 +41,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
 	MSG msg = {};
 
-	/*SoundHandler soundHandler;
-	soundHandler.Initialize();
-	soundHandler.StartAudioEngine();*/
-
 	while (msg.message != WM_QUIT)
 	{	
 		timer.Start();
@@ -66,7 +58,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 		dt = (float)timer.DeltaTime();
 	}
 
-	//soundHandler.StopAudioEngine();
 	delete game;
 	return 0;
 }

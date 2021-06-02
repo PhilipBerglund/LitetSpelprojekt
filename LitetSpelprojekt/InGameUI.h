@@ -64,6 +64,8 @@ private:
 			SetCursorType(CursorType::REGULAR);
 			drawOverlay = true;
 		}
+
+		Event::DispatchEvent(EventType::RESETCAMERA);
 	}
 
 	void SwitchPauseState()
@@ -86,6 +88,8 @@ private:
 			cursor.SetScale(0.6f);
 			drawOverlay = true;
 		}
+
+		Event::DispatchEvent(EventType::RESETCAMERA);
 	}
 
 	void DeactivateChatOverlay()
@@ -108,6 +112,7 @@ private:
 		}
 
 		chatOverlay.Deactivate();
+		Event::DispatchEvent(EventType::RESETCAMERA);
 	}
 
 	void DeactivateClueOverlay()
@@ -116,6 +121,7 @@ private:
 		Event::DispatchEvent(EventType::STATECHANGE);
 		GameSettings::SetState(GameState::INGAME);
 		SetCursorType(CursorType::CROSS);
+		Event::DispatchEvent(EventType::RESETCAMERA);
 	}
 
 	void DrawOverlay(float dt)
@@ -172,18 +178,18 @@ public:
 		pauseOverlay = { 0, 0, winSize.width, winSize.height };
 
 		//IMAGES
-		journalIcon= new Image(L"UI/MenuButton.png", 0.9f, true, { 50, 70 });
-		pauseMenuIcon = new Image(L"UI/JournalButton.png", 0.9f, true, { 60, winSize.height - 90 });
-		newInformationNotation = new Image(L"UI/InformationAdded.png", 0.9f, false, { winSize.width - 240, 40 });
+		journalIcon= new Image(L"./UI/MenuButton.png", 0.9f, true, { 50, 70 });
+		pauseMenuIcon = new Image(L"./UI/JournalButton.png", 0.9f, true, { 60, winSize.height - 90 });
+		newInformationNotation = new Image(L"./UI/InformationAdded.png", 0.9f, false, { winSize.width - 240, 40 });
 
 		images.push_back(journalIcon);
 		images.push_back(pauseMenuIcon);
 		images.push_back(newInformationNotation);
 
-		crossCursor = new Image(L"UI/CrossCursor.png", 1.0f, true, { winSize.width / 2, winSize.height / 2 });
-		clueCursor = new Image(L"UI/ClueCursor.png", 1.0f, false, { winSize.width / 2, winSize.height / 2 });
-		chatCursor = new Image(L"UI/ChatCursor.png", 1.0f, false, { winSize.width / 2, winSize.height / 2 });
-		cursor = Image(L"UI/RegularCursor.png", 1.0f, false, { winSize.width / 2, winSize.height / 2 });
+		crossCursor = new Image(L"./UI/CrossCursor.png", 1.0f, true, { winSize.width / 2, winSize.height / 2 });
+		clueCursor = new Image(L"./UI/ClueCursor.png", 1.0f, false, { winSize.width / 2, winSize.height / 2 });
+		chatCursor = new Image(L"./UI/ChatCursor.png", 1.0f, false, { winSize.width / 2, winSize.height / 2 });
+		cursor = Image(L"./UI/RegularCursor.png", 1.0f, false, { winSize.width / 2, winSize.height / 2 });
 
 		images.push_back(crossCursor);
 		images.push_back(clueCursor);

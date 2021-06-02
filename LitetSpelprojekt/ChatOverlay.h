@@ -46,7 +46,7 @@ public:
 		Event::Bind(this, EventType::BUTTONDOWN);
 		Event::Bind(this, EventType::BUTTONUP);
 
-		background = Image(L"UI/ChatBase.png", 1.0f, true, { Window::GetWidth() / 2.0f, Window::GetHeight() - 170 });
+		background = Image(L"./UI/ChatBase.png", 1.0f, true, { Window::GetWidth() / 2.0f, Window::GetHeight() - 170 });
 		name = Text(L"", true, { Window::GetWidth() / 2.0f - 400, Window::GetHeight() - 250 }, 200);
 		text = Text(L"", true, { Window::GetWidth() / 2.0f, Window::GetHeight() - 200 }, 800);
 	}
@@ -164,11 +164,11 @@ public:
 		Event::Bind(this, EventType::MOUSEMOVE);
 		Event::Bind(this, EventType::LEFTCLICK);
 
-		background = Image(L"UI/ConfrontTab.png", 1.0f, true, { Window::GetWidth() / 2, Window::GetHeight() / 2 });
+		background = Image(L"./UI/ConfrontTab.png", 1.0f, true, { Window::GetWidth() / 2, Window::GetHeight() / 2 });
 		converseButton = Button(true, { background.position.x, background.position.y - 20 }, 180, 30);
 		confrontButton = Button(true, { background.position.x, background.position.y + 55 }, 180, 30);
-		converseArrows = Image(L"UI/ConfrontConverseArrows.png", 1.0f, false, converseButton.position);
-		confrontArrows = Image(L"UI/ConfrontConverseArrows.png", 1.0f, false, confrontButton.position);
+		converseArrows = Image(L"./UI/ConfrontConverseArrows.png", 1.0f, false, converseButton.position);
+		confrontArrows = Image(L"./UI/ConfrontConverseArrows.png", 1.0f, false, confrontButton.position);
 	}
 
 	void Draw()
@@ -259,11 +259,11 @@ public:
 		Event::Bind(this, EventType::MOUSEMOVE);
 		Event::Bind(this, EventType::LEFTCLICK);
 
-		background = Image(L"UI/ConfirmationTab.png", 1.0f, true, { Window::GetWidth() / 2, Window::GetHeight() / 2 });
+		background = Image(L"./UI/ConfirmationTab.png", 1.0f, true, { Window::GetWidth() / 2, Window::GetHeight() / 2 });
 		yesButton = Button(true, { background.position.x - 85, background.position.y + 55 }, 60, 30);
 		noButton = Button(true, { yesButton.position.x + 170, yesButton.position.y }, 50, 30);
-		yesArrows = Image(L"UI/YesArrows.png", 1.0f, false, { yesButton.position.x + 3, yesButton.position.y});
-		noArrows = Image(L"UI/NoArrows.png", 1.0f, false, { noButton.position.x - 2, noButton.position.y });
+		yesArrows = Image(L"./UI/YesArrows.png", 1.0f, false, { yesButton.position.x + 3, yesButton.position.y});
+		noArrows = Image(L"./UI/NoArrows.png", 1.0f, false, { noButton.position.x - 2, noButton.position.y });
 	}
 
 	void Draw()

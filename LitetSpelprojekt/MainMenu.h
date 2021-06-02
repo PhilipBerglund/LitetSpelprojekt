@@ -3,6 +3,7 @@
 #include "Window.h"
 #include "Event.h"
 #include "GameSettings.h"
+#include "SoundHandler.h"
 #include "./UI.h"
 
 class MainMenu
@@ -30,6 +31,18 @@ private:
 	//CREDITS
 	Image creditsBackground;
 
+	//OPTIONS
+	Image optionsBackground;
+	Image slider;
+	Button sliderButton;
+
+	float sliderMinX;
+	float sliderMaxX;
+	bool leftDown = false;
+
+	Button checkmarkButton;
+	Image checkmark;
+
 	Button backButton;
 	Image backButtonArrows;
 
@@ -43,10 +56,24 @@ private:
 	//ALWAYS
 	Image cursor;
 
+	bool updateSlider = true;
+
+public:
+	void UpdateSlider()
+	{
+		float currentVolume = SoundHandler::GetVolume();
+		float sliderX = currentVolume * (sliderMaxX - sliderMinX) + sliderMinX;
+		slider.SetPosition(sliderX, slider.position.y);
+		sliderButton.SetPosition(slider.position.x, slider.position.y);
+		checkmark.SetVisibility(SoundHandler::IsMuted());
+		updateSlider = false;
+	}
+
 public:
 	MainMenu()
 	{
 		Event::Bind(this, EventType::LEFTCLICK);
+		Event::Bind(this, EventType::LEFTUP);
 		Event::Bind(this, EventType::MOUSEMOVE);
 		Event::Bind(this, EventType::STATECHANGE);
 
@@ -81,6 +108,22 @@ public:
 		backButton = Button(true, { Window::GetWidth() - 150, Window::GetHeight() - 80 }, 100.0f, 50.0f);
 		backButtonArrows = Image(L"./UI/ExitArrows.png", 1.0f, true, backButton.position);
 
+		//OPTIONS
+		optionsBackground = Image(L"./UI/OptionsMenu.png", 1.0f, true, center);
+		slider = Image(L"./UI/SliderThing.png", 1.0f, true, { center.x, center.y + 20 });
+		sliderButton = Button(true, slider.position, slider.width, slider.height);
+		checkmark = Image(L"./UI/Checkmark.png", 0.8f, false, { center.x + 50, center.y + 120 });
+		checkmarkButton = Button(true, checkmark.position, checkmark.width, checkmark.height);
+
+		sliderMinX = slider.position.x - 175;
+		sliderMaxX = slider.position.x + 155;
+
+		float currentVolume = SoundHandler::GetVolume();
+		float sliderX = currentVolume * (sliderMaxX - sliderMinX) + sliderMinX;
+
+		slider.SetPosition(sliderX, slider.position.y);
+		sliderButton.SetPosition(slider.position.x, slider.position.y);
+
 		//END
 		endWinBackground = Image(L"./UI/MissionComplete.png", 1.0f, true, center);
 		endLossBackground = Image(L"./UI/MissionFailed.png", 1.0f, true, center);
@@ -97,6 +140,9 @@ public:
 		switch (state)
 		{
 		case State::MAIN:
+			if (updateSlider)
+				UpdateSlider();
+
 			mainBackground.Draw();
 
 			#ifdef _DEBUG
@@ -108,11 +154,24 @@ public:
 				if (arrows.visible)
 					arrows.Draw();
 			break;
-		case State::HELP: case State::CREDITS:
+		case State::HELP: case State::CREDITS: case State::OPTIONS:
 			if (state == State::HELP)
 				helpBackground.Draw();
-			else
+
+			else if (state == State::CREDITS)
 				creditsBackground.Draw();
+
+			else
+			{
+				optionsBackground.Draw();
+				slider.Draw();
+
+				if (checkmark.visible)
+					checkmark.Draw();
+
+				if (backButtonArrows.visible)
+					backButtonArrows.Draw();
+			}
 
 			#ifdef _DEBUG
 			backButton.DrawBounds();
@@ -167,12 +226,35 @@ public:
 						mainButtonArrows[i].SetVisibility(false);
 				}
 
-			if (state == State::HELP || state == State::CREDITS)
+			if (state == State::HELP || state == State::CREDITS || state == State::OPTIONS)
 			{
 				if (backButton.OnHover(pos.first, pos.second))
 					backButtonArrows.SetVisibility(true);
 				else
 					backButtonArrows.SetVisibility(false);
+
+				if (state == State::OPTIONS)
+				{
+					if (leftDown && !SoundHandler::IsMuted())
+					{
+						int newX = 0;;
+
+						if (pos.first < sliderMinX)
+							newX = sliderMinX;
+
+						if (pos.first > sliderMaxX)
+							newX = sliderMaxX;
+
+						if (pos.first > sliderMinX && pos.first < sliderMaxX)
+							newX = pos.first;
+
+						slider.SetPosition(newX, slider.position.y);
+						sliderButton.SetPosition(slider.position.x, slider.position.y);
+
+						float volumePercent = (newX - sliderMinX) / (sliderMaxX - sliderMinX);
+						SoundHandler::SetVolume(volumePercent);
+					}
+				}
 			}
 
 			if (state == State::END)
@@ -184,6 +266,12 @@ public:
 			}
 				
 			break;
+		
+		case EventType::LEFTUP:
+		{
+			leftDown = false;
+			break;
+		}
 
 		case EventType::LEFTCLICK:
 			{
@@ -194,10 +282,11 @@ public:
 						GameSettings::SetState(GameState::INGAME);
 						Event::DispatchEvent(EventType::STATECHANGE);
 						Event::DispatchEvent(EventType::RESET);
+						updateSlider = true;
 					}
 
 					if (optionsButton.OnClick(pos.first, pos.second))
-						GameSettings::SetState(GameState::MAINMENU);
+						state = State::OPTIONS;
 
 					if (helpButton.OnClick(pos.first, pos.second))
 						state = State::HELP;
@@ -211,9 +300,31 @@ public:
 					break;
 				}
 
-				if (state == State::HELP || state == State::CREDITS)
+				if (state == State::HELP || state == State::CREDITS || state == State::OPTIONS)
 					if (backButton.OnClick(pos.first, pos.second))
 						state = State::MAIN;
+
+				if (state == State::OPTIONS)
+				{
+					if (sliderButton.OnClick(pos.first, pos.second))
+						leftDown = true;
+
+					if (checkmarkButton.OnClick(pos.first, pos.second))
+					{
+						if (!SoundHandler::IsMuted())
+						{
+							SoundHandler::Mute();
+							SoundHandler::SetVolume(0.0f);
+							slider.SetPosition(sliderMinX, slider.position.y);
+							sliderButton.SetPosition(slider.position.x, slider.position.y);
+						}
+
+						else
+							SoundHandler::Unmute();
+
+						checkmark.ToggleVisibility();
+					}
+				}
 
 				if (state == State::END)
 				{

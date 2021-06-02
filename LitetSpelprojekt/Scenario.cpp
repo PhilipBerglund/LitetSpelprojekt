@@ -133,7 +133,7 @@ Scenario::Scenario(Scene& scene)
 	knowItAll.age = 50;
 	knowItAll.height = 173;
 	knowItAll.shoeSize = 39;
-	knowItAll.information.info = "They say I know things. Who murdered Lloyd is one of the few things I don't know, but one thing I know for sure is that I'm the only one who comes here, if you know what I mean.";
+	knowItAll.information.info = "They say I know things. Who murdered Lloyd is one of the few things I don't know, but one thing I know for sure is that I'm the only one who comes here.";
 	knowItAll.information.connections[0] = "Fabian Voltaire";
 	knowItAll.information.numConnections = 1;
 	knowItAll.information.rumours[0] = "Isn't liked by the locals. - Franklin";
@@ -225,7 +225,7 @@ Scenario::Scenario(Scene& scene)
 	marketMan.information.info = "Business is not doing so well, since you are here, want to buy something? If you're wondering where I was last night, I was at the shooting range like I am every night. Usually with Voltaire, but he never showed up.";
 	marketMan.information.connections[0] = "Fabian Voltaire";
 	marketMan.information.numConnections = 1;
-	marketMan.information.rumours[0] = "Fabian is Mr. Wicker's favorite customer";
+	marketMan.information.rumours[0] = "Fabian is Mr. Wicker's favorite customer - Mr. Wicker";
 	marketMan.information.valueable = true;
 	marketMan.characteristics[0] = "Mustache";
 	marketMan.characteristics[1] = "Large feet";
@@ -246,7 +246,7 @@ Scenario::Scenario(Scene& scene)
 	lady.information.connections[1] = "Fabian Voltaire";
 	lady.information.numConnections = 2;
 	lady.information.rumours[0] = "Most honest person in town. - Olga";
-	lady.information.rumours[1] = "Grumpy -- Olga";
+	lady.information.rumours[1] = "Grumpy - Olga";
 	lady.information.valueable = true;
 	lady.characteristics[0] = "Old and slow";
 	lady.characteristics[1] = "Collects matryoshka dolls";
@@ -300,8 +300,6 @@ Scenario::Scenario(Scene& scene)
 	singer.model->Update(Graphics::GetDeviceContext());
 	scene.AddModel(singer.model);
 	suspects.push_back(singer);
-
-
 
 	Importer::Initialize(Graphics::GetDevice());
 }
@@ -437,8 +435,11 @@ void Scenario::Update(Scene& scene, InGameUI& ui, Camera& camera)
 						for (int i = 0; i < suspect.information.numConnections; ++i)
 						{
 							if (!ui.journal.HasSuspect(suspect.information.connections[i]))
+							{
 								ui.journal.AddSuspect(identifiedSuspects, suspect.information.connections[i]);
-
+								identifiedSuspects++;
+							}
+								
 							ui.journal.AddRumour(suspect.information.connections[i], suspect.information.rumours[i]);
 						}
 					}

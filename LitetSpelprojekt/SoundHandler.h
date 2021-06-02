@@ -8,25 +8,28 @@ class SoundHandler
 {
 private:
 	static ComPtr<IXAudio2> pXAudio2;
-	IXAudio2MasteringVoice* masterVoice = nullptr;
+	static IXAudio2MasteringVoice* masterVoice;
 
-	WAVEFORMATEXTENSIBLE wfx = { 0 };
-	XAUDIO2_BUFFER audioBuffer = { 0 };
-	IXAudio2SourceVoice* sourceVoice;
-
+	static WAVEFORMATEXTENSIBLE wfx;
+	static XAUDIO2_BUFFER audioBuffer;
+	static IXAudio2SourceVoice* sourceVoice;
+	static float volume;
+	static bool muted;
 	//UnorderedMap för att spara ljudfiler
 	//Enum för "tag" - första som None(default)
 
 public:
-	SoundHandler() = default;
-	void Initialize();
-	void AddSourceVoiceDetails(XAUDIO2_VOICE_DETAILS voiceDetails);
-	void StartAudioEngine();
-	void StopAudioEngine();
-	void AddAudio(std::wstring fileName);
-	void StartAudio();
-	void SetVolume(float volume);
-
-	void DestroyAudio();
+	static void Initialize();
+	static void AddSourceVoiceDetails(XAUDIO2_VOICE_DETAILS voiceDetails);
+	static void StartAudioEngine();
+	static void StopAudioEngine();
+	static void AddAudio(std::wstring fileName);
+	static void StartAudio();
+	static void SetVolume(float volume);
+	static float GetVolume();
+	static void DestroyAudio();
+	static bool IsMuted() { return muted; }
+	static void Mute() { muted = true; }
+	static void Unmute() { muted = false; }
 };
 

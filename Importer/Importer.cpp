@@ -93,6 +93,7 @@ namespace Importer
 			}
 	
 			Data::scenes.emplace_back(scene);
+			scene.PrintScene();
 			file.close();
 		}
 
@@ -182,9 +183,23 @@ namespace Importer
 			node.attributes.push_back(attribute);
 		}
 
+		void ReadMorphAnimation(MorphAnimation& morphAnimation)
+		{
+			ReadName(morphAnimation.name);
+			Read(morphAnimation.shapeCount);
+
+			for (int i = 0; i < morphAnimation.shapeCount; ++i)
+			{
+				Shape shape;
+				ReadShape(shape);
+				morphAnimation.shapes.push_back(shape);
+			}
+		}
+
 		void ReadMesh(SceneData& scene)
 		{
 			Mesh mesh;
+			mesh.type = DataType::MESH;
 			
 			Read(mesh.ID);
 			ReadName(mesh.name);
@@ -205,10 +220,12 @@ namespace Importer
 				mesh.materialIDs.emplace_back(ID);
 			}
 
+			ReadMorphAnimation(mesh.morphAnimation);
+
 			//ATTRIBUTES
-			//Read(mesh.attributeCount);
-			//for (int i = 0; i < mesh.attributeCount; ++i)
-			//	ReadAttribute(mesh);
+			Read(mesh.attributeCount);
+			for (int i = 0; i < mesh.attributeCount; ++i)
+				ReadAttribute(mesh);
 
 			mesh.sceneID = Data::scenes.size();
 			scene.meshes.emplace_back(mesh);
@@ -217,6 +234,7 @@ namespace Importer
 		void ReadVertexBuffer(SceneData& scene)
 		{
 			VertexBuffer vertexBuffer;
+			vertexBuffer.type = DataType::VERTEXBUFFER;
 
 			Read(vertexBuffer.ID);
 			Read(vertexBuffer.vertexCount);
@@ -236,7 +254,9 @@ namespace Importer
 				vertexBuffer.vertices.emplace_back(vertex);
 			}
 
-			//Read(vertexBuffer.attributeCount);
+			Read(vertexBuffer.attributeCount);
+			for (int i = 0; i < vertexBuffer.attributeCount; ++i)
+				ReadAttribute(vertexBuffer);
 
 			vertexBuffer.sceneID = Data::scenes.size();
 			scene.vertexBuffers.emplace_back(vertexBuffer);
@@ -245,6 +265,7 @@ namespace Importer
 		void ReadMaterial(SceneData& scene)
 		{
 			Material material;
+			material.type = DataType::MATERIAL;
 
 			Read(material.ID);
 			ReadName(material.name);
@@ -274,9 +295,9 @@ namespace Importer
 			material.sceneID = Data::scenes.size();
 
 			//ATTRIBUTES
-			//Read(material.attributeCount);
-			//for (int i = 0; i < material.attributeCount; ++i)
-			//	ReadAttribute(material);
+			Read(material.attributeCount);
+			for (int i = 0; i < material.attributeCount; ++i)
+				ReadAttribute(material);
 
 			scene.materials.emplace_back(material);
 		}
@@ -284,6 +305,7 @@ namespace Importer
 		void ReadLight(SceneData& scene)
 		{
 			Light light;
+			light.type = DataType::LIGHT;
 
 			Read(light.ID);
 			ReadName(light.name);
@@ -336,6 +358,7 @@ namespace Importer
 		void ReadCamera(SceneData& scene)
 		{
 			Camera camera;
+			camera.type = DataType::CAMERA;
 
 			Read(camera.ID);
 			ReadName(camera.name);
@@ -370,19 +393,6 @@ namespace Importer
 			}
 		}
 
-		void ReadMorphAnimation(MorphAnimation& morphAnimation)
-		{
-			ReadName(morphAnimation.name);
-			Read(morphAnimation.shapeCount);
-
-			for (int i = 0; i < morphAnimation.shapeCount; ++i)
-			{
-				Shape shape;
-				ReadShape(shape);
-				morphAnimation.shapes.push_back(shape);
-			}
-		}
-
 		void ReadAnimation(Animation& animation)
 		{
 			ReadName(animation.name);
@@ -414,10 +424,9 @@ namespace Importer
 		void ReadSkeleton(SceneData& scene)
 		{
 			Skeleton skeleton;
+			skeleton.type = DataType::SKELETON;
 
 			Read(skeleton.ID);
-
-			ReadMorphAnimation(skeleton.morphAnimation);
 
 			Read(skeleton.jointCount);
 
@@ -439,6 +448,7 @@ namespace Importer
 		void ReadGroup(SceneData& scene)
 		{
 			Group group;
+			group.type = DataType::GROUP;
 
 			Read(group.ID);
 			ReadName(group.name);

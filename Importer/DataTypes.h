@@ -321,45 +321,6 @@ private:
 	ComPtr<ID3D11Buffer> buffer;
 };
 
-//----------------------- MESH -----------------------
-struct Mesh :public Node
-{
-	int ID = -1;
-	char name[MAX_CHAR] = "";
-
-	unsigned int materialCount = 0;
-
-	int skeletonID = -1;
-	int vertexBufferID = -1;
-
-	float translation[3] = { 0.0f, 0.0f, 0.0f };
-	float rotation[3] = { 0.0f, 0.0f, 0.0f };
-	float scale[3] = { 0.0f, 0.0f, 0.0f };
-
-	std::vector<int> materialIDs;
-
-	Mesh() = default;
-
-	// Inherited via Node
-	virtual void PrintNode() override
-	{
-		Print(types[(int)type], "Type: ");
-		Print(ID, "ID: ");
-		Print(name, "Name: ");
-
-		Print(materialCount, "Material Count: ");
-		Print(skeletonID, "Skeleton ID: ");
-		Print(vertexBufferID, "Vertex Buffer ID: ");
-		Print(translation, 3, "Translation: ");
-		Print(rotation, 3, "Rotation: ");
-		Print(scale, 3, "Scale: ");
-
-		Print("Material IDs: ");
-		for (auto& ID : materialIDs)
-			Print(ID);
-	}
-};
-
 //----------------------- LIGHT -----------------------
 enum class LightType { POINT, DIRECTIONAL, SPOT, AREA, VOLUME, UNDEFINED };
 struct Light :public Node
@@ -518,32 +479,6 @@ struct Animation
 	}
 };
 
-//----------------------- SKELETON -----------------------
-struct Joint
-{
-	int ID = -1;
-	char name[MAX_CHAR] = "";
-	int parentID = -1;
-	float inverseBP[16] = { 1.0f, 0.0f, 0.0f, 0.0f,
-							0.0f, 1.0f, 0.0f, 0.0f,
-							0.0f, 0.0f, 1.0f, 0.0f,
-							0.0f, 0.0f, 0.0f, 1.0f };
-
-	Animation animation;
-
-	Joint() = default;
-	void PrintJoint()
-	{
-		Print(ID, "\nID: ");
-		Print(name, "Name: ");
-		Print(parentID, "Parent ID: ");
-		Print(inverseBP, 16, "Inverse Bind Pose: ");
-
-		Print("Animation: ");
-		animation.PrintAnimation();
-	}
-};
-
 struct Shape
 {
 	char name[MAX_CHAR] = "";
@@ -552,7 +487,7 @@ struct Shape
 
 	void PrintShape()
 	{
-		Print(name, "Name: ");
+		Print(name, "\nName: ");
 		Print(vertexCount, "Vertex Count: ");
 
 		for (int i = 0; i < vertexCount; ++i)
@@ -579,11 +514,35 @@ struct MorphAnimation
 	}
 };
 
+//----------------------- SKELETON -----------------------
+struct Joint
+{
+	int ID = -1;
+	char name[MAX_CHAR] = "";
+	int parentID = -1;
+	float inverseBP[16] = { 1.0f, 0.0f, 0.0f, 0.0f,
+							0.0f, 1.0f, 0.0f, 0.0f,
+							0.0f, 0.0f, 1.0f, 0.0f,
+							0.0f, 0.0f, 0.0f, 1.0f };
+
+	Animation animation;
+
+	Joint() = default;
+	void PrintJoint()
+	{
+		Print(ID, "\nID: ");
+		Print(name, "Name: ");
+		Print(parentID, "Parent ID: ");
+		Print(inverseBP, 16, "Inverse Bind Pose: ");
+
+		Print("Animation: ");
+		animation.PrintAnimation();
+	}
+};
+
 struct Skeleton : Node
 {
 	int ID = -1;
-
-	MorphAnimation morphAnimation;
 
 	unsigned int jointCount = 0;
 	std::vector<Joint> joints;
@@ -595,12 +554,6 @@ struct Skeleton : Node
 	{
 		Print(types[(int)type], "Type: ");
 		Print(ID, "ID: ");
-
-		if (morphAnimation.shapeCount != 0)
-		{
-			Print("Morph Animation: ");
-			morphAnimation.PrintMorphAnimation();
-		}
 
 		Print(jointCount, "\nJoint Count: ");
 		for (auto& joint : joints)
@@ -648,6 +601,53 @@ struct Group :public Node
 	}
 };
 
+//----------------------- MESH -----------------------
+struct Mesh :public Node
+{
+	int ID = -1;
+	char name[MAX_CHAR] = "";
+
+	unsigned int materialCount = 0;
+
+	int skeletonID = -1;
+	int vertexBufferID = -1;
+
+	float translation[3] = { 0.0f, 0.0f, 0.0f };
+	float rotation[3] = { 0.0f, 0.0f, 0.0f };
+	float scale[3] = { 0.0f, 0.0f, 0.0f };
+
+	std::vector<int> materialIDs;
+
+	MorphAnimation morphAnimation;
+
+	Mesh() = default;
+
+	// Inherited via Node
+	virtual void PrintNode() override
+	{
+		Print(types[(int)type], "Type: ");
+		Print(ID, "ID: ");
+		Print(name, "Name: ");
+
+		Print(materialCount, "Material Count: ");
+		Print(skeletonID, "Skeleton ID: ");
+		Print(vertexBufferID, "Vertex Buffer ID: ");
+		Print(translation, 3, "Translation: ");
+		Print(rotation, 3, "Rotation: ");
+		Print(scale, 3, "Scale: ");
+
+		Print("Material IDs: ");
+		for (auto& ID : materialIDs)
+			Print(ID);
+
+		if (morphAnimation.shapeCount != 0)
+		{
+			Print("Morph Animation: ");
+			morphAnimation.PrintMorphAnimation();
+		}
+	}
+};
+
 //----------------------- SCENE -----------------------
 struct SceneData
 {
@@ -664,31 +664,59 @@ struct SceneData
 	void PrintScene()
 	{
 		//MESHES
+		Print("\n---------------------- MESHES ----------------------");
 		for (auto& mesh : meshes)
+		{
+			Print("\n--------- NEW MESH ---------");
 			mesh.PrintNode();
-
+		}
+			
 		//MATERIALS
+		Print("\n---------------------- MATERIALS ----------------------");
 		for (auto& material : materials)
+		{
+			Print("\n--------- NEW MATERIAL ---------");
 			material.PrintNode();
-
+		}
+			
 		//VERTEX BUFFERS
+		/*Print("\n---------------------- VERTEX BUFFERS ----------------------");
 		for (auto& vertexBuffer : vertexBuffers)
+		{
+			Print("\n--------- NEW VERTEX BUFFER ---------");
 			vertexBuffer.PrintNode();
-
+		}*/
+			
 		//SKELETONS
+		Print("\n---------------------- SKELETONS ----------------------");
 		for (auto& skeleton : skeletons)
+		{
+			Print("\n--------- NEW SKELETON ---------");
 			skeleton.PrintNode();
+		}	
 
 		//CAMERAS
+		Print("\n---------------------- CAMERAS ----------------------");
 		for (auto& camera : cameras)
+		{
+			Print("\n--------- NEW CAMERA ---------");
 			camera.PrintNode();
-
+		}
+			
 		//LIGHTS
+		Print("\n---------------------- LIGHTS ----------------------");
 		for (auto& light : lights)
+		{
+			Print("\n--------- NEW LIGHT ---------");
 			light.PrintNode();
+		}
 
 		//GROUPS
+		Print("\n---------------------- GROUPS ----------------------");
 		for (auto& group : groups)
+		{
+			Print("\n--------- NEW GROUP ---------");
 			group.PrintNode();
+		}	
 	}
 };

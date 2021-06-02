@@ -48,7 +48,7 @@ Scene::Scene( UINT windowWidth, UINT windowHeight, HWND window)
 	this->frust.Update(this->camera);
    
 	bounds = Bounds("./Models/BBoxes.mff");
-	//rainBounds = Bounds("Models/BBoxes.mff");
+	rainBounds = Bounds("Models/RainBoxes.mff");
 
 	AddRainParticleSystem(3000, 150, 200);
 	AddSmokeParticleSystem(200, 5, 10, { 23.5f, 5.0f, -40.0f, 1.0f }, 60);
